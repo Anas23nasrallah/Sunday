@@ -5,6 +5,7 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
+// const { tasks } = require('../../src/stores/mainStore');
 
 
 /*  creating a random  salt
@@ -76,6 +77,84 @@ router.post('/login', function (req, res) {
 
         })
 })
+
+
+
+/*   getting all tasks of user with id of "userId"
+     @param - userId - the user's id passed as req param
+     # return - array of all relevant tasks with fields for each : id,taskName,description,priority,deadLine,status,budget
+*/
+router.get('/tasks/:userId', function (req, res) {
+    const userId = req.params.id
+    sequelize.query(`SELECT tasks.id,tasks.taskName,tasks.description,tasks.priority,tasks.deadLine,tasks.status,tasks.budget
+    FROM tasks JOIN user_tasks ON tasks.id=user_tasks.task_id
+    WHERE user_tasks.user_id = ${userId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then(function (results) {
+            res.send(results)
+        })
+})
+
+
+
+
+/*   Adding new task to the tasks table
+    @params - req : object of task similiar to Task.js
+     Example: =>
+{
+    "taskName" : "stam",
+    "description" : "say something",
+    "priority" : "low",
+    "deadLine" :  "2020-12-30" , // YYYY-MM-DD
+    "status" : "start",
+    "budget" : 120
+}
+
+ #result - return res : id of the new task
+     
+*/
+router.post('/tasks', function (req, res) {
+    const taskInfo = req.body
+    sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}","${taskInfo.priority}",
+                    "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget})
+                    `)
+        .then(function (result) {
+            res.send({" taskId" : result[0]})
+        })
+})
+
+
+
+
+/*   updating task
+    @params - req : object of task similiar to Task.js
+    Example: =>
+{
+    "taskId" : 3
+    "taskName" : "stam",
+    "description" : "say something",
+    "priority" : "low",
+    "deadLine" :  "2020-12-30" , // YYYY-MM-DD
+    "status" : "start",
+    "budget" : 120
+}
+
+ #result - /// res.end()
+     
+*/
+router.put('/updateTask', function (req, res) {
+    const taskInfo = req.body
+    sequelize.query(` UPDATE tasks
+                      SET tasks.budget=${taskInfo.budget}, tasks.deadline="${taskInfo.deadLine}",
+                          tasks.description="${taskInfo.description}", tasks.priority="${taskInfo.priority}",
+                          tasks.status = "${taskInfo.status}", tasks.taskName="${taskInfo.taskName}"
+                      WHERE tasks.taskId = ${taskInfo.taskId}
+                    `)
+        .then(function (result) {
+            res.end()
+        })
+})
+
 
 
 

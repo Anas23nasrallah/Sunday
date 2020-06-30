@@ -1,7 +1,8 @@
 import { observable } from 'mobx';
 
-class Task {
-  @observable _id;
+
+export class Task {
+  @observable taskId;
   @observable taskName;
   @observable description;
   @observable priority;
@@ -9,8 +10,8 @@ class Task {
   @observable status;
   @observable budget;
 
-  constructor(_id, taskName, description, priority, deadLine, status, budget) {
-    this._id = _id;
+  constructor(taskId, taskName, description, priority, deadLine, status, budget) {
+    this.taskId = taskId;
     this.taskName = taskName;
     this.description = description;
     this.priority = priority;
