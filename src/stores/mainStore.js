@@ -5,6 +5,7 @@ const API_URL = 'http://localhost:3200/';
 class Tasks {
   @observable _tasks = [];
 
+// summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
     let completedCounter = 0;
@@ -37,10 +38,11 @@ class Tasks {
     }
   };
 
-  // create a different route for each update ? or can we use 1 fuc to update all ?
+  // create a different route for each update ?
+  // or can we use 1 func to update all?
   // e.g. : if no input in fielkd- use current value- and update only whats types in
 
-  @action updateTask = async (client, emailType) => {
+  @action updateTask = async (taskName) => {
     try {
       let send = await axios.put(`${API_URL}/api/updateTask/`, {
         taskName,
