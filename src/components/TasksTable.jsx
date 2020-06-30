@@ -3,8 +3,7 @@ import Task from './Task';
 
 const TasksTable = (props) => {
 
-    const category = props.category
-    const tasks = props.tasks
+    const {category, tasks} = props
 
     return (
         <div>

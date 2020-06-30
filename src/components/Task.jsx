@@ -2,16 +2,15 @@ import React from 'react'
 
 
 const Task = (props) => {
-    const task = props.task
+    const {taskName, priority, progressStatus, deadline, budget} = props.task
 
     return (
         <tr >
-            <td >{task.taskName}</td>
-            <td >{task.description}</td>
-            <td>{task.priority}</td>
-            <td>{task.progressStatus}</td>
-            <td>{task.deadline}</td>
-            <td>{task.budget}</td>
+            <td >{taskName}</td>
+            <td>{priority}</td>
+            <td>{progressStatus}</td>
+            <td>{deadline}</td>
+            <td>{budget}</td>
         </tr>
     );
 }

@@ -2,13 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import TasksTable from './TasksTable'
 import AddTask from './AddTask'
+import { inject, observer } from 'mobx-react'
 
-const Tasks = () => {
+const Tasks = inject('tasksStore')(observer((props) => {
 
-    /** 
-     * ! some dummy data for testing  
-     * TODO this data should be injected using the stores
-    */
+    const tasks = props.tasksSrore_tasks
 
     const task1 = {
         name: 'take the dog for a walk',
@@ -35,7 +33,7 @@ const Tasks = () => {
         budget: 0
     }
 
-    const tasks = [task1, task2, task3]
+    // const tasks = [task1, task2, task3]
 
     const groupByCategory = (tasks) => {
         const groupedTasks = {}
@@ -65,6 +63,6 @@ const Tasks = () => {
         </div>
 
     );
-}
+}))
 
 export default Tasks;

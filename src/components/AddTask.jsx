@@ -1,46 +1,53 @@
 import React from 'react';
 import { useState } from 'react';
+import { observer, inject } from 'mobx-react';
 
-const AddTask = () => {
+const AddTask = inject('tasksStore')( observer((props) => {
+    const [inputs, setInputs] = useState({
+        taskName: '',
+        priority: '',
+        category: '',
+        deadline: '',
+        budget: 0
+    })
 
-    // TODO to seperate every component into a different component, if needed.
-
-    const [name, setName] = useState('')
-    const [priority, setPriority] = useState('')
-    const [deadline, setDeadline] = useState('')
-    const [budget, setBudget] = useState(0)
-    const [category, setCategory] = useState('')
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setInputs(inputs => ({
+            ...inputs, [name]: value
+        }));
+    };
 
     const addTask = () => {
-        console.log('AAAAD')
+        props.tasksStore.addTask(inputs)
     }
 
     return (
         <div>
             <span>Name:  </span>
-            <input placeholder={'The name of the task'} onChange={(e) => setName(e.target.value)} value={name}/><br></br>
+            <input name='taskName' placeholder={'The name of the task'} onChange={handleChange} value={inputs.taskName} /><br></br>
 
             <span>Priority: </span>
-            <select onChange={(e) => setPriority(e.target.value)} value={priority}>
-                <option value="urgent">Urgent</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
+            <select name='priority' onChange={handleChange} value={inputs.priority}>
+                <option value=''></option>
+                <option value='urgent'>Urgent</option>
+                <option value='high'>High</option>
+                <option value='medium'>Medium</option>
+                <option value='low'>Low</option>
             </select><br></br>
 
+            <span>Category: </span>
+            <input name='category' placeholder='The budget' onChange={handleChange} value={inputs.category} /><br></br>
+
             <span>Deadline:  </span>
-            <input placeholder={'The deadline'} onChange={(e) => setDeadline(e.target.value)} value={deadline} type='date'/><br></br>
+            <input name='deadline' placeholder='The deadline' onChange={handleChange} value={inputs.deadline} type='date' /><br></br>
 
             <span>Budget: </span>
-            <input placeholder={'The budget'} onChange={(e) => setBudget(e.target.value)} value={budget} type={'number'}/><br></br>
+            <input name='budget' placeholder='The budget' onChange={handleChange} value={inputs.budget} type='number' /><br></br>
 
-            <span>Category: </span>
-            <input placeholder={'The budget'} onChange={(e) => setCategory(e.target.value)} value={category}/><br></br>
-
-            <button onClick={() => addTask()}>Add Task</button>
+            <button onClick={addTask}>Add Task</button>
         </div>
     );
-
-}
+}))
 
 export default AddTask;
