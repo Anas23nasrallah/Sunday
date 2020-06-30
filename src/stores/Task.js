@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 
+
 export class Task {
   @observable taskId;
   @observable taskName;
@@ -19,3 +20,5 @@ export class Task {
     this.budget = budget;
   }
 }
+
+export default Task;
