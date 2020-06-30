@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Task } from './Task';
 const API_URL = 'http://localhost:3200/';
 
+
 export class Tasks {
   @observable _tasks = [];
 
@@ -33,15 +34,17 @@ export class Tasks {
     try {
       let newTask = new Task(taskName, description, priority, deadLine, status, budget)
         
-//  we need to find a way to retrive userId to put into this post req
-      let addTask = await axios.post(`${API_URL}/tasks`, { newTask, userId });
+//  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
+      const userId = 1
+////////////////////////////////////////
 
+      let addTask = await axios.post(`${API_URL}/tasks`, { newTask, userId });
       this.getTasksFromDB();
       this._tasks.push(addTask)
-      return addTask.data;
+      return addTask
 
     } catch (err) {
-      throw new Error(err.response.data.message);
+      throw new Error(err);
     }
   };
 
@@ -49,20 +52,10 @@ export class Tasks {
   // or can we use 1 func to update all?
   // e.g. : if no input in fielkd- use current value- and update only whats types in
 
-  @action updateTask = async (taskName) => {
+  @action updateTask = async (newTask) => {
     try {
-      let send = await axios.put(`${API_URL}/updateTask/`, {
-        userId,
-        taskId,
-        taskName,
-        description,
-        priority,
-        deadLine,
-        status,
-        budget,
-      });
+      let send = await axios.put(`${API_URL}/updateTask/`,newTask);
       return send.data;
-
     } catch (err) {
       throw new Error(err.response.data.message);
     }

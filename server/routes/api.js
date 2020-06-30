@@ -118,6 +118,8 @@ router.post('/tasks', function (req, res) {
     sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}","${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget})
                     `)
+            /// Need to Add to the user-tasks table !!!!!!! Don't forget 
+             ///////////
         .then(function (result) {
             res.send({" taskId" : result[0]})
         })

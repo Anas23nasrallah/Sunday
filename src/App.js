@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import Tasks from './components/Tasks'
 import Login from './components/Login';
+import './App.css';
 
 const App = () => {
 

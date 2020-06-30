@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
-    const tasks = props.tasksSrore_tasks
+    // const tasks = props.tasksSrore_tasks
 
     const task1 = {
         name: 'take the dog for a walk',
@@ -33,7 +33,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
         budget: 0
     }
 
-    // const tasks = [task1, task2, task3]
+    const tasks = [task1, task2, task3]
 
     const groupByCategory = (tasks) => {
         const groupedTasks = {}

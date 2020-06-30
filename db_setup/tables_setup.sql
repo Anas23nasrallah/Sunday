@@ -40,9 +40,7 @@
 -- CREATE TABLE user_tasks (
 --     task_id INT,
 --     user_id INT,
-
 --     FOREIGN KEY(user_id) REFERENCES username_password(id),
---     FOREIGN KEY(task_id) REFERENCES tasks(id)
-
+--     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
 -- );
 
