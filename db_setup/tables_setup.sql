@@ -24,12 +24,16 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE tasks (
---     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---     category VARCHAR(30),
+--     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+--     taskName VARCHAR(40),
+--     description VARCHAR(150),
 --     priority VARCHAR(20),
 --     deadline DATE,
---     progress_status VARCHAR(20)
+--     status VARCHAR(30),
+--     budget INT
 -- );
+
+
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
