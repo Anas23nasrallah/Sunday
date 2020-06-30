@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import Tasks from './components/Tasks'
+import Login from './components/Login';
 
-@observer
-class App extends Component {
-  render(){
+const App = () => {
+
   return (
-    <p>This template was created in 15.06.20 11:58 By Ananas</p>
-  )}
+    <Router >
+
+      <Link to='/tasks' ><span> Tasks</span></Link>
+      <Link to='/login' ><span> Login</span></Link>
+
+      <hr></hr>
+
+      <Route exact path='/tasks' render={() => <Tasks />} />
+      <Route exact path='/login' render={() => <Login />} />
+
+    </Router>
+  )
+
 }
 
 export default App;
