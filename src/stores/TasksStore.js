@@ -1,13 +1,14 @@
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import { Task } from './Task';
-const API_URL = 'http://localhost:3200/';
+const API_URL = 'http://localhost:3200';
 
 
 export class Tasks {
   @observable _tasks = [];
-  @observable userId
-  
+  @observable userId 
+  @observable loggedIn = false
+
   // summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
@@ -24,6 +25,7 @@ export class Tasks {
 
   @action setUserId(userID){
     this.userId = userID
+    this.loggedIn = true
   }
 
   @action getTasksFromDB = async (id) => {
@@ -35,18 +37,26 @@ export class Tasks {
     }
   };
 
-  @action addTask = async (taskName, description, priority, deadLine, status, budget) => {
+  @action addTask = async (task) => {
     try {
-      let newTask = new Task(taskName, description, priority, deadLine, status, budget)
-        
+      let newTask = {taskName: task.taskName, description:'description',status:'starting' ,priority:task.priority, 
+      deadLine: task.deadLine, budget: task.budget, category: task.category}
+      // taskName: '',
+      // priority: '',
+      // category: '',
+      // deadLine: null,
+      // budget: 0
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
-      const userId = 1
 ////////////////////////////////////////
+       
+      let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      console.log(savedTask)
 
-      let addTask = await axios.post(`${API_URL}/tasks`, { newTask, userId });
-      this.getTasksFromDB();
-      this._tasks.push(addTask)
-      return addTask
+      const taskObj = new Task(savedTask.data.taskId, task.taskName, 'description', task.priority, task.deadLine, task.budget, task.category)
+      // console.log('add task: ' , addTask)
+      // this.getTasksFromDB(this.userId);
+      this._tasks.push(taskObj)
+      // return addTask
 
     } catch (err) {
       throw new Error(err);

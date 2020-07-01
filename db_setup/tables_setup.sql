@@ -10,7 +10,7 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- Then uncomment this line and a singe create table every time:
--- USE sunday_finalProject;
+USE sunday_finalProject;
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
@@ -21,7 +21,7 @@
 --     cipher VARCHAR(50)
 -- );
 
--- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE tasks (
 --     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -35,7 +35,7 @@
 
 
 
--- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE user_tasks (
 --     task_id INT,
@@ -43,4 +43,9 @@
 --     FOREIGN KEY(user_id) REFERENCES username_password(id),
 --     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
 -- );
+
+-- ALTER TABLE tasks ADD category VARCHAR(30);
+-- DELETE FROM user_tasks;
+-- DELETE FROM tasks;
+
 
