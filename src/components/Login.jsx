@@ -1,15 +1,47 @@
 import React, {useState} from 'react';
-const Login = () => {
+import { observer, inject } from 'mobx-react';
+import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
+
+const Login = inject('tasksStore')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
 
     const logIn = () => {
-        alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
+        const loginData = {
+            name:userNameInput,
+            password:passwordInput
+        }
+        Axios.post('/login',loginData).then( res => {
+            if(res.data.result === 'OK'){
+                const userID = res.data.id
+                props.tasksStore.setUserId(userID)
+                window.location.href = window.location.hostname + '/tasks'
+                // <Redirect to='/tasks'/>
+            } else {
+                alert('Incorect password or username')
+            }
+        })
+        // alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
     }
 
     const createNewUser = () => {
-        alert('Open New Tab For New Info')
+        const loginData = {
+            name:userNameInput,
+            password:passwordInput
+        }
+        Axios.post('/signup',loginData).then( res => {
+            if(res.data.result === 'OK'){
+                const userID = res.data.id
+                props.tasksStore.setUserId(userID)
+                window.location.href = window.location.hostname + '/tasks'
+                // <Redirect to='/tasks'/>
+            } else {
+                alert('Problem creating new user')
+            }
+        })
+        // alert('Open New Tab For New Info')
     }
 
     return (
@@ -21,6 +53,6 @@ const Login = () => {
             <button onClick={createNewUser}>Create New User</button>
         </div>
     );
-}
+}))
  
 export default Login;
