@@ -4,16 +4,15 @@ import { observer } from 'mobx-react'
 import Tasks from './components/Tasks'
 import Login from './components/Login';
 import './App.css';
+import NavBar from './components/navBar';
 
 const App = () => {
 
   return (
     <Router >
 
-      <Link to='/' ><span> Login</span></Link>
-      <Link to='/tasks' ><span> Tasks</span></Link>
-
-      <hr></hr>
+      <NavBar/>
+      {/* <hr></hr> */}
 
       <Route exact path='/' component={Login} />
       <Route exact path='/tasks' component={Tasks} />
