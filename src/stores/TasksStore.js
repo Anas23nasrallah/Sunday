@@ -6,9 +6,8 @@ const API_URL = 'http://localhost:3200/';
 
 export class Tasks {
   @observable _tasks = [];
- //add observable userId + action funtion to set it
-
-
+  @observable userId
+  
   // summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
@@ -21,6 +20,10 @@ export class Tasks {
       openTasks: this.openCounter,
       completedTasks: this.completedCounter,
     };
+  }
+
+  @action setUserId(userID){
+    this.userId = userID
   }
 
   @action getTasksFromDB = async (id) => {

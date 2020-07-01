@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
 // const { tasks } = require('../../src/stores/mainStore');
@@ -47,8 +47,8 @@ router.post('/signup', function (req, res) {
     const salt = createRandomSalt()
     const cipher = encodeDesECB(password, salt, "10110101")
     sequelize.query(`INSERT INTO username_password VALUES(null,"${name}","${salt}","${cipher}")`)
-        .then(function (result) {
-            res.send({"id" : results[0].id})
+        .then(function (results) {
+            res.send({status: 'OK', "id" : results[0].id})
         })
 })
 
@@ -68,9 +68,9 @@ router.post('/login', function (req, res) {
                 const salt = results[0].salt
                 const cipher = results[0].cipher
                 const usersCipher = encodeDesECB(password, salt, "10110101")
-                if (cipher == usersCipher) { res.send({ "result": "OK", "userId": results[0].id }) }
+                if (cipher == usersCipher) { res.send({ "status": "OK", "userId": results[0].id }) }
                 else {
-                    res.send({ "result": "NOPE", "userId": results[0].id })
+                    res.send({ "status": "NOPE", "id": results[0].id })
                 }
             } else {
                 res.end()

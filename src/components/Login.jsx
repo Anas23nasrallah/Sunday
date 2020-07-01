@@ -1,17 +1,48 @@
 import React, {useState} from 'react';
-const Login = () => {
+import { observer, inject } from 'mobx-react';
+import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
+
+const Login = inject('tasksStore')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
 
     const logIn = () => {
-        //use post req to "/login"
-        alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
+        const loginData = {
+            name:userNameInput,
+            password:passwordInput
+        }
+        Axios.post('http://localhost:3200/login',loginData).then( res => {
+            if(res.data.status === 'OK'){
+                const userID = res.data.id
+                props.tasksStore.setUserId(userID)
+                window.location.href = window.location.origin + '/tasks'
+                // <Redirect to='/tasks'/>
+            } else {
+                alert('Incorect password or username')
+            }
+        })
+        // alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
     }
 
     const createNewUser = () => {
-         //use post req to "/signup"
-        alert('Open New Tab For New Info')
+        const loginData = {
+            name:userNameInput,
+            password:passwordInput
+        }
+        Axios.post('http://localhost:3200/signup',loginData).then( res => {
+            if(res.data.status === 'OK'){
+                const userID = res.data.id
+                props.tasksStore.setUserId(userID)
+                window.location.href = window.location.origin + '/tasks'
+                // <Redirect to='/tasks'/>
+            } else {
+                alert('Problem creating new user')
+            }
+        })
+        // alert('Open New Tab For New Info')
+
     }
 
     return (
@@ -23,6 +54,6 @@ const Login = () => {
             <button onClick={createNewUser}>Create New User</button>
         </div>
     );
-}
+}))
  
 export default Login;
