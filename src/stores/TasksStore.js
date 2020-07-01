@@ -6,6 +6,8 @@ const API_URL = 'http://localhost:3200/';
 
 export class Tasks {
   @observable _tasks = [];
+ //add observable userId + action funtion to set it
+
 
   // summary of open vs closed
   @computed get openTasks() {
