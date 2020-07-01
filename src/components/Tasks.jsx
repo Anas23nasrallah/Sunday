@@ -7,15 +7,14 @@ import '../styles/tasksPage.css'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
-    // const tasks = props.tasksSrore_tasks
-    let tasks = []
+    const tasks = props.tasksStore._tasks
+    // let tasks = []
 
-    useEffect(() => {
-        async function fetchData() {
-          tasks = await props.tasksStore.getTasksFromDB(props.tasksStore.userId)
-        }
-        fetchData();
-      })
+    const fetchData =  () => {
+        props.tasksStore.getTasksFromDB(props.tasksStore.userId)
+    }
+
+    useEffect(fetchData)
 
     // const task1 = {
     //     name: 'take the dog for a walk',

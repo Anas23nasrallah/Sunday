@@ -6,7 +6,8 @@ const API_URL = 'http://localhost:3200';
 
 export class Tasks {
   @observable _tasks = [];
-  @observable userId
+  @observable userId 
+  @observable loggedIn = false
 
   // summary of open vs closed
   @computed get openTasks() {
@@ -24,6 +25,7 @@ export class Tasks {
 
   @action setUserId(userID){
     this.userId = userID
+    this.loggedIn = true
   }
 
   @action getTasksFromDB = async (id) => {
@@ -38,11 +40,16 @@ export class Tasks {
   @action addTask = async (task) => {
     try {
       let newTask = new Task(task.taskName, 'description', task.priority, task.deadLine, task.budget)
-        
+      // taskName: '',
+      // priority: '',
+      // category: '',
+      // deadLine: null,
+      // budget: 0
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
 ////////////////////////////////////////
       console.log('the id in store', this.userId)
       let addTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      console.log('add task: ' + addTask)
       // this.getTasksFromDB(this.userId);
       this._tasks.push(newTask)
       // return addTask
