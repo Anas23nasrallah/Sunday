@@ -117,6 +117,9 @@ router.get('/tasks/:userId', function (req, res) {
 router.post('/tasks/:userId', function (req, res) { 
     const taskInfo = req.body 
     const userId = req.params.userId
+    console.log(taskInfo)
+    console.log(userId)
+
     sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}","${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget})
                     `)

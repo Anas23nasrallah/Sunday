@@ -10,37 +10,37 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- Then uncomment this line and a singe create table every time:
--- USE sunday_finalProject;
+USE sunday_finalProject;
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE username_password (
---     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     username VARCHAR(30),
---     salt VARCHAR(12),
---     cipher VARCHAR(50)
--- );
+CREATE TABLE username_password (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(30),
+    salt VARCHAR(12),
+    cipher VARCHAR(50)
+);
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE tasks (
---     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---     taskName VARCHAR(40),
---     description VARCHAR(150),
---     priority VARCHAR(20),
---     deadline DATE,
---     status VARCHAR(30),
---     budget INT
--- );
+CREATE TABLE tasks (
+    taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    taskName VARCHAR(40),
+    description VARCHAR(150),
+    priority VARCHAR(20),
+    deadline DATE,
+    status VARCHAR(30),
+    budget INT
+);
 
 
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE user_tasks (
---     task_id INT,
---     user_id INT,
---     FOREIGN KEY(user_id) REFERENCES username_password(id),
---     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
--- );
+CREATE TABLE user_tasks (
+    task_id INT,
+    user_id INT,
+    FOREIGN KEY(user_id) REFERENCES username_password(id),
+    FOREIGN KEY(task_id) REFERENCES tasks(taskId)
+);
 
