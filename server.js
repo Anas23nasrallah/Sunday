@@ -28,4 +28,4 @@ app.get('*', function (req, res) {
 
 
 const port = 3200
-app.listen(port)
+app.listen(port,console.log(`Server up and running on port ${port}`))
