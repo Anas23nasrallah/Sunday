@@ -7,7 +7,7 @@ const AddTask = inject('tasksStore')( observer((props) => {
         taskName: '',
         priority: '',
         category: '',
-        deadLine: null,
+        deadLine: '',
         budget: 0
     })
 
