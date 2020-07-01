@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import { observer, inject } from 'mobx-react';
 import Axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import '../styles/login.css'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
 
 const Login = inject('tasksStore')(observer((props) => {
 
@@ -47,11 +51,21 @@ const Login = inject('tasksStore')(observer((props) => {
 
     return (
         <div id="login-page-container">
-            <h1>LOGIN PAGE:</h1>
-            <input type="text" placeholder="User Name" value={userNameInput} onChange={(e)=>setUserNameInput(e.target.value)}/> <br/>
-            <input type="text" placeholder="Password" value={passwordInput} onChange={(e)=>setPasswordInput(e.target.value)}/> <br/>
-            <button onClick={logIn}>Login In</button> <br/>
-            <button onClick={createNewUser}>Create New User</button>
+            <div id="login-page">
+                {/* <h1>Welcome,</h1> */}
+                <TextField id="outlined-password-input" label="User Name" type="text" 
+                autoComplete="current-password" variant="outlined" 
+                style={{marginTop: '5%'}}
+                value={userNameInput} onChange={(e)=>setUserNameInput(e.target.value)}/> <br/>
+                <TextField id="outlined-password-input" label="Password" type="password" 
+                autoComplete="current-password" variant="outlined" 
+                style={{marginTop: '5%'}}
+                value={passwordInput} onChange={(e)=>setPasswordInput(e.target.value)}/> <br/>
+            
+                <Button variant="contained" color="primary" onClick={logIn}> Log In </Button> <br/>
+                <Button variant="contained" color="primary" onClick={createNewUser}> Create New User </Button>
+
+            </div>
         </div>
     );
 }))

@@ -1,0 +1,22 @@
+#login-page-container{
+    display: grid;
+}
+
+#login-page{
+    border: solid black 2px;
+    width: fit-content;
+    height: fit-content;
+    padding: 5%;
+    text-align: center;
+    justify-self: center;
+    margin-top: 5%;
+    border-radius: 4%;
+}
+
+#login-page button{
+    margin-top: 3%;
+}
+
+/* .MuiFormControl-root MuiTextField-root{
+    margin-top: 5%;
+} */
