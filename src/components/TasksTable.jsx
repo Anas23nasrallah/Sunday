@@ -4,7 +4,6 @@ import Task from './Task';
 const TasksTable = (props) => {
 
     const {category, tasks} = props
-
     return (
         <div>
             <p>{category}</p>

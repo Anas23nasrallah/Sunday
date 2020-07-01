@@ -23,8 +23,6 @@ const Login = inject('tasksStore')(observer((props) => {
                 const userID = res.data.userId
                 // alert(userID)
                 props.tasksStore.setUserId(userID)
-                alert(props.tasksStore.userId)
-
                 // window.location.href = window.location.origin + '/tasks'
 
             } else {
@@ -50,7 +48,6 @@ const Login = inject('tasksStore')(observer((props) => {
             }
         })
         // alert('Open New Tab For New Info')
-
     }
 
     return (
