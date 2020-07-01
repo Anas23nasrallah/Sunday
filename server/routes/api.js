@@ -86,9 +86,9 @@ router.post('/login', function (req, res) {
      # return - array of all relevant tasks with fields for each : id,taskName,description,priority,deadLine,status,budget
 */
 router.get('/tasks/:userId', function (req, res) {
-    const userId = req.params.id
-    sequelize.query(`SELECT tasks.id,tasks.taskName,tasks.description,tasks.priority,tasks.deadLine,tasks.status,tasks.budget
-    FROM tasks JOIN user_tasks ON tasks.id=user_tasks.task_id
+    const userId = req.params.userId
+    sequelize.query(`SELECT tasks.taskId,tasks.taskName,tasks.description,tasks.priority,tasks.deadLine,tasks.status,tasks.budget
+    FROM tasks JOIN user_tasks ON tasks.taskId=user_tasks.task_id
     WHERE user_tasks.user_id = ${userId}
    `, { type: Sequelize.QueryTypes.SELECT })
         .then(function (results) {
@@ -117,17 +117,15 @@ router.get('/tasks/:userId', function (req, res) {
 router.post('/tasks/:userId', function (req, res) { 
     const taskInfo = req.body 
     const userId = req.params.userId
-    console.log(taskInfo)
-    console.log(userId)
 
     sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}","${taskInfo.priority}",
-                    "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget})
+                    "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget}, '${taskInfo.category}')
                     `)
         .then(function (result) {
             const taskId = result[0]
             sequelize.query(`INSERT INTO user_tasks VALUES(${taskId},${userId})
-            `).then( function () {
-                   res.send({" taskId" : result[0]})
+            `, { type: Sequelize.QueryTypes.SELECT }).then( function () {
+                   res.send({"taskId" : result[0]})
             })
         })
 })

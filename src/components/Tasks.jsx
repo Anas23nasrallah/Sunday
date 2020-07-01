@@ -4,10 +4,11 @@ import TasksTable from './TasksTable'
 import AddTask from './AddTask'
 import { inject, observer } from 'mobx-react'
 import '../styles/tasksPage.css'
+import { toJS } from 'mobx'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
-    const tasks = props.tasksStore._tasks
+    const tasks = props.tasksStore._tasks.map(t => toJS(t))
     // let tasks = []
 
     const fetchData =  () => {
@@ -56,7 +57,9 @@ const Tasks = inject('tasksStore')(observer((props) => {
     }
 
     const groupedTasks = groupByCategory(tasks)
+    // console.log(groupedTasks)
     let addTaskToggleFlag = false
+
     const showAddTaskComp = () => {
         if(!addTaskToggleFlag){
             addTaskToggleFlag=true
@@ -65,7 +68,6 @@ const Tasks = inject('tasksStore')(observer((props) => {
             addTaskToggleFlag=false
             return null
         }
-        
     }
     return (
         <div id="tasks-page">

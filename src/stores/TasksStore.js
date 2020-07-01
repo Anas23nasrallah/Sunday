@@ -39,7 +39,8 @@ export class Tasks {
 
   @action addTask = async (task) => {
     try {
-      let newTask = new Task(task.taskName, 'description', task.priority, task.deadLine, task.budget)
+      let newTask = {taskName: task.taskName, description:'description',status:'starting' ,priority:task.priority, 
+      deadLine: task.deadLine, budget: task.budget, category: task.category}
       // taskName: '',
       // priority: '',
       // category: '',
@@ -47,11 +48,14 @@ export class Tasks {
       // budget: 0
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
 ////////////////////////////////////////
-      console.log('the id in store', this.userId)
-      let addTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
-      console.log('add task: ' + addTask)
+       
+      let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      console.log(savedTask)
+
+      const taskObj = new Task(savedTask.data.taskId, task.taskName, 'description', task.priority, task.deadLine, task.budget, task.category)
+      // console.log('add task: ' , addTask)
       // this.getTasksFromDB(this.userId);
-      this._tasks.push(newTask)
+      this._tasks.push(taskObj)
       // return addTask
 
     } catch (err) {
