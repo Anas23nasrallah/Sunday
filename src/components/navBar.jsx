@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -38,13 +38,13 @@ export default function NavBar() {
             {/* <MenuIcon /> */}
             <h1>Sunday.com</h1>
           </IconButton>
-          <Link to='/' > 
-             <Typography variant="h6" className={classes.title}>
-                LoginIn
+          <Link to='/' className={classes.title}> 
+             <Typography variant="h6" >
+                Login
               </Typography>
           </Link>
-        <Link to='/tasks' >
-              <Typography variant="h6" className={classes.title}>
+        <Link to='/tasks' className={classes.title}>
+              <Typography variant="h6" >
                 Tasks
             </Typography>
           </Link>
