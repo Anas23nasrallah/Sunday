@@ -48,13 +48,23 @@ const Tasks = inject('tasksStore')(observer((props) => {
     }
 
     const groupedTasks = groupByCategory(tasks)
-
+    let addTaskToggleFlag = false
+    const showAddTaskComp = () => {
+        if(!addTaskToggleFlag){
+            addTaskToggleFlag=true
+            return <AddTask />
+        } else {
+            addTaskToggleFlag=false
+            return null
+        }
+        
+    }
     return (
         <div>
 
             <Router >
                 <Link to='/addTask' ><span> Add Task</span></Link>
-                <Route exact path='/addTask' render={() => <AddTask />} />
+                <Route exact path='/addTask' render={showAddTaskComp} />
             </Router>
 
             <div>

@@ -10,13 +10,13 @@ const App = () => {
   return (
     <Router >
 
+      <Link to='/' ><span> Login</span></Link>
       <Link to='/tasks' ><span> Tasks</span></Link>
-      <Link to='/login' ><span> Login</span></Link>
 
       <hr></hr>
 
-      <Route exact path='/tasks' render={() => <Tasks />} />
-      <Route exact path='/login' render={() => <Login />} />
+      <Route exact path='/' component={Login} />
+      <Route exact path='/tasks' component={Tasks} />
 
     </Router>
   )
