@@ -13,11 +13,11 @@ const Login = inject('tasksStore')(observer((props) => {
             name:userNameInput,
             password:passwordInput
         }
-        Axios.post('/login',loginData).then( res => {
-            if(res.data.result === 'OK'){
+        Axios.post('http://localhost:3200/login',loginData).then( res => {
+            if(res.data.status === 'OK'){
                 const userID = res.data.id
                 props.tasksStore.setUserId(userID)
-                window.location.href = window.location.hostname + '/tasks'
+                window.location.href = window.location.origin + '/tasks'
                 // <Redirect to='/tasks'/>
             } else {
                 alert('Incorect password or username')
@@ -31,17 +31,18 @@ const Login = inject('tasksStore')(observer((props) => {
             name:userNameInput,
             password:passwordInput
         }
-        Axios.post('/signup',loginData).then( res => {
-            if(res.data.result === 'OK'){
+        Axios.post('http://localhost:3200/signup',loginData).then( res => {
+            if(res.data.status === 'OK'){
                 const userID = res.data.id
                 props.tasksStore.setUserId(userID)
-                window.location.href = window.location.hostname + '/tasks'
+                window.location.href = window.location.origin + '/tasks'
                 // <Redirect to='/tasks'/>
             } else {
                 alert('Problem creating new user')
             }
         })
         // alert('Open New Tab For New Info')
+
     }
 
     return (

@@ -7,6 +7,7 @@ const API_URL = 'http://localhost:3200/';
 export class Tasks {
   @observable _tasks = [];
   @observable userId
+  
   // summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
