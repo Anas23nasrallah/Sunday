@@ -31,7 +31,7 @@ export default function NavBar() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="nav-bar">
       <AppBar position="static" className={classes.container}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">

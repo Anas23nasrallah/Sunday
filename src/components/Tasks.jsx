@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import TasksTable from './TasksTable'
 import AddTask from './AddTask'
 import { inject, observer } from 'mobx-react'
+import '../styles/tasksPage.css'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
@@ -60,7 +61,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
         
     }
     return (
-        <div>
+        <div id="tasks-page">
 
             <Router >
                 <Link to='/addTask' ><span> Add Task</span></Link>
