@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 
 
 export class Task {
-  @observable taskId;
+  // @observable taskId;
   @observable taskName;
   @observable description;
   @observable priority;
@@ -10,13 +10,12 @@ export class Task {
   @observable status;
   @observable budget;
 
-  constructor(taskId, taskName, description, priority, deadLine, status, budget) {
-    this.taskId = taskId;
+  constructor(taskName, description, priority, deadLine, budget) {
     this.taskName = taskName;
     this.description = description;
     this.priority = priority;
     this.deadLine = deadLine;
-    this.status = status;
+    this.status = 'Starting';
     this.budget = budget;
   }
 }

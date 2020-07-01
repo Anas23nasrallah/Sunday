@@ -1,13 +1,13 @@
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import { Task } from './Task';
-const API_URL = 'http://localhost:3200/';
+const API_URL = 'http://localhost:3200';
 
 
 export class Tasks {
   @observable _tasks = [];
   @observable userId
-  
+
   // summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
@@ -35,18 +35,17 @@ export class Tasks {
     }
   };
 
-  @action addTask = async (taskName, description, priority, deadLine, status, budget) => {
+  @action addTask = async (task) => {
     try {
-      let newTask = new Task(taskName, description, priority, deadLine, status, budget)
+      let newTask = new Task(task.taskName, 'description', task.priority, task.deadLine, task.budget)
         
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
-      const userId = 1
 ////////////////////////////////////////
-
-      let addTask = await axios.post(`${API_URL}/tasks`, { newTask, userId });
-      this.getTasksFromDB();
-      this._tasks.push(addTask)
-      return addTask
+      console.log('the id in store', this.userId)
+      let addTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      // this.getTasksFromDB(this.userId);
+      this._tasks.push(newTask)
+      // return addTask
 
     } catch (err) {
       throw new Error(err);

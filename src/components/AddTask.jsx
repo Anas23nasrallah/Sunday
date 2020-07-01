@@ -7,7 +7,7 @@ const AddTask = inject('tasksStore')( observer((props) => {
         taskName: '',
         priority: '',
         category: '',
-        deadline: '',
+        deadLine: null,
         budget: 0
     })
 
@@ -40,7 +40,7 @@ const AddTask = inject('tasksStore')( observer((props) => {
             <input name='category' placeholder='The budget' onChange={handleChange} value={inputs.category} /><br></br>
 
             <span>Deadline:  </span>
-            <input name='deadline' placeholder='The deadline' onChange={handleChange} value={inputs.deadline} type='date' /><br></br>
+            <input name='deadLine' placeholder='The deadline' onChange={handleChange} value={inputs.deadLine} type='date' /><br></br>
 
             <span>Budget: </span>
             <input name='budget' placeholder='The budget' onChange={handleChange} value={inputs.budget} type='number' /><br></br>

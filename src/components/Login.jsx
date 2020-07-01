@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { observer, inject } from 'mobx-react';
 import Axios from 'axios';
+
 import { Redirect } from 'react-router-dom';
 import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
@@ -19,7 +20,7 @@ const Login = inject('tasksStore')(observer((props) => {
         }
         Axios.post('http://localhost:3200/login',loginData).then( res => {
             if(res.data.status === 'OK'){
-                const userID = res.data.id
+                const userID = res.data.userId
                 props.tasksStore.setUserId(userID)
                 window.location.href = window.location.origin + '/tasks'
                 // <Redirect to='/tasks'/>
