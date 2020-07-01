@@ -39,6 +39,7 @@ const encodeDesECB = function (password, salt, keyString) {
 
 /*   New user singed up, add it to the user-password table
      just after getting the cipher using DES encry.. algorithm 
+        # return - userId 
 */
 router.post('/signup', function (req, res) {
     const password = req.body.password
@@ -47,7 +48,7 @@ router.post('/signup', function (req, res) {
     const cipher = encodeDesECB(password, salt, "10110101")
     sequelize.query(`INSERT INTO username_password VALUES(null,"${name}","${salt}","${cipher}")`)
         .then(function (result) {
-            res.end()
+            res.send({"id" : results[0].id})
         })
 })
 
@@ -67,7 +68,7 @@ router.post('/login', function (req, res) {
                 const salt = results[0].salt
                 const cipher = results[0].cipher
                 const usersCipher = encodeDesECB(password, salt, "10110101")
-                if (cipher == usersCipher) { res.send({ "result": "OK" }) }
+                if (cipher == usersCipher) { res.send({ "result": "OK", "userId": results[0].id }) }
                 else {
                     res.send({ "result": "NOPE", "userId": results[0].id })
                 }
@@ -113,15 +114,18 @@ router.get('/tasks/:userId', function (req, res) {
  #result - return res : id of the new task
      
 */
-router.post('/tasks', function (req, res) {
-    const taskInfo = req.body
+router.post('/tasks/:userId', function (req, res) { 
+    const taskInfo = req.body 
+    const userId = req.params.userId
     sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}","${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget})
                     `)
-            /// Need to Add to the user-tasks table !!!!!!! Don't forget 
-             ///////////
         .then(function (result) {
-            res.send({" taskId" : result[0]})
+            const taskId = result[0]
+            sequelize.query(`INSERT INTO user_tasks VALUES(${taskId},${userId})
+            `).then( function () {
+                   res.send({" taskId" : result[0]})
+            })
         })
 })
 

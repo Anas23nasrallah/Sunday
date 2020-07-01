@@ -5,10 +5,12 @@ const Login = () => {
     const [passwordInput, setPasswordInput] = useState('')
 
     const logIn = () => {
+        //use post req to "/login"
         alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
     }
 
     const createNewUser = () => {
+         //use post req to "/signup"
         alert('Open New Tab For New Info')
     }
 
