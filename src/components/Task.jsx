@@ -5,6 +5,7 @@ const Task = (props) => {
     const {taskName, priority, progressStatus, deadline, budget} = props.task
 
     return (
+        <tbody>
         <tr >
             <td >{taskName}</td>
             <td>{priority}</td>
@@ -12,6 +13,7 @@ const Task = (props) => {
             <td>{deadline}</td>
             <td>{budget}</td>
         </tr>
+        </tbody>
     );
 }
 

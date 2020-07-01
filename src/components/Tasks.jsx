@@ -8,14 +8,17 @@ import { toJS } from 'mobx'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
-    const tasks = props.tasksStore._tasks.map(t => toJS(t))
+    // [props.tasksStore._tasks.map(t => toJS(t))]
+    const tasks = props.tasksStore._tasks
+
+    
     // let tasks = []
 
     const fetchData =  () => {
         props.tasksStore.getTasksFromDB(props.tasksStore.userId)
     }
 
-    useEffect(fetchData)
+    useEffect(fetchData,[tasks])
 
     // const task1 = {
     //     name: 'take the dog for a walk',
@@ -45,6 +48,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
     // const tasks = [task1, task2, task3]
 
     const groupByCategory = (tasks) => {
+        // console.log(tasks)
         const groupedTasks = {}
         for (let task of tasks) {
             if (groupedTasks[task.category]) {
@@ -71,12 +75,10 @@ const Tasks = inject('tasksStore')(observer((props) => {
     }
     return (
         <div id="tasks-page">
-
             <Router >
                 <Link to='/addTask' ><span> Add Task</span></Link>
                 <Route exact path='/addTask' render={showAddTaskComp} />
             </Router>
-
             <div>
                 {Object.keys(groupedTasks).map((group, i) => <TasksTable key={i} category={group} tasks={groupedTasks[group]} />)}
             </div>
