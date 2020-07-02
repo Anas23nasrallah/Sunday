@@ -19,7 +19,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
     }
 
 
-    useEffect(fetchData,[tasks])
+    useEffect(fetchData, [])
 
     // const task1 = {
     //     name: 'take the dog for a walk',

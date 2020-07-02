@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
 // const { tasks } = require('../../src/stores/mainStore');
@@ -116,13 +116,14 @@ router.post('/tasks/:userId', function (req, res) {
     const taskInfo = req.body 
     const userId = req.params.userId
 
-    sequelize.query(`INSERT INTO tasks VALUES(null,"${taskInfo.taskName}","${taskInfo.description}", "${taskInfo.priority}",
+
+    sequelize.query(`INSERT INTO tasks VALUES(null, "${taskInfo.taskName}", "${taskInfo.description}", "${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget}, '${taskInfo.category}')
                     `, { type: Sequelize.QueryTypes.SELECT })
         .then( (result) => {
             const taskId = result[0]
-            sequelize.query(`INSERT INTO user_tasks VALUES(${taskId},${userId})
-            `, { type: Sequelize.QueryTypes.SELECT }).then( function () {
+            sequelize.query(`INSERT INTO user_tasks VALUES(${taskId}, ${userId})
+            `).then( function () {
                    res.send({"taskId" : taskId})
             })
         })
