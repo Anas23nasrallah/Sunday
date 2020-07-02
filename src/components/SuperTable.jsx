@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
+import {observer, inject} from 'mobx-react'
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -17,6 +18,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { useEffect } from 'react';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -38,14 +40,14 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   };
 
-export default function SuperTable(props) {
+export default inject('tasksStore')(observer( function SuperTable(props) {
   const [state, setState] = React.useState({
     
     columns: [
       { title: 'Task Name', field: 'taskName' },
       { title: 'Description', field: 'description' },
       { title: 'Priority', field: 'priority' },
-      { title: 'Deadline', field: 'deadline', type: 'date' },
+      { title: 'Deadline', field: 'deadline' },
       { title: 'Status', field: 'status' },
       { title: 'Budget', field: 'budget', type: 'numeric' },
     //   {
@@ -54,7 +56,7 @@ export default function SuperTable(props) {
     //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
     //   },
     ],
-
+    // tasks={groupedTasks[group]}
     data: props.tasks
     // [
     //   { taskName: 'Mehmet', description: 'Baran', priority: 1987, seadline: '23/01/2020' , status:'Start', budget:100},
@@ -66,6 +68,12 @@ export default function SuperTable(props) {
     //   },
     // ],
   });
+
+  useEffect( () => {
+    let oldData = {...state}
+    oldData.data = props.tasks
+    setState(oldData)
+  },[props.tasks])
 
   return (
     <div className="tasks-category-table">
@@ -115,4 +123,4 @@ export default function SuperTable(props) {
       </div>
   );
 }
-
+))

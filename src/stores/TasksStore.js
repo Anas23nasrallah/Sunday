@@ -9,6 +9,19 @@ export class Tasks {
   @observable userId 
   @observable loggedIn = false
 
+  @computed get getTasksByCategory(){
+    const groupedTasks = {}
+    for (let task of this._tasks) {
+        if (groupedTasks[task.category]) {
+            groupedTasks[task.category].push(task)
+        } else {
+            groupedTasks[task.category] = [task]
+        }
+    }
+    return groupedTasks
+}
+
+
   // summary of open vs closed
   @computed get openTasks() {
     let openCounter = 0;
@@ -57,11 +70,14 @@ export class Tasks {
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
 ////////////////////////////////////////
        
-      let savedTaskID = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      // console.log(savedTask)      
       // console.log(savedTaskID.data)
 
-      let taskObj = new Task(savedTaskID.data.taskId, task.taskName, 'description' ,task.priority, 
-      task.deadLine, task.budget, task.category)
+
+//       let taskObj = new Task(savedTaskID.data.taskId, task.taskName, 'description' ,task.priority, 
+//       task.deadLine, task.budget, task.category)
+
       // console.log('add task: ' , addTask)
       // this._tasks.push(taskObj)
       this.getTasksFromDB(this.userId);

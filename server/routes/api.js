@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
 const { bind } = require('file-loader');
@@ -164,7 +164,6 @@ router.post('/tasks/:userId', function (req, res) {
             })
         })
 })
-
 
 
 
