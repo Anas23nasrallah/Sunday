@@ -55,8 +55,8 @@ export class Tasks {
 
       const taskObj = new Task(savedTask.data.taskId, task.taskName, 'description', task.priority, task.deadLine, task.budget, task.category)
       // console.log('add task: ' , addTask)
-      // this.getTasksFromDB(this.userId);
-      this._tasks.push(taskObj)
+      this.getTasksFromDB(this.userId);
+      // this._tasks.push(taskObj)
       // return addTask
 
     } catch (err) {
