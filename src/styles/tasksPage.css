@@ -9,3 +9,13 @@
     width: 80%;
     margin-left: 10%;
 }
+
+#new-category-input button{
+    height: 55px;
+    margin-left: 1%;
+    font-weight: 800;
+}
+
+.MuiInputBase-input{
+    cursor: pointer;
+}

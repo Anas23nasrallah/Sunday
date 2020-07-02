@@ -10,7 +10,7 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- Then uncomment this line and a singe create table every time:
--- USE sunday_finalproject;
+USE sunday_finalproject;
 
 -- DROP TABLE user_tasks
 -- DROP TABLE tasks ;
@@ -49,8 +49,8 @@
 -- );
 
 -- ALTER TABLE tasks ADD category VARCHAR(30);
--- DELETE FROM user_tasks;
--- DELETE FROM tasks;
+DELETE FROM user_tasks;
+DELETE FROM tasks;
 
 
 
