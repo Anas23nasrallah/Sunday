@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import { observer, inject } from 'mobx-react';
 import Axios from 'axios';
-
-import { Redirect } from 'react-router-dom';
 import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -64,7 +62,7 @@ const Login = inject('tasksStore')(observer((props) => {
                 value={passwordInput} onChange={(e)=>setPasswordInput(e.target.value)}/> <br/>
             
                 <Button variant="contained" color="primary" onClick={logIn}> Log In </Button> <br/>
-                <Button variant="contained" color="primary" onClick={createNewUser}> Create New User </Button>
+                {/* <Button variant="contained" color="primary" onClick={createNewUser}> Create New User </Button> */}
 
             </div>
         </div>

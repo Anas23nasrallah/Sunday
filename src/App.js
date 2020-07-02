@@ -6,6 +6,7 @@ import Login from './components/Login';
 import './App.css';
 import NavBar from './components/navBar';
 import { Redirect } from 'react-router-dom';
+import SignUp from './components/SignUp';
 
 const App = inject('tasksStore')(observer((props) => {
 
@@ -21,6 +22,8 @@ const App = inject('tasksStore')(observer((props) => {
       </Route>
 
       <Route exact path='/tasks' component={Tasks} />
+      <Route exact path='/signUp' component={SignUp} />
+
 
     </Router>
   )
