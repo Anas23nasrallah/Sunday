@@ -57,11 +57,38 @@ router.post('/signup', function (req, res) {
         .then(function (results) {
             const userId = results[0]
             sequelize.query(`INSERT INTO users VALUES(${userId},"${name}","${firstName}","${lastName}","${email}","${birthDate}")`)
-            .then(function (results) {
-                res.send({status: 'OK'})
+            .then(function (secondResults) {
+                res.send({status : "OK"})
             })
         })
 })
+
+
+
+
+/*
+     get usernames 
+ */
+router.get('/users', function (req, res) {
+    sequelize.query(`SELECT username_password.username
+    FROM username_password
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results.map(u=>u.username)) )
+})
+
+
+/*
+      get user's info 
+*/
+router.get('/user/:userId', function (req, res) {
+    const userId = req.params.userId
+    sequelize.query(`SELECT *
+                    FROM users
+                    WHERE users.userId = ${userId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results[0]) )
+})
+
 
 
 /*   trying to log in 
@@ -126,12 +153,10 @@ router.get('/tasks/:userId', function (req, res) {
 router.post('/tasks/:userId', function (req, res) {
     const taskInfo = req.body
     const userId = req.params.userId
-
-
     sequelize.query(`INSERT INTO tasks VALUES(null, "${taskInfo.taskName}", "${taskInfo.description}", "${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget}, '${taskInfo.category}')
-                    `, { type: Sequelize.QueryTypes.SELECT })
-        .then( (result) => {
+                    `)
+        .then( function (result) {
             const taskId = result[0]
             sequelize.query(`INSERT INTO user_tasks VALUES(${taskId}, ${userId})
             `).then(function () {

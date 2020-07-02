@@ -60,11 +60,11 @@ export class Tasks {
       let savedTaskID = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
       // console.log(savedTaskID.data)
 
-      let taskObj = new Task(savedTaskID.data.id, task.taskName, 'description' ,task.priority, 
+      let taskObj = new Task(savedTaskID.data.taskId, task.taskName, 'description' ,task.priority, 
       task.deadLine, task.budget, task.category)
       // console.log('add task: ' , addTask)
-      this.getTasksFromDB(this.userId);
       // this._tasks.push(taskObj)
+      this.getTasksFromDB(this.userId);
       // return addTask
 
     } catch (err) {
