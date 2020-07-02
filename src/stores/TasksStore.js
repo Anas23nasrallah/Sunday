@@ -32,6 +32,7 @@ export class Tasks {
     try {
       let tasks = await axios.get(`${API_URL}/tasks/${id}`); // ! check if ? or :
       this._tasks = tasks.data;
+      // console.log(tasks)
     } catch (err) {
       console.log(err);
     }

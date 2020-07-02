@@ -10,7 +10,10 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- Then uncomment this line and a singe create table every time:
-USE sunday_finalProject;
+USE sunday_finalproject;
+
+-- DROP TABLE user_tasks
+-- DROP TABLE tasks ;
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
@@ -30,7 +33,8 @@ USE sunday_finalProject;
 --     priority VARCHAR(20),
 --     deadline DATE,
 --     status VARCHAR(30),
---     budget INT
+--     budget INT,
+--     category VARCHAR(50)
 -- );
 
 
@@ -47,5 +51,7 @@ USE sunday_finalProject;
 ALTER TABLE tasks ADD category VARCHAR(30);
 -- DELETE FROM user_tasks;
 -- DELETE FROM tasks;
+
+
 
 
