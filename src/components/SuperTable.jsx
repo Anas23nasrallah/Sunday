@@ -42,13 +42,14 @@ const tableIcons = {
   };
 
 export default inject('tasksStore')(observer( function SuperTable(props) {
+  const tasksStore = props.tasksStore
   const [state, setState] = React.useState({
-    
+
     columns: [
       { title: 'Task Name', field: 'taskName' },
       { title: 'Description', field: 'description' },
       { title: 'Priority', field: 'priority' },
-      { title: 'Deadline', field: 'deadline', type:"date" },
+      { title: 'Deadline', field: 'deadLine', type:"date" },
       { title: 'Status', field: 'status' },
       { title: 'Budget', field: 'budget', type: 'numeric' },
     //   {
@@ -76,6 +77,25 @@ export default inject('tasksStore')(observer( function SuperTable(props) {
     // ],
   });
 
+  const addTask = (rowData) => {
+    const newTask = {...rowData,category:props.category}
+    // console.log(newTask)
+    tasksStore.addTask(newTask)
+  }
+
+  const updateTask = (rowData) => {
+    const updatedTask = {...rowData,category:props.category}
+    // console.log(newTask)
+    tasksStore.updateTask(updatedTask)
+  }
+
+  const deleteTask = (rowData) => {
+    const taskToDelete = rowData.taskId
+    // {...rowData,category:props.category}
+    // console.log(taskToDelete)
+    tasksStore.deleteTask(taskToDelete)
+  }
+
   useEffect( () => {
     let oldData = {...state}
     oldData.data = props.tasks
@@ -89,54 +109,52 @@ export default inject('tasksStore')(observer( function SuperTable(props) {
       title={props.category}
       columns={state.columns}
       data={state.data}
-      components={{
-        Deadline: props => (
-          <input type='date' onClick={() => alert('what')}/>
-          // <Input
-          //   onClick={(event) => props.action.onClick(event, props.data)}
-          //   color="primary"
-          //   variant="contained"
-          //   style={{textTransform: 'none'}}
-          //   size="small"
-          // >
-          //   My Button
-          // </Input>
-        ),
-      }}
+      // actions={[
+      //   {
+      //     icon: 'save',
+      //     tooltip: 'Save User',
+      //     onClick: (event, rowData) => alert("You saved " + rowData.name)
+      //   }
+      // ]}
       editable={{
-        onRowAdd: (newData) =>
+        onRowAdd: 
+        (newData) => 
         new Promise((resolve) => {
           setTimeout(() => {
             resolve();
-            setState((prevState) => {
-              const data = [...prevState.data];
-              data.push(newData);
-              return { ...prevState, data };
-            });
+            // setState((prevState) => {
+            //   const data = [...prevState.data];
+            //   data.push(newData);
+            //   return { ...prevState, data };
+            // });
+            addTask(newData)
           }, 600);
-        }),
+        })
+        ,
         onRowUpdate: (newData, oldData) =>
         new Promise((resolve) => {
           setTimeout(() => {
             resolve();
-            if (oldData) {
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data[data.indexOf(oldData)] = newData;
-                return { ...prevState, data };
-              });
-            }
+            // if (oldData) {
+            //   setState((prevState) => {
+            //     const data = [...prevState.data];
+            //     data[data.indexOf(oldData)] = newData;
+            //     return { ...prevState, data };
+            //   });
+            // }
+            updateTask(newData)
           }, 600);
         }),
         onRowDelete: (oldData) =>
         new Promise((resolve) => {
           setTimeout(() => {
             resolve();
-            setState((prevState) => {
-              const data = [...prevState.data];
-              data.splice(data.indexOf(oldData), 1);
-              return { ...prevState, data };
-            });
+            // setState((prevState) => {
+            //   const data = [...prevState.data];
+            //   data.splice(data.indexOf(oldData), 1);
+            //   return { ...prevState, data };
+            // });
+            deleteTask(oldData)
           }, 600);
         }),
       }}

@@ -2,6 +2,7 @@ import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import { Task } from './Task';
 const API_URL = 'http://localhost:3200';
+const dateFormat = require('dateformat');
 
 
 export class Tasks {
@@ -12,32 +13,44 @@ export class Tasks {
 
   @computed get getTasksByCategory(){
     const groupedTasks = {}
-    for(let cat of this.categories){
-      groupedTasks[cat] = []
-    }
-    for (let task of this._tasks) {
-      groupedTasks[task.category].push(task)
-    }
+    this._tasks.forEach( t => groupedTasks[t.category] ? groupedTasks[t.category].push(t) :  groupedTasks[t.category] = [t])
+    this.categories.forEach( c => groupedTasks[c] = [])
+    // if(!groupedTasks['Personal']){
+    //   response.push('Personal')
+    // }
     return groupedTasks
   }
 
-  @action setCategories(){
-    const groupedTasks = {}
-    for (let task of this._tasks) {
-      if (groupedTasks[task.category]) {
-          groupedTasks[task.category].push(task)
-      } else {
-          groupedTasks[task.category] = [task]
-      }
-    }
-    const response = Object.keys(groupedTasks)
-    if(!groupedTasks['Personal']){
-      response.push('Personal')
-    }
-    // groupedTasks['Personal'] ? null : groupedTasks
-    // this.categories = [...this.categories, ...Object.keys(groupedTasks)] 
-    this.categories = response
-  }
+  // @computed get getTasksByCategory(){
+  //   const groupedTasks = {}
+  //   for(let cat of this.categories){
+  //     groupedTasks[cat] = []
+  //   }
+  //   for (let task of this._tasks) {
+  //     groupedTasks[task.category].push(task)
+  //   }
+  //   return groupedTasks
+  // }
+
+  // @action setCategories(){
+  //   const groupedTasks = {}
+  //   if(this._tasks.length){
+  //     for (let task of this._tasks) {
+  //       if (groupedTasks[task.category]) {
+  //           groupedTasks[task.category].push(task)
+  //       } else {
+  //           groupedTasks[task.category] = [task]
+  //       }
+  //     }
+  //   }
+  //   const response = Object.keys(groupedTasks)
+  //   if(!groupedTasks['Personal']){
+  //     response.push('Personal')
+  //   }
+  //   // groupedTasks['Personal'] ? null : groupedTasks
+  //   // this.categories = [...this.categories, ...Object.keys(groupedTasks)] 
+  //   this.categories = response
+  // }
 
   @action addCategory(categoryInput){
     this.categories.push(categoryInput)
@@ -66,6 +79,7 @@ export class Tasks {
     try {
       let tasks = await axios.get(`${API_URL}/tasks/${id}`); // ! check if ? or :
       this._tasks = tasks.data;
+      // this.setCategories()
       // console.log(tasks)
     } catch (err) {
       console.log(err);
@@ -80,9 +94,11 @@ export class Tasks {
   
 
   @action addTask = async (task) => {
+    const d = new Date(task.deadLine)
+    const date = dateFormat(d,'isoDate')
     try {
       let newTask = {taskName: task.taskName, description:'description',status:'starting' ,priority:task.priority, 
-      deadLine: task.deadLine, budget: task.budget, category: task.category}
+      deadLine: date, budget: task.budget, category: task.category}
       // taskName: '',
       // priority: '',
       // category: '',
@@ -116,6 +132,7 @@ export class Tasks {
   @action updateTask = async (newTask) => {
     try {
       let send = await axios.put(`${API_URL}/updateTask/`,newTask);
+      this.getTasksFromDB(this.userId);
       return send.data;
     } catch (err) {
       throw new Error(err.response.data.message);
