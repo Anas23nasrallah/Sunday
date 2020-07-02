@@ -6,20 +6,23 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 
-const Login = inject('tasksStore')(observer((props) => {
+const Login = inject('tasksStore', 'user')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
 
     const logIn = async () => {
+        console.log(passwordInput)
         const loginData = {
             name:userNameInput,
             password:passwordInput
         }
-        Axios.post('http://localhost:3200/login',loginData).then( res => {
+        
+        Axios.post('http://localhost:3200/login',loginData).then( async res => {
             if(res.data.status === 'OK'){
                 const userID = res.data.userId
                 // alert(userID)
+                const response = await Axios.get(`http://localhost:3200/user/${userID}`)
                 props.tasksStore.setUserId(userID)
                 // window.location.href = window.location.origin + '/tasks'
 
