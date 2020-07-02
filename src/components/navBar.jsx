@@ -53,6 +53,11 @@ export default function NavBar() {
                 Sign Up
             </Typography>
           </Link>
+          <Link to='/profile' className={classes.title}>
+              <Typography variant="h6" >
+                Profile
+            </Typography>
+          </Link>
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
