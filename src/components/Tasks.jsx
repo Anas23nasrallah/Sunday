@@ -49,21 +49,22 @@ const Tasks = inject('tasksStore')(observer((props) => {
 
     // const tasks = [task1, task2, task3]
 
-    const groupByCategory = (tasks) => {
-        // console.log(tasks)
-        const groupedTasks = {}
-        for (let task of tasks) {
-            console.log(task)
-            if (groupedTasks[task.category]) {
-                groupedTasks[task.category].push(task)
-            } else {
-                groupedTasks[task.category] = [task]
-            }
-        }
-        return groupedTasks
-    }
+    // const groupByCategory = (tasks) => {
+    //     // console.log(tasks)
+    //     const groupedTasks = {}
+    //     for (let task of tasks) {
+    //         // console.log(task)
+    //         if (groupedTasks[task.category]) {
+    //             groupedTasks[task.category].push(task)
+    //         } else {
+    //             groupedTasks[task.category] = [task]
+    //         }
+    //     }
+    //     return groupedTasks
+    // }
+    const groupedTasks = props.tasksStore.getTasksByCategory
 
-    const groupedTasks = groupByCategory(tasks)
+    // const groupedTasks = groupByCategory(tasks)
     // console.log(groupedTasks)
     let addTaskToggleFlag = false
 
@@ -83,7 +84,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
                 <Route exact path='/addTask' render={showAddTaskComp} />
             </Router>
             <div >
-                {Object.keys(groupedTasks).map((group, i) => <SuperTable key={i} category={group} tasks={groupedTasks[group]} />)}
+                {Object.keys(groupedTasks).map((group, i) => <SuperTable key={i} category={group} tasks={groupedTasks[group]}/>)}
             </div>
         </div>
 
