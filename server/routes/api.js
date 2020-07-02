@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
 // const { tasks } = require('../../src/stores/mainStore');
@@ -48,7 +48,7 @@ router.post('/signup', function (req, res) {
     const cipher = encodeDesECB(password, salt, "10110101")
     sequelize.query(`INSERT INTO username_password VALUES(null,"${name}","${salt}","${cipher}")`)
         .then(function (results) {
-            res.send({status: 'OK', "id" : results[0].id})
+            res.send({ status: 'OK', "id": results[0].id })
         })
 })
 
@@ -114,8 +114,8 @@ router.get('/tasks/:userId', function (req, res) {
  #result - return res : id of the new task
      
 */
-router.post('/tasks/:userId', function (req, res) { 
-    const taskInfo = req.body 
+router.post('/tasks/:userId', function (req, res) {
+    const taskInfo = req.body
     const userId = req.params.userId
 
     sequelize.query(`INSERT INTO tasks VALUES(null, "${taskInfo.taskName}", "${taskInfo.description}", "${taskInfo.priority}",
@@ -124,8 +124,8 @@ router.post('/tasks/:userId', function (req, res) {
         .then(function (result) {
             const taskId = result[0]
             sequelize.query(`INSERT INTO user_tasks VALUES(${taskId}, ${userId})
-            `).then( function () {
-                   res.send({"taskId" : taskId})
+            `).then(function () {
+                res.send({ "taskId": taskId })
             })
         })
 })
@@ -162,6 +162,24 @@ router.put('/updateTask', function (req, res) {
         })
 })
 
+
+
+/*
+    Delete task 
+*/
+router.delete('/deleteTask/:taskId', function (req, res) {
+    const id = req.params.taskId
+    sequelize.query(`DELETE FROM user_tasks
+                     WHERE user_tasks.task_id = ${id}
+                    `)
+        .then(function (result) {
+            sequelize.query(`DELETE FROM tasks
+                             WHERE tasks.taskId = ${id}
+            `).then(function () {
+                res.end()
+            })
+        })
+})
 
 
 

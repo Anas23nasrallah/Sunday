@@ -38,6 +38,13 @@ export class Tasks {
     }
   };
 
+
+  @action deleteTask = async (taskId) => {
+      await axios.delete(`${API_URL}/deleteTask/${taskId}`);
+      this.getTasksFromDB(this.userId);
+  }
+  
+
   @action addTask = async (task) => {
     try {
       let newTask = {taskName: task.taskName, description:'description',status:'starting' ,priority:task.priority, 
