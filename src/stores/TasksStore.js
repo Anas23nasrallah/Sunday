@@ -8,19 +8,40 @@ export class Tasks {
   @observable _tasks = [];
   @observable userId 
   @observable loggedIn = false
+  @observable categories = []
 
   @computed get getTasksByCategory(){
     const groupedTasks = {}
+    for(let cat of this.categories){
+      groupedTasks[cat] = []
+    }
     for (let task of this._tasks) {
-        if (groupedTasks[task.category]) {
-            groupedTasks[task.category].push(task)
-        } else {
-            groupedTasks[task.category] = [task]
-        }
+      groupedTasks[task.category].push(task)
     }
     return groupedTasks
-}
+  }
 
+  @action setCategories(){
+    const groupedTasks = {}
+    for (let task of this._tasks) {
+      if (groupedTasks[task.category]) {
+          groupedTasks[task.category].push(task)
+      } else {
+          groupedTasks[task.category] = [task]
+      }
+    }
+    const response = Object.keys(groupedTasks)
+    if(!groupedTasks['Personal']){
+      response.push('Personal')
+    }
+    // groupedTasks['Personal'] ? null : groupedTasks
+    // this.categories = [...this.categories, ...Object.keys(groupedTasks)] 
+    this.categories = response
+  }
+
+  @action addCategory(categoryInput){
+    this.categories.push(categoryInput)
+  }
 
   // summary of open vs closed
   @computed get openTasks() {

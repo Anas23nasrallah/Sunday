@@ -19,6 +19,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { useEffect } from 'react';
+import { Input } from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -47,7 +48,7 @@ export default inject('tasksStore')(observer( function SuperTable(props) {
       { title: 'Task Name', field: 'taskName' },
       { title: 'Description', field: 'description' },
       { title: 'Priority', field: 'priority' },
-      { title: 'Deadline', field: 'deadline' },
+      { title: 'Deadline', field: 'deadline', type:"date" },
       { title: 'Status', field: 'status' },
       { title: 'Budget', field: 'budget', type: 'numeric' },
     //   {
@@ -56,6 +57,12 @@ export default inject('tasksStore')(observer( function SuperTable(props) {
     //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
     //   },
     ],
+
+      // {
+      //   field: 'url',
+      //   title: 'Avatar',
+      //   render: rowData => <img src={rowData.url} style={{width: 50, borderRadius: '50%'}}/>
+      // }
     // tasks={groupedTasks[group]}
     data: props.tasks
     // [
@@ -82,6 +89,20 @@ export default inject('tasksStore')(observer( function SuperTable(props) {
       title={props.category}
       columns={state.columns}
       data={state.data}
+      components={{
+        Deadline: props => (
+          <input type='date' onClick={() => alert('what')}/>
+          // <Input
+          //   onClick={(event) => props.action.onClick(event, props.data)}
+          //   color="primary"
+          //   variant="contained"
+          //   style={{textTransform: 'none'}}
+          //   size="small"
+          // >
+          //   My Button
+          // </Input>
+        ),
+      }}
       editable={{
         onRowAdd: (newData) =>
         new Promise((resolve) => {
