@@ -18,7 +18,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
         props.tasksStore.getTasksFromDB(props.tasksStore.userId)
     }
 
-    useEffect(fetchData,[tasks])
+    useEffect(fetchData, [])
 
     // const task1 = {
     //     name: 'take the dog for a walk',
