@@ -18,9 +18,9 @@ const Tasks = inject('tasksStore')(observer((props) => {
     
     // let tasks = []
 
-    const fetchData =  () => {
+    const fetchData = () => {
         props.tasksStore.getTasksFromDB(props.tasksStore.userId)
-        props.tasksStore.setCategories()
+        // props.tasksStore.setCategories()
     }
 
 
