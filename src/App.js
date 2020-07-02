@@ -6,7 +6,10 @@ import Login from './components/Login';
 import './App.css';
 import NavBar from './components/navBar';
 import { Redirect } from 'react-router-dom';
+
 import SignUp from './components/SignUp';
+import TasksTable from './components/TasksTable';
+
 
 const App = inject('tasksStore')(observer((props) => {
 
@@ -26,6 +29,7 @@ const App = inject('tasksStore')(observer((props) => {
 
 
     </Router>
+    // <SuperTable />
   )
 
 }))

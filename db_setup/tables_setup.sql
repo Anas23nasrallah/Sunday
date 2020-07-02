@@ -10,7 +10,7 @@
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- Then uncomment this line and a singe create table every time:
-USE sunday_finalproject;
+-- USE sunday_finalproject;
 
 -- DROP TABLE user_tasks
 -- DROP TABLE tasks ;
@@ -53,5 +53,42 @@ USE sunday_finalproject;
 -- DELETE FROM tasks;
 
 
+
+-- -- ///////////  /////////   ///////////  Teams Tables  //////////  ///////// //////////////  ////////
+
+-- CREATE TABLE teams (
+--     teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+--     teamName VARCHAR(40)
+-- );
+
+-- CREATE TABLE teams_users (
+--     teamId INT , 
+--     userId INT,
+--     is_admin BIT,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId)
+-- );
+
+-- CREATE TABLE teams_tasks (
+--     teamId INT , 
+--     taskId INT,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId),
+--     FOREIGN KEY(taskId) REFERENCES tasks(taskId)
+-- );
+
+-- CREATE TABLE users (
+--     userId INT NOT NULL PRIMARY KEY, 
+--     userName VARCHAR(40),
+--     firstName VARCHAR(40),
+--     lastName VARCHAR(40), 
+--     email VARCHAR(70),
+--     birthDate  DATE
+-- );
+
+
+
+
+
+ 
+ 
 
 

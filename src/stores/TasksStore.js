@@ -38,6 +38,13 @@ export class Tasks {
     }
   };
 
+
+  @action deleteTask = async (taskId) => {
+      await axios.delete(`${API_URL}/deleteTask/${taskId}`);
+      this.getTasksFromDB(this.userId);
+  }
+  
+
   @action addTask = async (task) => {
     try {
       let newTask = {taskName: task.taskName, description:'description',status:'starting' ,priority:task.priority, 
@@ -50,10 +57,11 @@ export class Tasks {
 //  we need to find a way to retrive userId to put into this post req  ==============> here ==============>
 ////////////////////////////////////////
        
-      let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
-      console.log(savedTask)
+      let savedTaskID = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      // console.log(savedTaskID.data)
 
-      const taskObj = new Task(savedTask.data.taskId, task.taskName, 'description', task.priority, task.deadLine, task.budget, task.category)
+      let taskObj = new Task(savedTaskID.data.id, task.taskName, 'description' ,task.priority, 
+      task.deadLine, task.budget, task.category)
       // console.log('add task: ' , addTask)
       this.getTasksFromDB(this.userId);
       // this._tasks.push(taskObj)

@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
+const { bind } = require('file-loader');
 // const { tasks } = require('../../src/stores/mainStore');
 
 
@@ -42,13 +43,23 @@ const encodeDesECB = function (password, salt, keyString) {
         # return - userId 
 */
 router.post('/signup', function (req, res) {
+    ///////extracting info/////////////
     const password = req.body.password
-    const name = req.body.name
+    const name = req.body.userName
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const email = req.body.email
+    const birthDate = req.body.birthDate
+    ////////////////////////////////
     const salt = createRandomSalt()
     const cipher = encodeDesECB(password, salt, "10110101")
     sequelize.query(`INSERT INTO username_password VALUES(null,"${name}","${salt}","${cipher}")`)
         .then(function (results) {
-            res.send({status: 'OK', "id" : results[0].id})
+            const userId = results[0]
+            sequelize.query(`INSERT INTO users VALUES(${userId},"${name}","${firstName}","${lastName}","${email}","${birthDate}")`)
+            .then(function (results) {
+                res.send({status: 'OK'})
+            })
         })
 })
 
@@ -91,9 +102,7 @@ router.get('/tasks/:userId', function (req, res) {
     FROM tasks JOIN user_tasks ON tasks.taskId=user_tasks.task_id
     WHERE user_tasks.user_id = ${userId}
    `, { type: Sequelize.QueryTypes.SELECT })
-        .then(function (results) {
-            res.send(results)
-        })
+        .then( results => res.send(results) )
 })
 
 
@@ -114,18 +123,19 @@ router.get('/tasks/:userId', function (req, res) {
  #result - return res : id of the new task
      
 */
-router.post('/tasks/:userId', function (req, res) { 
-    const taskInfo = req.body 
+router.post('/tasks/:userId', function (req, res) {
+    const taskInfo = req.body
     const userId = req.params.userId
+
 
     sequelize.query(`INSERT INTO tasks VALUES(null, "${taskInfo.taskName}", "${taskInfo.description}", "${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget}, '${taskInfo.category}')
-                    `)
-        .then(function (result) {
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( (result) => {
             const taskId = result[0]
             sequelize.query(`INSERT INTO user_tasks VALUES(${taskId}, ${userId})
-            `).then( function () {
-                   res.send({"taskId" : taskId})
+            `).then(function () {
+                res.send({ "taskId": taskId })
             })
         })
 })
@@ -161,6 +171,24 @@ router.put('/updateTask', function (req, res) {
         })
 })
 
+
+
+/*
+    Delete task 
+*/
+router.delete('/deleteTask/:taskId', function (req, res) {
+    const id = req.params.taskId
+    sequelize.query(`DELETE FROM user_tasks
+                     WHERE user_tasks.task_id = ${id}
+                    `)
+        .then(function (result) {
+            sequelize.query(`DELETE FROM tasks
+                             WHERE tasks.taskId = ${id}
+            `).then(function () {
+                res.end()
+            })
+        })
+})
 
 
 
