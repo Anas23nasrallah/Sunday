@@ -55,9 +55,10 @@ const SignUp = () => {
         return (!!inputs.email && !!inputs.firstName && !!inputs.lastName)
     }
 
-    const signUp = () => {
+
+    const signUp = async () => {
         if (areInputsValid(inputs)) {
-            // axios.post
+            await axios.post('http://localhost:3200/signup', inputs)
             return
         } else {
             alert('Fill all the fields')
