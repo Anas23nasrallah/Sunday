@@ -6,6 +6,8 @@ import Login from './components/Login';
 import './App.css';
 import NavBar from './components/navBar';
 import { Redirect } from 'react-router-dom';
+import TasksTable from './components/TasksTable';
+// import SuperTable from './components/tableComp'
 
 const App = inject('tasksStore')(observer((props) => {
 
@@ -23,6 +25,7 @@ const App = inject('tasksStore')(observer((props) => {
       <Route exact path='/tasks' component={Tasks} />
 
     </Router>
+    // <SuperTable />
   )
 
 }))
