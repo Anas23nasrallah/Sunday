@@ -91,9 +91,7 @@ router.get('/tasks/:userId', function (req, res) {
     FROM tasks JOIN user_tasks ON tasks.taskId=user_tasks.task_id
     WHERE user_tasks.user_id = ${userId}
    `, { type: Sequelize.QueryTypes.SELECT })
-        .then(function (results) {
-            res.send(results)
-        })
+        .then( results => res.send(results) )
 })
 
 
@@ -118,10 +116,11 @@ router.post('/tasks/:userId', function (req, res) {
     const taskInfo = req.body
     const userId = req.params.userId
 
+
     sequelize.query(`INSERT INTO tasks VALUES(null, "${taskInfo.taskName}", "${taskInfo.description}", "${taskInfo.priority}",
                     "${taskInfo.deadLine}", "${taskInfo.status}", ${taskInfo.budget}, '${taskInfo.category}')
-                    `)
-        .then(function (result) {
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( (result) => {
             const taskId = result[0]
             sequelize.query(`INSERT INTO user_tasks VALUES(${taskId}, ${userId})
             `).then(function () {
