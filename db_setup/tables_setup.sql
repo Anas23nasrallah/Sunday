@@ -44,7 +44,7 @@ USE sunday_finalProject;
 --     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
 -- );
 
--- ALTER TABLE tasks ADD category VARCHAR(30);
+ALTER TABLE tasks ADD category VARCHAR(30);
 -- DELETE FROM user_tasks;
 -- DELETE FROM tasks;
 

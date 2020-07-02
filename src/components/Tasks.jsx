@@ -15,7 +15,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
         props.tasksStore.getTasksFromDB(props.tasksStore.userId)
     }
 
-    useEffect(fetchData)
+    useEffect(fetchData,[])
 
     // const task1 = {
     //     name: 'take the dog for a walk',
@@ -47,6 +47,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
     const groupByCategory = (tasks) => {
         const groupedTasks = {}
         for (let task of tasks) {
+            console.log(task)
             if (groupedTasks[task.category]) {
                 groupedTasks[task.category].push(task)
             } else {
