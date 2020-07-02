@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom';
 
 import SignUp from './components/SignUp';
 import TasksTable from './components/TasksTable';
+import Profile from './components/Profile';
 
 
 const App = inject('tasksStore')(observer((props) => {
@@ -18,14 +19,14 @@ const App = inject('tasksStore')(observer((props) => {
     <Router >
 
       <NavBar/>
-      {/* <hr></hr> */}
 
       <Route exact path='/' >
-        {props.tasksStore.loggedIn ? <Redirect to="/tasks" /> : <Login />}
+        {props.tasksStore.loggedIn ? <Redirect to="/tasks" /> : <Login />} // TODO should the loggedIn variable be in the tasksStore?
       </Route>
 
       <Route exact path='/tasks' component={Tasks} />
       <Route exact path='/signUp' component={SignUp} />
+      <Route exact path='/profile' component={Profile} />
 
 
     </Router>
