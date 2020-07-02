@@ -48,6 +48,11 @@ export default function NavBar() {
                 Tasks
             </Typography>
           </Link>
+          <Link to='/signUp' className={classes.title}>
+              <Typography variant="h6" >
+                Sign Up
+            </Typography>
+          </Link>
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>

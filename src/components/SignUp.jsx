@@ -55,6 +55,7 @@ const SignUp = () => {
         return (!!inputs.email && !!inputs.firstName && !!inputs.lastName)
     }
 
+
     const signUp = async () => {
         if (areInputsValid(inputs)) {
             await axios.post('http://localhost:3200/signup', inputs)

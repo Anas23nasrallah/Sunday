@@ -5,6 +5,7 @@ import AddTask from './AddTask'
 import { inject, observer } from 'mobx-react'
 import '../styles/tasksPage.css'
 import { toJS } from 'mobx'
+import SuperTable from './SuperTable'
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
@@ -18,7 +19,8 @@ const Tasks = inject('tasksStore')(observer((props) => {
         props.tasksStore.getTasksFromDB(props.tasksStore.userId)
     }
 
-    useEffect(fetchData,[tasks])
+
+    useEffect(fetchData, [])
 
     // const task1 = {
     //     name: 'take the dog for a walk',
@@ -51,6 +53,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
         // console.log(tasks)
         const groupedTasks = {}
         for (let task of tasks) {
+            console.log(task)
             if (groupedTasks[task.category]) {
                 groupedTasks[task.category].push(task)
             } else {
@@ -79,8 +82,8 @@ const Tasks = inject('tasksStore')(observer((props) => {
                 <Link to='/addTask' ><span> Add Task</span></Link>
                 <Route exact path='/addTask' render={showAddTaskComp} />
             </Router>
-            <div>
-                {Object.keys(groupedTasks).map((group, i) => <TasksTable key={i} category={group} tasks={groupedTasks[group]} />)}
+            <div >
+                {Object.keys(groupedTasks).map((group, i) => <SuperTable key={i} category={group} tasks={groupedTasks[group]} />)}
             </div>
         </div>
 
