@@ -8,6 +8,7 @@ const Profile = inject('user')(observer((props) => {
             <p>Welcome B*tch</p>
             <p>{user.firstName} {user.lastName}</p>
             <p>{user.userName}</p>
+            <p>{user.email}</p>
         </div>
     );
 }))

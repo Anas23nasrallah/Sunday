@@ -16,6 +16,7 @@ export class Tasks {
       groupedTasks[cat] = []
     }
     for (let task of this._tasks) {
+      console.log(groupedTasks[task.category])
       groupedTasks[task.category].push(task)
     }
     return groupedTasks

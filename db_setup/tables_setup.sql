@@ -12,77 +12,78 @@
 -- Then uncomment this line and a singe create table every time:
 USE sunday_finalproject;
 
--- DROP TABLE user_tasks
+-- DROP TABLE user_tasks;
 -- DROP TABLE tasks ;
+-- DROP TABLE username_password;
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE username_password (
---     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     username VARCHAR(30),
---     salt VARCHAR(12),
---     cipher VARCHAR(50)
--- );
+CREATE TABLE username_password (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(30),
+    salt VARCHAR(12),
+    cipher VARCHAR(50)
+);
 
 -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE tasks (
---     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---     taskName VARCHAR(40),
---     description VARCHAR(150),
---     priority VARCHAR(20),
---     deadline DATE,
---     status VARCHAR(30),
---     budget INT,
---     category VARCHAR(50)
--- );
+CREATE TABLE tasks (
+    taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    taskName VARCHAR(40),
+    description VARCHAR(150),
+    priority VARCHAR(20),
+    deadline DATE,
+    status VARCHAR(30),
+    budget INT,
+    category VARCHAR(50)
+);
 
 
 
 -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- CREATE TABLE user_tasks (
---     task_id INT,
---     user_id INT,
---     FOREIGN KEY(user_id) REFERENCES username_password(id),
---     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
--- );
+CREATE TABLE user_tasks (
+    task_id INT,
+    user_id INT,
+    FOREIGN KEY(user_id) REFERENCES username_password(id),
+    FOREIGN KEY(task_id) REFERENCES tasks(taskId)
+);
 
 -- ALTER TABLE tasks ADD category VARCHAR(30);
-DELETE FROM user_tasks;
-DELETE FROM tasks;
+-- DELETE FROM user_tasks;
+-- DELETE FROM tasks;
 
 
 
 -- -- ///////////  /////////   ///////////  Teams Tables  //////////  ///////// //////////////  ////////
 
--- CREATE TABLE teams (
---     teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---     teamName VARCHAR(40)
--- );
+CREATE TABLE teams (
+    teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    teamName VARCHAR(40)
+);
 
--- CREATE TABLE teams_users (
---     teamId INT , 
---     userId INT,
---     is_admin BIT,
---     FOREIGN KEY(teamId) REFERENCES teams(teamId)
--- );
+CREATE TABLE teams_users (
+    teamId INT , 
+    userId INT,
+    is_admin BIT,
+    FOREIGN KEY(teamId) REFERENCES teams(teamId)
+);
 
--- CREATE TABLE teams_tasks (
---     teamId INT , 
---     taskId INT,
---     FOREIGN KEY(teamId) REFERENCES teams(teamId),
---     FOREIGN KEY(taskId) REFERENCES tasks(taskId)
--- );
+CREATE TABLE teams_tasks (
+    teamId INT , 
+    taskId INT,
+    FOREIGN KEY(teamId) REFERENCES teams(teamId),
+    FOREIGN KEY(taskId) REFERENCES tasks(taskId)
+);
 
--- CREATE TABLE users (
---     userId INT NOT NULL PRIMARY KEY, 
---     userName VARCHAR(40),
---     firstName VARCHAR(40),
---     lastName VARCHAR(40), 
---     email VARCHAR(70),
---     birthDate  DATE
--- );
+CREATE TABLE users (
+    userId INT NOT NULL PRIMARY KEY, 
+    userName VARCHAR(40),
+    firstName VARCHAR(40),
+    lastName VARCHAR(40), 
+    email VARCHAR(70),
+    birthDate  DATE
+);
 
 
 
