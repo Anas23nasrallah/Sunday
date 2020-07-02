@@ -5,6 +5,7 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 
 const crypto = require('crypto');
+const { bind } = require('file-loader');
 // const { tasks } = require('../../src/stores/mainStore');
 
 
@@ -42,13 +43,23 @@ const encodeDesECB = function (password, salt, keyString) {
         # return - userId 
 */
 router.post('/signup', function (req, res) {
+    ///////extracting info/////////////
     const password = req.body.password
-    const name = req.body.name
+    const name = req.body.userName
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const email = req.body.email
+    const birthDate = req.body.birthDate
+    ////////////////////////////////
     const salt = createRandomSalt()
     const cipher = encodeDesECB(password, salt, "10110101")
     sequelize.query(`INSERT INTO username_password VALUES(null,"${name}","${salt}","${cipher}")`)
         .then(function (results) {
-            res.send({ status: 'OK', "id": results[0].id })
+            const userId = results[0]
+            sequelize.query(`INSERT INTO users VALUES(${userId},"${name}","${firstName}","${lastName}","${email}","${birthDate}")`)
+            .then(function (results) {
+                res.send({status: 'OK'})
+            })
         })
 })
 

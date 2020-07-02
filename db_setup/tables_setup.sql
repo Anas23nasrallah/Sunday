@@ -48,7 +48,7 @@
 --     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
 -- );
 
-ALTER TABLE tasks ADD category VARCHAR(30);
+-- ALTER TABLE tasks ADD category VARCHAR(30);
 -- DELETE FROM user_tasks;
 -- DELETE FROM tasks;
 
@@ -74,5 +74,21 @@ ALTER TABLE tasks ADD category VARCHAR(30);
 --     FOREIGN KEY(teamId) REFERENCES teams(teamId),
 --     FOREIGN KEY(taskId) REFERENCES tasks(taskId)
 -- );
+
+-- CREATE TABLE users (
+--     userId INT NOT NULL PRIMARY KEY, 
+--     userName VARCHAR(40),
+--     firstName VARCHAR(40),
+--     lastName VARCHAR(40), 
+--     email VARCHAR(70),
+--     birthDate  DATE
+-- );
+
+
+
+
+
+ 
+ 
 
 
