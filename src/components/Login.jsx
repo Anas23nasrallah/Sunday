@@ -12,7 +12,6 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
     const [passwordInput, setPasswordInput] = useState('')
 
     const logIn = async () => {
-        console.log(passwordInput)
         const loginData = {
             name:userNameInput,
             password:passwordInput
@@ -21,10 +20,10 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
         Axios.post('http://localhost:3200/login',loginData).then( async res => {
             if(res.data.status === 'OK'){
                 const userID = res.data.userId
-                // alert(userID)
                 const response = await Axios.get(`http://localhost:3200/user/${userID}`)
                 props.tasksStore.setUserId(userID)
-                // window.location.href = window.location.origin + '/tasks'
+                props.user.setDetails(response.data)
+                console.log(props.user)
 
             } else {
                 alert('Incorect password or username')
@@ -33,23 +32,23 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
         // alert(`Checking validation for:\nUser Name: ${userNameInput}\nPassword: ${passwordInput}`)
     }
 
-    const createNewUser = () => {
-        const loginData = {
-            name:userNameInput,
-            password:passwordInput
-        }
-        Axios.post('http://localhost:3200/signup',loginData).then( res => {
-            if(res.data.status === 'OK'){
-                const userID = res.data.id
-                props.tasksStore.setUserId(userID)
-                window.location.href = window.location.origin + '/tasks'
-                // <Redirect to='/tasks'/>
-            } else {
-                alert('Problem creating new user')
-            }
-        })
+    // const createNewUser = () => {
+    //     const loginData = {
+    //         name:userNameInput,
+    //         password:passwordInput
+    //     }
+    //     Axios.post('http://localhost:3200/signup',loginData).then( res => {
+    //         if(res.data.status === 'OK'){
+    //             const userID = res.data.id
+    //             props.tasksStore.setUserId(userID)
+    //             window.location.href = window.location.origin + '/tasks'
+    //             // <Redirect to='/tasks'/>
+    //         } else {
+    //             alert('Problem creating new user')
+    //         }
+    //     })
         // alert('Open New Tab For New Info')
-    }
+    // }
 
     return (
         <div id="login-page-container">

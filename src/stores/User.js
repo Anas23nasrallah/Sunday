@@ -1,4 +1,4 @@
-const { observable, action } = require("mobx");
+const { observable, action, computed } = require("mobx");
 
 export class User {
     @observable userName = null
@@ -6,6 +6,7 @@ export class User {
     @observable lastName = null
     @observable birthDate = null
     @observable email = null
+    @observable loggedIn = false
 
     @action setDetails(details){
         this.userName = details.userName
@@ -13,5 +14,10 @@ export class User {
         this.lastName = details.lastName
         this.birthDate = details.birthDate
         this.email = details.email
+        this.loggedIn = true
+    }
+
+    @computed get isUserLoggedIn() {
+        return this.isLoggedIn
     }
 }

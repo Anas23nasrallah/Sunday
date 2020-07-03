@@ -21,7 +21,7 @@ const App = inject('tasksStore')(observer((props) => {
       <NavBar/>
 
       <Route exact path='/' >
-        {props.tasksStore.loggedIn ? <Redirect to="/tasks" /> : <Login />} // TODO should the loggedIn variable be in the tasksStore?
+        {props.tasksStore.loggedIn ? <Redirect to="/tasks" /> : <Login />} {/* TODO should the loggedIn variable be in the tasksStore?*/}
       </Route>
 
       <Route exact path='/tasks' component={Tasks} />

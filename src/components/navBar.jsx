@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { inject, observer } from 'mobx-react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,50 +18,72 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    color:'white',
-    textDecoration:'none',
-    textAlign:'end',
+    color: 'white',
+    textDecoration: 'none',
+    textAlign: 'end',
     marginRight: theme.spacing(2),
   },
-  container:{
-    height:'10vh',
+  container: {
+    height: '10vh',
   }
 }));
 
-export default function NavBar() {
+const NavBar = inject('user')(observer((props) => {
   const classes = useStyles();
+  const loggedIn = props.user.loggedIn
 
   return (
-    <div className={classes.root} id="nav-bar">
-      <AppBar position="static" className={classes.container}>
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            {/* <MenuIcon /> */}
-            <h1>Sunday.com</h1>
-          </IconButton>
-          <Link to='/' className={classes.title}> 
-             <Typography variant="h6" >
-                Login
-              </Typography>
-          </Link>
-        <Link to='/tasks' className={classes.title}>
+    loggedIn ?
+      <div className={classes.root} id="nav-bar">
+        <AppBar position="static" className={classes.container}>
+          <Toolbar>
+
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              {/* <MenuIcon /> */}
+              <h1>Sunday.com</h1>
+            </IconButton>
+
+            <Link to='/tasks' className={classes.title}>
               <Typography variant="h6" >
                 Tasks
             </Typography>
-          </Link>
-          <Link to='/signUp' className={classes.title}>
-              <Typography variant="h6" >
-                Sign Up
-            </Typography>
-          </Link>
-          <Link to='/profile' className={classes.title}>
+            </Link>
+
+            <Link to='/profile' className={classes.title}>
               <Typography variant="h6" >
                 Profile
             </Typography>
-          </Link>
-          {/* <Button color="inherit">Login</Button> */}
-        </Toolbar>
-      </AppBar>
-    </div>
+            </Link>
+
+          </Toolbar>
+        </AppBar>
+      </div>
+      :
+      <div className={classes.root} id="nav-bar">
+        <AppBar position="static" className={classes.container}>
+          <Toolbar>
+
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <h1>Sunday.com</h1>
+            </IconButton>
+
+            <Link to='/' className={classes.title}>
+              <Typography variant="h6" >
+                Login
+              </Typography>
+            </Link>
+
+            <Link to='/signUp' className={classes.title}>
+              <Typography variant="h6" >
+                Sign Up
+            </Typography>
+            </Link>
+
+          </Toolbar>
+        </AppBar>
+      </div>
+
   );
-}
+}))
+
+export default NavBar
