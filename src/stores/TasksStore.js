@@ -1,6 +1,5 @@
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
-import { Task } from './Task';
 const API_URL = 'http://localhost:3200';
 const dateFormat = require('dateformat');
 
