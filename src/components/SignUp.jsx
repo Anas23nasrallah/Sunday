@@ -5,10 +5,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from 'react';
 import axios from 'axios';
+import { inject, observer } from 'mobx-react';
 
-const SignUp = () => {
+const SignUp = inject('usernamesStore')(observer((props) => {
 
-    const users = ['eitan'] //must be injected
+    const users = props.usernamesStore.usernames
+    console.log('in sign up', users)
 
     const [inputs, setInputs] = useState({
         userName: '',
@@ -28,42 +30,38 @@ const SignUp = () => {
     };
 
     const isUserNameValid = (userName) => {
-        return !users.includes(userName) && !!userName 
+        return !users.includes(userName)
     }
 
     const isPasswordValid = (password, rePassword) => {
-        return (password === rePassword && !!password)
+        return password === rePassword
     }
 
     const areInputsValid = (inputs) => {
         if (!isUserNameValid(inputs.userName)) {
-            if (inputs.userName) {
-                alert('The username you chose already exists, choose another')
-                return
-            }
-            alert('Enter a username')
-            return
+            alert('The username you chose already exists, choose another')
+            return false
         }
         if (!isPasswordValid(inputs.password, inputs.rePassword)) {
-            if (inputs.password) {
-                alert('The passwords does not match!')
-                return
-            }
-            alert('Enter a password')
-            return
+            alert('The passwords does not match!')
+            return false
         }
-        return (!!inputs.email && !!inputs.firstName && !!inputs.lastName)
+        return true
     }
 
-
-    const signUp = async () => {
-        if (areInputsValid(inputs)) {
-            await axios.post('http://localhost:3200/signup', inputs)
-            return
+    const allFieldsFilled = (inputs) => {
+        if (!!inputs.email && !!inputs.firstName && !!inputs.lastName && !!inputs.userName && !!inputs.password && !!inputs.rePassword) {
+            return true
         } else {
-            alert('Fill all the fields')
-            return
+            alert('Fill all the fields!')
+            return false
         }
+    }
+    const signUp = async () => {
+        if (!allFieldsFilled(inputs) || !areInputsValid(inputs)) { return }
+        await axios.post('http://localhost:3200/signup', inputs)
+        alert('Signed up successfully')
+        return
     }
 
     return (
@@ -80,7 +78,7 @@ const SignUp = () => {
                         name='userName'
                         value={inputs.userName}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="firstName-input"
                         label="First Name"
@@ -90,7 +88,7 @@ const SignUp = () => {
                         name='firstName'
                         value={inputs.firstName}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="lastName-input"
                         label="Last Name"
@@ -100,7 +98,7 @@ const SignUp = () => {
                         name='lastName'
                         value={inputs.lastName}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="birthDate-input"
                         label="Date of Birth"
@@ -110,7 +108,7 @@ const SignUp = () => {
                         name='birthDate'
                         value={inputs.birthDate}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="mail-input"
                         label="E-mail"
@@ -120,7 +118,7 @@ const SignUp = () => {
                         name='email'
                         value={inputs.email}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="password-input"
                         label="Password"
@@ -130,7 +128,7 @@ const SignUp = () => {
                         name='password'
                         value={inputs.password}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
                     <TextField id="repassword-input"
                         label="Retype password"
@@ -140,14 +138,14 @@ const SignUp = () => {
                         name='rePassword'
                         value={inputs.rePassword}
                         onChange={handleChange}
-                    /><br/>
+                    /><br />
 
-                    <Button variant="contained" onClick={signUp} color="primary"> Sign UP </Button> <br/><br/>
+                    <Button variant="contained" onClick={signUp} color="primary"> Sign UP </Button> <br /><br />
 
                     <span>Already registered? <Link to="/">Login here!</Link></span>
                 </div>
             </div>
         </form>);
-}
+}))
 
 export default SignUp;
