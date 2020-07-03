@@ -1,8 +1,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
-import {observer, inject} from 'mobx-react'
-
+import { observer, inject } from 'mobx-react'
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -22,144 +21,128 @@ import { useEffect } from 'react';
 import { Input } from '@material-ui/core';
 
 const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
 
-export default inject('tasksStore')(observer( function SuperTable(props) {
+export default inject('tasksStore')(observer(function SuperTable(props) {
   const tasksStore = props.tasksStore
   const [state, setState] = React.useState({
 
     columns: [
-      { title: 'Task Name', field: 'taskName' },
-      { title: 'Description', field: 'description' },
-      { title: 'Priority', field: 'priority' },
-      { title: 'Deadline', field: 'deadLine', type:"date" },
-      { title: 'Status', field: 'status' },
-      { title: 'Budget', field: 'budget', type: 'numeric' },
-    //   {
-    //     title: 'Birth Place',
-    //     field: 'birthCity',
-    //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-    //   },
+      { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
+      { title: 'Description', field: 'description', sorting: false },
+      { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+      { title: 'Deadline', field: 'deadLine', type: "date" },
+      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: {1:'Starting', 2:'In progress', 3:'Completed'} },
+      { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
     ],
 
-      // {
-      //   field: 'url',
-      //   title: 'Avatar',
-      //   render: rowData => <img src={rowData.url} style={{width: 50, borderRadius: '50%'}}/>
-      // }
-    // tasks={groupedTasks[group]}
+    // {
+    //   field: 'url',
+    //   title: 'Avatar',
+    //   render: rowData => <img src={rowData.url} style={{width: 50, borderRadius: '50%'}}/>
+    // }
+
+
     data: props.tasks
-    // [
-    //   { taskName: 'Mehmet', description: 'Baran', priority: 1987, seadline: '23/01/2020' , status:'Start', budget:100},
-    //   {
-    //     taskName: 'Zerya Betül',
-    //     description: 'Baran',
-    //     priority: 2017,
-    //     birthCity: 34,
-    //   },
-    // ],
   });
 
   const addTask = (rowData) => {
-    const newTask = {...rowData,category:props.category}
-    // console.log(newTask)
+    console.log(rowData)
+    const newTask = { ...rowData, category: props.category }
     tasksStore.addTask(newTask)
   }
 
   const updateTask = (rowData) => {
-    const updatedTask = {...rowData,category:props.category}
-    // console.log(newTask)
+    const updatedTask = { ...rowData, category: props.category }
     tasksStore.updateTask(updatedTask)
   }
 
   const deleteTask = (rowData) => {
     const taskToDelete = rowData.taskId
-    // {...rowData,category:props.category}
-    // console.log(taskToDelete)
     tasksStore.deleteTask(taskToDelete)
   }
 
-  useEffect( () => {
-    let oldData = {...state}
+  useEffect(() => {
+    let oldData = { ...state }
     oldData.data = props.tasks
     setState(oldData)
-  },[props.tasks])
+  }, [props.tasks])
 
   return (
     <div className="tasks-category-table">
-    <MaterialTable
-      icons={tableIcons}
-      title={props.category}
-      columns={state.columns}
-      data={state.data}
-      // actions={[
-      //   {
-      //     icon: 'save',
-      //     tooltip: 'Save User',
-      //     onClick: (event, rowData) => alert("You saved " + rowData.name)
-      //   }
-      // ]}
-      editable={{
-        onRowAdd: 
-        (newData) => 
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-            // setState((prevState) => {
-            //   const data = [...prevState.data];
-            //   data.push(newData);
-            //   return { ...prevState, data };
-            // });
-            addTask(newData)
-          }, 600);
-        })
-        ,
-        onRowUpdate: (newData, oldData) =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-            // if (oldData) {
-            //   setState((prevState) => {
-            //     const data = [...prevState.data];
-            //     data[data.indexOf(oldData)] = newData;
-            //     return { ...prevState, data };
-            //   });
-            // }
-            updateTask(newData)
-          }, 600);
-        }),
-        onRowDelete: (oldData) =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-            // setState((prevState) => {
-            //   const data = [...prevState.data];
-            //   data.splice(data.indexOf(oldData), 1);
-            //   return { ...prevState, data };
-            // });
-            deleteTask(oldData)
-          }, 600);
-        }),
-      }}
+      <MaterialTable
+        icons={tableIcons}
+        title={props.category}
+        columns={state.columns}
+        data={state.data}
+        // actions={[
+        //   {
+        //     icon: 'save',
+        //     tooltip: 'Save User',
+        //     onClick: (event, rowData) => alert("You saved " + rowData.name)
+        //   }
+        // ]}
+        editable={{
+          onRowAdd:
+            (newData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  // setState((prevState) => {
+                  //   const data = [...prevState.data];
+                  //   data.push(newData);
+                  //   return { ...prevState, data };
+                  // });
+                  addTask(newData)
+                }, 600);
+              })
+          ,
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                // if (oldData) {
+                //   setState((prevState) => {
+                //     const data = [...prevState.data];
+                //     data[data.indexOf(oldData)] = newData;
+                //     return { ...prevState, data };
+                //   });
+                // }
+                updateTask(newData)
+              }, 600);
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                // setState((prevState) => {
+                //   const data = [...prevState.data];
+                //   data.splice(data.indexOf(oldData), 1);
+                //   return { ...prevState, data };
+                // });
+                if (oldData.status == 3) { deleteTask(oldData) }
+              }, 600);
+            }),
+        }}
       />
-      </div>
+    </div>
   );
 }
 ))
