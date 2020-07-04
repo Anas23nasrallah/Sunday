@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -34,9 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = inject('user')(observer((props) => {
   const classes = useStyles();
-  const loggedIn = props.user.loggedIn
 
   return (
+
+    props.user.loggedIn == 'true' ?
       <div className={classes.root} id="nav-bar">
         <AppBar position="static" className={classes.container}>
           <Toolbar>
@@ -45,6 +46,47 @@ const NavBar = inject('user')(observer((props) => {
                   <h1 style={{marginLeft:'0'}}>Sunday.com</h1>
                 </IconButton>
 
+            <Link to='/tasks' className={classes.title}>
+              <Typography variant="h6" >
+                Tasks
+            </Typography>
+            </Link>
+
+            <Link to='/profile' className={classes.title}>
+              <Typography variant="h6" >
+                Profile
+            </Typography>
+            </Link>
+
+            <Link className={classes.title}>
+              <Typography variant="h6" onClick={() => props.user.logout()}>
+                Log Out
+            </Typography>
+            </Link>
+
+          </Toolbar>
+        </AppBar>
+      </div>
+      :
+      <div className={classes.root} id="nav-bar">
+        <AppBar position="static" className={classes.container}>
+          <Toolbar>
+
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <h1>Sunday.com</h1>
+            </IconButton>
+
+            <Link to='/login' className={classes.title}>
+              <Typography variant="h6" >
+                Login
+              </Typography>
+            </Link>
+
+            <Link to='/signUp' className={classes.title}>
+              <Typography variant="h6" >
+                Sign Up
+            </Typography>
+            </Link>
                 <CustomizedMenus loggedIn={loggedIn} className={classes.title}/>
 
           </Toolbar>

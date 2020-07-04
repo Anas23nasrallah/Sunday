@@ -6,7 +6,7 @@ export class User {
     @observable lastName = null
     @observable birthDate = null
     @observable email = null
-    @observable loggedIn = false
+    @observable loggedIn = localStorage.getItem('loggedIn')
 
     @action login(details, userID){
         this.userName = details.userName
@@ -14,11 +14,18 @@ export class User {
         this.lastName = details.lastName
         this.birthDate = details.birthDate
         this.email = details.email
-        this.loggedIn = true
         localStorage.setItem("userId", userID)
+        localStorage.setItem("loggedIn", 'true')
+        this.loggedIn = 'true'
     }
 
-    @computed get isUserLoggedIn() {
-        return this.isLoggedIn
+    @action logout(){
+        localStorage.setItem("userId", undefined)
+        localStorage.setItem("loggedIn", 'false')
+        this.loggedIn = 'false'
+    }
+
+    @computed get in(){
+        return localStorage.getItem('loggedIn')
     }
 }
