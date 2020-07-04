@@ -22,6 +22,27 @@ const SignUp = inject('usernamesStore')(observer((props) => {
         rePassword: ''
     })
 
+    const sendNewUserMail = async () => {
+    await axios({ method: "POST", 
+             url:"http://localhost:3200/send", 
+             data: {
+                    email: inputs.email,
+                    mailContent: `Hey ${inputs.firstName}   ${inputs.lastName},\n
+                     You have been signed up successfully for Sunday.com\n
+                     Have a nice day\n
+                     Best regards\n
+                     Sunday.com team
+                     `}
+             }).then((response)=>{
+                      if (response.data.msg === 'success'){
+                          alert("Email sent, awesome!"); 
+                          this.resetForm()
+                      }else if(response.data.msg === 'fail'){
+                          alert("Oops, something went wrong. Try again")
+                      }
+      })
+    }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setInputs(inputs => ({
@@ -60,6 +81,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
     const signUp = async () => {
         if (!allFieldsFilled(inputs) || !areInputsValid(inputs)) { return }
         await axios.post('http://localhost:3200/signup', inputs)
+        sendNewUserMail()
         alert('Signed up successfully')
         return
     }

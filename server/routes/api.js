@@ -2,7 +2,22 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+
+
+//setting email config
+const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'sundayprojectmail@gmail.com',
+    pass: 'sunday2020'
+  }
+});
+//
+
+
 
 const crypto = require('crypto');
 const { bind } = require('file-loader');
@@ -214,6 +229,29 @@ router.delete('/deleteTask/:taskId', function (req, res) {
             })
         })
 })
+
+
+/*
+    sending  message for a user
+*/
+router.post('/send', (req, res) => {
+    const email = req.body.email
+    const mailContent = req.body.mailContent
+    const  mailOptions = {
+        from: 'sundayprojectmail@gmail.com',
+        to: email,
+        subject: 'Sending Email using Node.js',
+        text: mailContent
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  })
 
 
 
