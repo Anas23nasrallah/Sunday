@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom'
 import { inject, observer } from 'mobx-react';
+import CustomizedMenus from './menuBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     // marginRight: theme.spacing(2),
+    margiRight: '60%'
   },
   title: {
     flexGrow: 1,
@@ -22,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     textAlign: 'end',
     marginRight: theme.spacing(2),
+    // background: 'white',
+    // color: 'black'
   },
   container: {
     height: '10vh',
@@ -38,10 +42,9 @@ const NavBar = inject('user')(observer((props) => {
         <AppBar position="static" className={classes.container}>
           <Toolbar>
 
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              {/* <MenuIcon /> */}
-              <h1>Sunday.com</h1>
-            </IconButton>
+                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                  <h1 style={{marginLeft:'0'}}>Sunday.com</h1>
+                </IconButton>
 
             <Link to='/tasks' className={classes.title}>
               <Typography variant="h6" >
@@ -84,12 +87,14 @@ const NavBar = inject('user')(observer((props) => {
                 Sign Up
             </Typography>
             </Link>
+                <CustomizedMenus loggedIn={loggedIn} className={classes.title}/>
 
           </Toolbar>
         </AppBar>
       </div>
-
   );
 }))
 
 export default NavBar
+
+
