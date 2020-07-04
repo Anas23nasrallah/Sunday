@@ -33,18 +33,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavBar = inject('user')(observer((props) => {
+  
   const classes = useStyles();
+  let loggedIn = props.user.loggedIn
 
   return (
 
-    props.user.loggedIn == 'true' ?
+    loggedIn == 'true' ?
       <div className={classes.root} id="nav-bar">
         <AppBar position="static" className={classes.container}>
           <Toolbar>
 
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                  <h1 style={{marginLeft:'0'}}>Sunday.com</h1>
-                </IconButton>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <h1 style={{ marginLeft: '0' }}>Sunday.com</h1>
+            </IconButton>
 
             <Link to='/tasks' className={classes.title}>
               <Typography variant="h6" >
@@ -87,7 +89,7 @@ const NavBar = inject('user')(observer((props) => {
                 Sign Up
             </Typography>
             </Link>
-                <CustomizedMenus loggedIn={loggedIn} className={classes.title}/>
+            <CustomizedMenus loggedIn={loggedIn} className={classes.title} />
 
           </Toolbar>
         </AppBar>
