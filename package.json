@@ -48,6 +48,8 @@
     "mobx-react": "^6.2.2",
     "mobx-react-devtools": "^6.1.1",
     "mysql2": "^2.1.0",
+    "nodemailer": "^6.4.10",
+    "nodemailer-react": "^0.1.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.1.0",
