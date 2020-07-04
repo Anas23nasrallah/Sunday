@@ -6,8 +6,8 @@ const dateFormat = require('dateformat');
 
 export class Tasks {
   @observable _tasks = [];
-  @observable userId
-  @observable loggedIn = false
+  @observable userId = localStorage.getItem("userId")
+  // @observable loggedIn = false
   @observable categories = []
 
   @computed get getTasksByCategory() {
@@ -37,10 +37,10 @@ export class Tasks {
     };
   }
 
-  @action setUserId(userID) {
-    this.userId = userID
-    this.loggedIn = true
-  }
+  // @action setUserId(userID) {
+  //   this.userId = userID
+  //   this.loggedIn = true
+  // }
 
   @action getTasksFromDB = async (id) => {
     try {
