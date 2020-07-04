@@ -4,6 +4,7 @@ import Axios from 'axios';
 import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 
 const Login = inject('tasksStore', 'user')(observer((props) => {
@@ -44,7 +45,9 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 value={passwordInput} onChange={(e)=>setPasswordInput(e.target.value)}/> <br/>
             
                 <Button variant="contained" color="primary" onClick={logIn}> Log In </Button> <br/>
-
+                <Link to="/signUp">
+                    <Button variant="contained" color="primary"> Create New Account </Button> 
+                </Link>
             </div>
         </div>
     );

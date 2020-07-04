@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     // marginRight: theme.spacing(2),
-    margiRight: '60%'
+    margiRight: '60%',
+    fontWeight: '600',
+    marginLeft:'0px', 
+    width:'30vw'
   },
   title: {
     flexGrow: 1,
@@ -38,58 +41,17 @@ const NavBar = inject('user')(observer((props) => {
   let loggedIn = props.user.loggedIn
 
   return (
-
-    loggedIn == 'true' ?
+ 
       <div className={classes.root} id="nav-bar">
         <AppBar position="static" className={classes.container}>
           <Toolbar>
+          <Typography className={classes.menuButton} variant="h2" noWrap>
+              Sunday.com
+          </Typography>
 
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <h1 style={{ marginLeft: '0' }}>Sunday.com</h1>
-            </IconButton>
-
-            <Link to='/tasks' className={classes.title}>
-              <Typography variant="h6" >
-                Tasks
-            </Typography>
-            </Link>
-
-            <Link to='/profile' className={classes.title}>
-              <Typography variant="h6" >
-                Profile
-            </Typography>
-            </Link>
-
-            <Link className={classes.title}>
-              <Typography variant="h6" onClick={() => props.user.logout()}>
-                Log Out
-            </Typography>
-            </Link>
-
-          </Toolbar>
-        </AppBar>
-      </div>
-      :
-      <div className={classes.root} id="nav-bar">
-        <AppBar position="static" className={classes.container}>
-          <Toolbar>
-
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <h1>Sunday.com</h1>
-            </IconButton>
-
-            <Link to='/login' className={classes.title}>
-              <Typography variant="h6" >
-                Login
-              </Typography>
-            </Link>
-
-            <Link to='/signUp' className={classes.title}>
-              <Typography variant="h6" >
-                Sign Up
-            </Typography>
-            </Link>
+          { loggedIn == 'true' ?
             <CustomizedMenus loggedIn={loggedIn} className={classes.title} />
+            :null}
 
           </Toolbar>
         </AppBar>

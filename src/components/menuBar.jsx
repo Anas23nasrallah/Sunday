@@ -54,14 +54,14 @@ export default function CustomizedMenus(props) {
 
   
   return (
-    <div>
+    <div style={{display:'grid', width:'68vw'}}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
         variant="contained"
         color="primary"
         onClick={handleClick}
-        style={{color:'black', background:'white'}}
+        style={{color:'black', background:'white', width: '7vw', justifySelf: 'end'}}
       >
         Menu
       </Button>
@@ -73,23 +73,6 @@ export default function CustomizedMenus(props) {
         onClose={handleClose}
       >
 
-        {!props.loggedIn ? 
-            <div>
-
-                <Link to='/' >
-                    <StyledMenuItem>
-                        <ListItemText primary="Login" />
-                    </StyledMenuItem>
-                </Link>
-
-                <Link to='/signUp'>
-                    <StyledMenuItem>
-                        <ListItemText primary="Sign Up" />
-                    </StyledMenuItem>
-                </Link>
-
-            </div>
-            : 
             <div>
 
                 <Link to='/tasks' >
@@ -105,7 +88,7 @@ export default function CustomizedMenus(props) {
                 </Link>
 
             </div>
-            }
+
         </StyledMenu>
 
         {/* <StyledMenuItem>
