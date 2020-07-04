@@ -17,6 +17,10 @@
     margin-top: 3%;
 }
 
+a{
+    text-decoration: none;
+}
+
 /* .MuiFormControl-root MuiTextField-root{
     margin-top: 5%;
 } */
