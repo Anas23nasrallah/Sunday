@@ -37,11 +37,6 @@ export class Tasks {
     };
   }
 
-  // @action setUserId(userID) {
-  //   this.userId = userID
-  //   this.loggedIn = true
-  // }
-
   @action getTasksFromDB = async (id) => {
     try {
       let tasks = await axios.get(`${API_URL}/tasks/${id}`); // ! check if ? or :
