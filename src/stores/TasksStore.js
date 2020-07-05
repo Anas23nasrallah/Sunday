@@ -12,6 +12,7 @@ export class Tasks {
 
   @computed get getTasksByCategory() {
 
+
     const groupedTasks = {}
     this._tasks.forEach(t => groupedTasks[t.category] ? groupedTasks[t.category].push(t) : groupedTasks[t.category] = [t])
     this.categories.forEach(c => groupedTasks[c] = [])
@@ -45,6 +46,7 @@ export class Tasks {
       console.log(err);
     }
   };
+
 
   @action deleteTask = async (taskId) => {
     await axios.delete(`${API_URL}/deleteTask/${taskId}`);
