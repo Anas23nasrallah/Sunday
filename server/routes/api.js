@@ -4,7 +4,6 @@ const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
 const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 
-
 //setting email config
 const nodemailer = require('nodemailer');
 
@@ -148,6 +147,19 @@ router.get('/tasks/:userId', function (req, res) {
 })
 
 
+/*  get the name of the user doing the task
+*/
+router.get('/taskuser/:taskId', function (req, res) {
+    const taskId = req.params.taskId
+    sequelize.query(`SELECT users.firstName,users.lastName
+    FROM users JOIN user_tasks ON users.userId=user_tasks.user_id
+    WHERE user_tasks.task_id = ${taskId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
 
 
 /*   Adding new task to the tasks table
@@ -213,6 +225,8 @@ router.put('/updateTask', function (req, res) {
 
 
 
+
+
 /*
     Delete task 
 */
@@ -240,7 +254,7 @@ router.post('/send', (req, res) => {
     const  mailOptions = {
         from: 'sundayprojectmail@gmail.com',
         to: email,
-        subject: 'Sending Email using Node.js',
+        subject: 'Mail from Sunday.com',
         text: mailContent
       };
       
@@ -253,6 +267,114 @@ router.post('/send', (req, res) => {
       });
   })
 
+
+
+
+//////////////////////////////////////// Teams API ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/*  Adding new team
+    @params: take a req like : 
+    {
+        "teamName" : "Winners",
+        "userId" : 5  // Admin that created the team
+    }
+    #return - team's id
+*/
+router.post('/teams', function (req, res) {
+    const teamInfo = req.body
+    sequelize.query(`INSERT INTO teams VALUES(null, "${teamInfo.teamName}")
+                    `)
+        .then( function (result) {
+            const teamId = result[0]
+            sequelize.query(`INSERT INTO teams_users VALUES(${teamId}, ${teamInfo.userId},1)
+            `).then(function () {
+                res.send({ "teamId": teamId })
+            })
+        })
+})
+
+
+
+/*  Adding new (member) user to a team 
+    @params -teamId 
+    @params - username 
+     - the user added by deafult as NOT admin
+*/
+router.post('/teamsusers/:teamId/:username', function (req, res) {
+    const username = req.params.username
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT users.userId FROM users WHERE userName = "${username}"
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (result) {
+            const userId = result[0].userId
+            sequelize.query(`INSERT INTO teams_users VALUES(${teamId}, ${userId},0)
+            `).then(function () {
+                res.end()
+            })
+        })
+})
+
+
+/*  Adding new task to a team 
+    @params -teamId 
+    @params - taskId
+     - the user added by deafult as NOT admin
+*/
+router.post('/teamstasks/:teamId/:taskId', function (req, res) {
+    const taskId = req.params.taskId
+    const teamId = req.params.teamId
+    sequelize.query(`INSERT INTO teams_tasks VALUES(${teamId}, ${taskId})
+            `).then(function () {
+                res.end()
+            })
+
+})
+
+
+/*  getting teams of the user 
+    @params: userId
+    #return - teams 
+*/
+router.get('/teams/:userId', function (req, res) {
+    const userId = req.params.userId
+    sequelize.query(`SELECT teams.teamId,teams.teamName,teams_users.is_admin
+                     FROM teams JOIN teams_users 
+                     ON teams.teamId = teams_users.teamId
+                     WHERE teams_users.userId = ${userId}
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
+
+/*  getting tasks of a team
+    @params: teamId
+    #return - tasks
+*/
+router.get('/teamstasks/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT tasks.taskId,tasks.taskName,tasks.description,tasks.priority,tasks.deadLine,tasks.status,tasks.budget,tasks.category
+    FROM tasks JOIN teams_tasks ON tasks.taskId=teams_tasks.taskId
+    WHERE teams_tasks.teamId = ${teamId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
+/* get members of a team 
+*/
+router.get('/members/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT users.firstName,users.lastName
+    FROM users JOIN teams_users ON users.userId=teams_users.userId
+    WHERE teams_users.teamId = ${teamId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
 
 
 module.exports = router

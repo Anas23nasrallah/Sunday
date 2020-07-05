@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 import Teams from './components/Teams'
+import Chat from './components/chat';
 
 const App = inject('tasksStore', 'user')(observer((props) => {
 
@@ -26,7 +27,7 @@ const App = inject('tasksStore', 'user')(observer((props) => {
       <Route exact path='/signUp' component={SignUp} />
       <Route exact path='/profile' component={Profile} />
       <Route exact path='/teams' component={Teams} />
-
+      <Route exact path='/chat' component={Chat} />
 
     </Router>
   )
