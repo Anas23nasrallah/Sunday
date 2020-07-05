@@ -19,7 +19,6 @@ const TeamsByMembers = inject('teamsStore')(observer((props) => {
         return modifiedTeam
     }
     const modifiedTeams = teams.map(t => modifyTeam(t))
-    console.log(Object.keys(modifiedTeams[0]))
     return (
         <div>
             {modifiedTeams.map(team => Object.keys(team).map((member, i) => {
