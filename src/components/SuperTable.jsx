@@ -64,7 +64,7 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
   });
 
   const addTask = (rowData) => {
-    // console.log(rowData)
+
     const newTask = { ...rowData, category: props.category }
     tasksStore.addTask(newTask)
   }

@@ -9,6 +9,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom'
+import { observer, inject } from 'mobx-react';
+
 
 const StyledMenu = withStyles({
   paper: {
@@ -41,7 +43,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function CustomizedMenus(props) {
+const CustomizedMenus = inject('user')(observer((props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -52,16 +54,16 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
-  
+
   return (
-    <div style={{display:'grid', width:'68vw'}}>
+    <div style={{ display: 'grid', width: '68vw' }}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
         variant="contained"
         color="primary"
         onClick={handleClick}
-        style={{color:'black', background:'white', width: '7vw', justifySelf: 'end'}}
+        style={{ color: 'black', background: 'white', width: '7vw', justifySelf: 'end' }}
       >
         Menu
       </Button>
@@ -73,20 +75,29 @@ export default function CustomizedMenus(props) {
         onClose={handleClose}
       >
 
-            <div>
+        <div>
 
-                <Link to='/tasks' >
-                    <StyledMenuItem>
-                        <ListItemText primary="Tasks" />
-                    </StyledMenuItem>
-                </Link>
+          <Link to='/tasks' >
+            <StyledMenuItem>
+              <ListItemText primary="Tasks" />
+            </StyledMenuItem>
+          </Link>
 
-                <Link to='/profile'>
-                    <StyledMenuItem>
-                        <ListItemText primary="Profile" />
-                    </StyledMenuItem>
-                </Link>
+          <Link to='/profile'>
+            <StyledMenuItem>
+              <ListItemText primary="Profile" />
+            </StyledMenuItem>
+          </Link>
 
+          <Link to='/teams'>
+            <StyledMenuItem>
+              <ListItemText primary="Teams" />
+            </StyledMenuItem>
+          </Link>
+
+          <StyledMenuItem style={{ cursor: 'pointer' }} onClick={() => props.user.logout()}>
+            <ListItemText primary="Log Out" />
+          </StyledMenuItem>
                 <Link to='/chat'>
                     <StyledMenuItem>
                         <ListItemText primary="Chat" />
@@ -95,9 +106,11 @@ export default function CustomizedMenus(props) {
 
             </div>
 
-        </StyledMenu>
+        </div>
 
-        {/* <StyledMenuItem>
+      </StyledMenu>
+
+      {/* <StyledMenuItem>
           <ListItemIcon>
             <InboxIcon fontSize="small" />
           </ListItemIcon>
@@ -105,4 +118,6 @@ export default function CustomizedMenus(props) {
         </StyledMenuItem> */}
     </div>
   );
-}
+}))
+
+export default CustomizedMenus
