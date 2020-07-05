@@ -23,7 +23,7 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
     const modifiedTeams = modifyTeams(teams)
     return (
         <div>
-            {modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} namw={t.name}/>)}
+            {modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} name={t.name}/>)}
         </div>
     );
 }))

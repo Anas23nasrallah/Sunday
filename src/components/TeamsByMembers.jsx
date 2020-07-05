@@ -3,28 +3,34 @@ import { inject, observer } from 'mobx-react';
 import TeamsByMemberTable from './TeamsByMemberTable';
 
 
-const TeamsByTasks = inject('teamsStore')(observer((props) => {
+const TeamsByMembers = inject('teamsStore')(observer((props) => {
 
     const teams = props.teamsStore.teams
 
-    const modifyTeams = (teams) => {
-        const modifiedTeams = []
-        for(let team of teams){
-            const modifiedTeam = {name: team.name, rows: []}
-            for(let task of team.tasks){
-                task.task.assignee = task.assignee
-                modifiedTeam.rows.push(task.task)
+    const modifyTeam = (team) => {
+        const modifiedTeam = { teamName: team.name }
+        for (let task of team.tasks) {
+            if (modifiedTeam[task.assignee]) {
+                modifiedTeam[task.assignee].push(task.task)
+            } else {
+                modifiedTeam[task.assignee] = [task.task]
             }
-            modifiedTeams.push(modifiedTeam)
         }
-        return modifiedTeams
+        return modifiedTeam
     }
-    const modifiedTeams = modifyTeams(teams)
+    const modifiedTeams = teams.map(t => modifyTeam(t))
+    console.log(Object.keys(modifiedTeams[0]))
     return (
         <div>
-            {modifiedTeams.map((t, i) => <TeamsByMemberTable rows={t.rows} key={i} namw={t.name}/>)}
+            {modifiedTeams.map(team => Object.keys(team).map((member, i) => {
+                return (
+                    member !== 'teamName' ?
+                        <TeamsByMemberTable member={member} key={i} tasks={team[member]} teamName={team.teamName} />
+                        : null
+                )
+            }))}
         </div>
     );
 }))
 
-export default TeamsByTasks;
+export default TeamsByMembers;

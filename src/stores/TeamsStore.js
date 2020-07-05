@@ -8,18 +8,15 @@ const dummyTeams = [
         tasks: [
             {
                 task: new Task(1, 'routes', 'in the back', 'Hight', 'today', 3, 'category1'),
-                assignee
-                : 'Ahmad'
+                assignee: 'Ahmad'
             },
             {
                 task: new Task(2, 'DataBase', 'in the db', 'Urgernt', 'tmw', 2, 'category2'),
-                assignee
-                : 'Ahmad'
+                assignee: 'Ahmad'
             },
             {
                 task: new Task(3, 'Dummies', 'for testing', 'Medium', 'today', 6, 'category2'),
-                assignee
-                : 'Eitan'
+                assignee: 'Eitan'
             }
         ]
     },
@@ -29,18 +26,15 @@ const dummyTeams = [
         tasks: [
             {
                 task: new Task(1, 'components', 'in REACT', 'Hight', 'today', 0, 'category4'),
-                assignee
-                : 'Anas'
+                assignee: 'Anas'
             },
             {
                 task: new Task(2, 'Stores', 'in the stores file', 'Low', 'today', 54, 'category3'),
-                assignee
-                : 'Anas'
+                assignee: 'Anas'
             },
             {
                 task: new Task(3, 'Material UI', 'for better UI', 'High', 'today', 33, 'category6'),
-                assignee
-                : 'Eitan'
+                assignee: 'Eitan'
             }
         ]
     }

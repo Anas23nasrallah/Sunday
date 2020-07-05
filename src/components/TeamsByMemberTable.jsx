@@ -45,13 +45,12 @@ export default inject('tasksStore')(observer(function TeamsByMemberTable(props) 
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false },
             { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { 1: 'Starting', 2: 'In progress', 3: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
-        data: props.rows
+        data: props.tasks
     });
 
     // const addTask = (rowData) => {
@@ -72,15 +71,15 @@ export default inject('tasksStore')(observer(function TeamsByMemberTable(props) 
 
     useEffect(() => {
         let oldData = { ...state }
-        oldData.data = props.rows
+        oldData.data = props.tasks
         setState(oldData)
-    }, [props.rows])
+    }, [props.tasks])
 
     return (
         <div className="tasks-category-table">
             <MaterialTable
                 icons={tableIcons}
-                title={props.name}
+                title={props.tasks[0].assignee + ' - ' + props.teamName}
                 columns={state.columns}
                 data={state.data}
                 // editable={{
