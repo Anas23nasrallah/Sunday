@@ -45,7 +45,7 @@ const NavBar = inject('user')(observer((props) => {
       <div className={classes.root} id="nav-bar">
         <AppBar position="static" className={classes.container}>
           <Toolbar>
-          <Typography className={classes.menuButton} variant="h2" noWrap>
+          <Typography className={classes.menuButton} variant="h4" noWrap>
               Sunday.com
           </Typography>
 
