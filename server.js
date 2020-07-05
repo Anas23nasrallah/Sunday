@@ -5,6 +5,12 @@ const bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname, 'build')));
 const api = require('./server/routes/api')
 
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
+
+const socketManager = require('./server/routes/socketManager')
+io.on('connection', socketManager)
 
 
 app.use(function (req, res, next) {
@@ -27,5 +33,10 @@ app.get('*', function (req, res) {
 
 
 
-const port = 3200
-app.listen(port,console.log(`Server up and running on port ${port}`))
+// app.listen(port,console.log(`Server up and running on port ${port}`))
+const PORT = 3200
+
+http.listen(PORT, () => {
+    console.log(`Server up and running on port ${PORT}`)
+  });
+  

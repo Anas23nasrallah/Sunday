@@ -87,6 +87,12 @@ export default function CustomizedMenus(props) {
                     </StyledMenuItem>
                 </Link>
 
+                <Link to='/chat'>
+                    <StyledMenuItem>
+                        <ListItemText primary="Chat" />
+                    </StyledMenuItem>
+                </Link>
+
             </div>
 
         </StyledMenu>
