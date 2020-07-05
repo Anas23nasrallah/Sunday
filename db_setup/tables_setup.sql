@@ -68,7 +68,7 @@ CREATE TABLE teams_users (
     is_admin BIT,
     FOREIGN KEY(teamId) REFERENCES teams(teamId)
 );
-
+ 
 CREATE TABLE teams_tasks (
     teamId INT , 
     taskId INT,
