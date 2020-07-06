@@ -5,6 +5,7 @@ import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { AlertError } from 'material-ui/svg-icons';
 
 
 const Login = inject('tasksStore', 'user')(observer((props) => {
@@ -25,7 +26,7 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 props.user.logout()
                 props.user.login(response.data, userID)
             } else {
-                alert('Incorect password or username')
+                alert(res.data.status)
             }
         })
     }

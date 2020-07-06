@@ -117,10 +117,17 @@ router.get('/userid/:userName', function (req, res) {
 })
 
 
+
+let WRONG_LOG_IN_USERNAME = ""
+let attempt = 0
+let isLogInAllowed = true
+
 /*   trying to log in 
      # return - res 'OK' or 'Nope' and user's id
 */
 router.post('/login', function (req, res) {
+    if(isLogInAllowed==false) {res.send({"status": "Still blocked"})} 
+    else {
     const password = req.body.password
     const name = req.body.name
     sequelize.query(`SELECT *
@@ -132,15 +139,28 @@ router.post('/login', function (req, res) {
                 const salt = results[0].salt
                 const cipher = results[0].cipher
                 const usersCipher = encodeDesECB(password, salt, "10110101")
-                if (cipher == usersCipher) { res.send({ "status": "OK", "userId": results[0].id }) }
+                if (cipher == usersCipher) { res.send({ "status": "OK", "userId": results[0].id }) 
+                  attempt = 0
+                  WRONG_LOG_IN_USERNAME = ""
+                 }
                 else {
-                    res.send({ "status": "NOPE", "id": results[0].id })
+                    let returnMessage = 'Incorect password or username'
+                    if(attempt>=1 && WRONG_LOG_IN_USERNAME==name) {
+                    isLogInAllowed = false
+                     returnMessage = `Too many wrong passwords, you are blocked for ${attempt*15} seconds! `
+                        setTimeout(function(){ isLogInAllowed=true }, 15*attempt*1000);
+                    }
+                    WRONG_LOG_IN_USERNAME = name
+                    attempt++
+                    console.log(attempt)
+                    res.send({ "status": returnMessage, "id": results[0].id })
                 }
             } else {
-                res.end()
+                res.send({"status": "Incorect password or username"})
             }
 
         })
+    }
 })
 
 
