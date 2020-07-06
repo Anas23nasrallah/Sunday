@@ -24,7 +24,9 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
   let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    //function getTeamId
   const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
-  let currentTeamDisplayedID = chatStore.currentTeamDisplayedID
+  // let currentTeamDisplayedID = chatStore.currentTeamDisplayedID
+  let currentTeamDisplayedID = 2
+
   // const [currentTeamDisplayedID, setCurrentTeamDisplayedID] = useState('')
 
 
@@ -49,8 +51,11 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
 
 
   // useEffect(()=>{
+    // socket.emit('joinRoom',currentTeamDisplayedID)   
   //   getMessages(currentTeamDisplayedID)       //byteamID
   // },[currentTeamDisplayedID])
+
+  //might occur errors-not sure if need to exit before entering a new one
 
   //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
 
@@ -185,7 +190,8 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
 
 
       socket.on('connect', () => {
-        console.log('connection')
+        socket.emit('joinRoom',currentTeamDisplayedID)      //when entering a new room = change of teamdisplayed
+        console.log('connection to room: '+currentTeamDisplayedID)
       })
 
       socket.on('disconnect', () => {
@@ -220,10 +226,10 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
 
       const sendInput = (e,message) => {
         e.preventDefault(); // prevents page reloading
-        console.log(MY_USER_ID)
+        // console.log(MY_USER_ID)
         const messageData = { message:message, author:MY_USER_ID}
         //const messageToDisplayAndSave = await saveToDB(messageData)
-        socket.emit('chat message', messageData);
+        socket.emit('chat message', messageData, currentTeamDisplayedID);
         addToMessages(messageData)
         return false;
       }
