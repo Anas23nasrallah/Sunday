@@ -92,11 +92,14 @@ USE sunday_finalproject;
 CREATE TABLE teams_chat (
     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     teamId INT , 
-    author VARCHAR(40),
+    authorname VARCHAR(40),
+    author INT,
     message VARCHAR(1000),
     timestamp DATETIME,
     FOREIGN KEY(teamId) REFERENCES teams(teamId)
 );
+
+
 
 
 
