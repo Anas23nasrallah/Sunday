@@ -1,3 +1,5 @@
+import Axios from "axios";
+
 const { observable, action, computed } = require("mobx");
 
 export class User {
@@ -24,6 +26,13 @@ export class User {
         localStorage.setItem("loggedIn", 'false')
         this.loggedIn = 'false'
     }
+
+    // getTeams = async () =>{
+        
+    //     const response = await Axios.get(`http://localhost:3200//teams/${localStorage.getItem('userId')}`)
+    //     return response.data
+    // }
+    
 
     @computed get in(){
         return localStorage.getItem('loggedIn')

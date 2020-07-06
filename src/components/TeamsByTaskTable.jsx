@@ -40,7 +40,7 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByTaskTable(props) {
+export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
     
     const teamsStore = props.teamsStore
     const getUsernamesLookup = (usernames) => {
@@ -61,7 +61,7 @@ export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByT
             { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps},
             { title: 'Priority', field: 'priority', lookup: { 1:'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
-            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { 1: 'Starting', 2: 'In progress', 3: 'Completed' } },
+            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
         data: props.rows
@@ -69,8 +69,6 @@ export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByT
 
     const addTask = (rowData) => {
         teamsStore.addTask(props.name, rowData)
-        // const newTask = { ...rowData, category: props.category }
-        // tasksStore.addTask(newTask)
     }
 
     // const updateTask = (rowData) => {
@@ -78,10 +76,10 @@ export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByT
     //     tasksStore.updateTask(updatedTask)
     // }
 
-    // const deleteTask = (rowData) => {
-    //     const taskToDelete = rowData.taskId
-    //     tasksStore.deleteTask(taskToDelete)
-    // }
+    const deleteTask = (rowData) => {
+        const taskToDelete = rowData.taskId
+        props.tasksStore.deleteTask(taskToDelete)
+    }
 
     useEffect(() => {
         let oldData = { ...state }
@@ -110,7 +108,6 @@ export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByT
                         new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve();
-
                                 // updateTask(newData)
                             }, 600);
                         }),
@@ -118,7 +115,8 @@ export default inject('teamsStore', 'usernamesStore')(observer(function TeamsByT
                         new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve();
-                                // if (oldData.status == 3) { deleteTask(oldData) }
+                                // if (oldData.status == 'Completed') { deleteTask(oldData) }
+                                deleteTask(oldData)
                             }, 600);
                         }),
                 }}

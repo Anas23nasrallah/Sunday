@@ -79,7 +79,7 @@ const CustomizedMenus = inject('user')(observer((props) => {
 
           <Link to='/tasks' >
             <StyledMenuItem>
-              <ListItemText primary="Personal Tasks" />
+              <ListItemText primary="My Tasks" />
             </StyledMenuItem>
           </Link>
 

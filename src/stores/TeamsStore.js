@@ -68,13 +68,12 @@ export class TeamsStore {
                 let taskInfo = {}
                 taskInfo.task = task
                 const tasksUserFromAPI = await axios.get(`${API_URL}/taskuser/${task.taskId}`);
-                taskInfo.user = (tasksUserFromAPI.data).map(u => u.firstName + ' ' + u.lastName)
+                taskInfo.assignee = (tasksUserFromAPI.data).map(u => u.username)[0]
                 teamInfo.tasks.push(taskInfo)
             }
             teamInfo.members = (membersFromAPI.data).map(u => u.firstName + ' ' + u.lastName)
             teamsArr.push(teamInfo)
         }
-        console.log('teamsArr', teamsArr)
         this.teams = teamsArr
     }
 
