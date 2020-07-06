@@ -79,7 +79,7 @@ const CustomizedMenus = inject('user')(observer((props) => {
 
           <Link to='/tasks' >
             <StyledMenuItem>
-              <ListItemText primary="Tasks" />
+              <ListItemText primary="Personal Tasks" />
             </StyledMenuItem>
           </Link>
 
@@ -91,9 +91,15 @@ const CustomizedMenus = inject('user')(observer((props) => {
 
           <Link to='/teams'>
             <StyledMenuItem>
-              <ListItemText primary="Teams" />
+              <ListItemText primary="Teams Tasks" />
             </StyledMenuItem>
           </Link>
+
+
+          <StyledMenuItem style={{ cursor: 'pointer', color: 'blue'}} onClick={() => props.user.logout()}>
+            <ListItemText primary="Log Out" />
+          </StyledMenuItem>
+
 
           <Link to='/chat'>
               <StyledMenuItem>

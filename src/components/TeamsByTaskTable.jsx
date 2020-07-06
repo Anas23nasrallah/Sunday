@@ -40,8 +40,10 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export default inject('tasksStore')(observer(function TeamsByTaskTable(props) {
+export default inject('teamsStore')(observer(function TeamsByTaskTable(props) {
     
+    const teamsStore = props.teamsStore
+
     const [state, setState] = React.useState({
 
         columns: [
@@ -55,11 +57,11 @@ export default inject('tasksStore')(observer(function TeamsByTaskTable(props) {
         data: props.rows
     });
 
-    // const addTask = (rowData) => {
-    //     console.log(rowData)
-    //     const newTask = { ...rowData, category: props.category }
-    //     tasksStore.addTask(newTask)
-    // }
+    const addTask = (rowData) => {
+        teamsStore.addTask(props.name, rowData)
+        // const newTask = { ...rowData, category: props.category }
+        // tasksStore.addTask(newTask)
+    }
 
     // const updateTask = (rowData) => {
     //     const updatedTask = { ...rowData, category: props.category }
@@ -84,16 +86,15 @@ export default inject('tasksStore')(observer(function TeamsByTaskTable(props) {
                 title={props.name}
                 columns={state.columns}
                 data={state.data}
-                // editable={{
-                //     onRowAdd:
-                //         (newData) =>
-                //             new Promise((resolve) => {
-                //                 setTimeout(() => {
-                //                     resolve();
-
-                //                     addTask(newData)
-                //                 }, 600);
-                //             })
+                editable={{
+                    onRowAdd:
+                        (newData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    addTask(newData)
+                                }, 600);
+                            })
                 //     ,
                 //     onRowUpdate: (newData, oldData) =>
                 //         new Promise((resolve) => {
@@ -111,7 +112,7 @@ export default inject('tasksStore')(observer(function TeamsByTaskTable(props) {
                 //                 if (oldData.status == 3) { deleteTask(oldData) }
                 //             }, 600);
                 //         }),
-                // }}
+                }}
             />
         </div>
     );

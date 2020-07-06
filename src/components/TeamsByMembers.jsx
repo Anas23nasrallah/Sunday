@@ -9,11 +9,13 @@ const TeamsByMembers = inject('teamsStore')(observer((props) => {
 
     const modifyTeam = (team) => {
         const modifiedTeam = { teamName: team.name }
-        for (let task of team.tasks) {
-            if (modifiedTeam[task.assignee]) {
-                modifiedTeam[task.assignee].push(task.task)
-            } else {
-                modifiedTeam[task.assignee] = [task.task]
+        if (team.tasks) {
+            for (let task of team.tasks) {
+                if (modifiedTeam[task.assignee]) {
+                    modifiedTeam[task.assignee].push(task.task)
+                } else {
+                    modifiedTeam[task.assignee] = [task.task]
+                }
             }
         }
         return modifiedTeam
