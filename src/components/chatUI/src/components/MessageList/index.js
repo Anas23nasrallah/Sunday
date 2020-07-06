@@ -9,14 +9,18 @@ import io from 'socket.io-client'
 import { inject, observer } from 'mobx-react';
 
 const socketURL = "http://localhost:3200"
+const socket = io(socketURL)
 
 
-const MY_USER_ID = 'apple';
+const MY_USER_ID = 'apple';     //local storage//store
+const MY_TEAMS_IDS = [];     //function getTeamId
+
 
 export default inject('tasksStore', 'user')(observer(function MessageList(props) {
   
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
+  const [currentTeamDisplayed, setCurrentTeamDisplayed] = useState('')
 
   useEffect(() => {
     getMessages();
@@ -26,7 +30,23 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
     renderMessages();
   },[messages])
 
-  
+
+  // useEffect(() => {
+  //   getUserTeamsIDS(MY_USER_ID);
+  // },[])
+
+  // const getUserTeamsIDS(userID)=>{
+  //   MY_TEAMS_IDS = ['TeamIDS']
+  // }
+
+  // useEffect(()=>{
+  //   getMessages(currentTeamDisplayed)       //byteamID
+  // },[currentTeamDisplayed])
+
+  //onclick => setCurrentTeamDisplayed(newID)
+
+
+  //We need to change to b By team id (for the room)
   const getMessages = () => {
      var tempMessages = [
         {
@@ -156,9 +176,6 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
       // const messages=props.messages
       // const setMessages=props.setMessages
 
-
-      const socket = io(socketURL)
-
       socket.on('connect', () => {
         console.log('connection')
       })
@@ -167,23 +184,31 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
           console.log('user disconnected');
       });
 
-      socket.on('chat message', function(msg){
-          const msgs = [...messages]
-          const newMsg = {
-            id: 11,
-            // author: msg.sender,
-            author: 'orange',
-            message: msg.text,
-            timestamp: new Date().getTime()
-          }
-          console.log(newMsg)
-          msgs.push(newMsg)
-          setMessages(msgs)
+
+      const addToMessages = (msg) => {
+        const msgs = [...messages]
+        const newMsg = {
+          id: 11,
+          // author: msg.sender,
+          author: 'orange',
+          message: msg.text,
+          timestamp: new Date().getTime()
+        }
+        // console.log(socket)
+        msgs.push(newMsg)
+        setMessages(msgs)
+      }
+
+      socket.on('chat message', (msg) => {
+        addToMessages(msg)
       });
 
       const sendInput = (e,msg) => {
+        const msgData = {text:msg, sender:localStorage['userId']}
         e.preventDefault(); // prevents page reloading
-        socket.emit('chat message', {text:msg, sender:localStorage['userId']});
+        socket.emit('chat message', msgData);
+        addToMessages(msgData)
+        //2DO >> save to db function
         return false;
       }
 
