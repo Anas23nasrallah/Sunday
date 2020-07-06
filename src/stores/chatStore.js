@@ -23,6 +23,10 @@ export class ChatStore {
 
   @action setMY_TEAMS_IDS(teamsIDArr){
     this.MY_TEAMS_IDS=teamsIDArr
+    // if(teamsIDArr[0]){
+    //     this.currentTeamDisplayedID =  teamsIDArr[0]
+    // }
+
   }
 
 }

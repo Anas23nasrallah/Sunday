@@ -13,8 +13,8 @@ const socketURL = "http://localhost:3200"
 const socket = io(socketURL)
 
 
-const MY_USER_ID = localStorage['userId'];     //local storage//store
-let MY_TEAMS_IDS = [];     //function getTeamId
+// const MY_USER_ID = localStorage['userId'];     //local storage//store
+// let MY_TEAMS_IDS = [];     //function getTeamId
 
 export default inject('tasksStore', 'user', 'chatStore')(observer(function MessageList(props) {
   
@@ -24,14 +24,16 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
   let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    //function getTeamId
   const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
-  // let currentTeamDisplayedID = chatStore.currentTeamDisplayedID
-  let currentTeamDisplayedID = 2
+  let currentTeamDisplayedID = chatStore.currentTeamDisplayedID 
+  // let currentTeamDisplayedID = 2    //hard codded rn
 
   // const [currentTeamDisplayedID, setCurrentTeamDisplayedID] = useState('')
 
+  //might occur errors-not sure if need to exit before entering a new one
+  //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
 
   useEffect(() => {
-    getMessages();
+    getMessages(currentTeamDisplayedID);
   },[])
 
   useEffect(() => {
@@ -39,27 +41,21 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
   },[messages])
 
 
-  // useEffect(() => {
-      //chatStore.setMY_USER_ID()
-      //Axios.get('/get all teams for id=MY_USER_ID').then(teams => {
-      // MY_TEAMS_IDS = teams.map(t => t.id)
-
-      //chatStore.setMY_TEAMS_IDS(teams.map(t => t.id))       >> maybe ?
-
-      // })
-  // },[])
+  useEffect(() => {
+      chatStore.setMY_USER_ID()
+      Axios.get(`http://localhost:3200/teams/${MY_USER_ID}`).then(teams => {
+      chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
+      chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
+      })
+  },[])
 
 
-  // useEffect(()=>{
-    // socket.emit('joinRoom',currentTeamDisplayedID)   
-  //   getMessages(currentTeamDisplayedID)       //byteamID
-  // },[currentTeamDisplayedID])
+  useEffect(()=>{
+    socket.emit('joinRoom',currentTeamDisplayedID)   
+    getMessages(currentTeamDisplayedID)       //byteamID
+  },[currentTeamDisplayedID])
 
-  //might occur errors-not sure if need to exit before entering a new one
 
-  //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
-
-  //We need to change to b By team id (for the room)
   const getMessages = async (teamID) => {
      var tempMessages = [
         {
@@ -123,10 +119,11 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
           timestamp: new Date().getTime()
         },
       ]
-      //Axios.get('/get all team messages from db').then( tempMessages => {
-        // setMessages([...tempMessages])
-      // })
-      setMessages([...messages, ...tempMessages])
+      Axios.get(`http://localhost:3200/teamschat/${currentTeamDisplayedID}`).then( pastMessages => {
+        console.log(pastMessages.data)
+        setMessages([...pastMessages.data])
+      })
+      // setMessages([...messages, ...tempMessages])
   }
 
   const renderMessages = () => {
@@ -202,35 +199,31 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
       const addToMessages = (message) => {
         const newMessages = [...messages]
         const newMessage = {
-          id: 11,
-          // author: message.id,
+          id: message.id,
           author: message.author,
-          // author: 'orange',
           message: message.message,
-          timestamp: new Date().getTime()
-          // timestamp: message.timestamp,
+          timestamp: message.timestamp,
         }
         newMessages.push(newMessage)
         setMessages(newMessages)
       }
 
-      // const saveToDB = (message) => {
-      //   Axios.post('/save new text',message).then(message => {
-      //     return message
-      //   })
-      // }
+      const saveToDB = (message) => {
+        Axios.post(`http://localhost:3200/teamschat`,message).then(message => {
+          return message.data
+        })
+      }
 
       socket.on('chat message', (msg) => {
         addToMessages(msg)
       });
 
-      const sendInput = (e,message) => {
+      const sendInput = async (e,message) => {
         e.preventDefault(); // prevents page reloading
-        // console.log(MY_USER_ID)
-        const messageData = { message:message, author:MY_USER_ID}
-        //const messageToDisplayAndSave = await saveToDB(messageData)
-        socket.emit('chat message', messageData, currentTeamDisplayedID);
-        addToMessages(messageData)
+        const messageData = { message:message, author:MY_USER_ID, teamId:currentTeamDisplayedID}
+        const messageToDisplayAndSave = await saveToDB(messageData)
+        socket.emit('chat message', {...messageToDisplayAndSave, ...messageData}, currentTeamDisplayedID);
+        addToMessages({...messageToDisplayAndSave, ...messageData})
         return false;
       }
 
@@ -246,8 +239,13 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
         />
 
         <div className="message-list-container">
-          {/* {renderMessages()} */}
-          {messagesToRender.map( (m,i) => <div key={i}>{m}</div>)}
+          {messagesToRender.map( (m,i) => 
+            <div key={i}>
+              {/* show who sent what no style: */}
+              {/* {m.props.data.author + ' :\n'}     */}
+              {m}
+            </div>)
+            }
           </div>
 
         <Compose sendInput={sendInput} 
