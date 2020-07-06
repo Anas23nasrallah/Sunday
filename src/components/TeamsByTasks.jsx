@@ -9,6 +9,7 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
     const teams = props.teamsStore.teams
 
     const modifyTeams = (teams) => {
+        if (!teams) { return }
         const modifiedTeams = []
         if (teams.length) {
             for (let team of teams) {
@@ -25,12 +26,12 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
 
         return modifiedTeams
     }
-    
+
     const modifiedTeams = modifyTeams(teams)
 
     return (
         <div>
-            {modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} name={t.name} />)}
+            {modifiedTeams ? modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} name={t.name} />) : null}
         </div>
     );
 }))

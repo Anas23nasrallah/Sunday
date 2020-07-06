@@ -10,6 +10,7 @@ import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 import Teams from './components/Teams'
 import Chat from './components/chat';
+import TeamHandler from './components/TeamHandler';
 
 const App = inject('tasksStore', 'user')(observer((props) => {
 
@@ -28,6 +29,8 @@ const App = inject('tasksStore', 'user')(observer((props) => {
       <Route exact path='/profile' component={Profile} />
       <Route exact path='/teams' component={Teams} />
       <Route exact path='/chat' component={Chat} />
+      <Route exact path='/teamhandler' component={TeamHandler} />
+
 
     </Router>
   )

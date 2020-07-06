@@ -23,7 +23,6 @@ const Tasks = inject('tasksStore')(observer((props) => {
         // props.tasksStore.setCategories()
     }
 
-
     useEffect(fetchData, [])
 
     const groupedTasks = props.tasksStore.getTasksByCategory

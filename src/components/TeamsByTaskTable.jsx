@@ -40,18 +40,28 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export default inject('teamsStore')(observer(function TeamsByTaskTable(props) {
+export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
     
     const teamsStore = props.teamsStore
+    const getUsernamesLookup = (usernames) => {
+        const usernamesLookUp = {}
+        let counter = 1
+        for(let username of usernames){
+            usernamesLookUp[username] = username
+            counter++
+        }
+        return usernamesLookUp
+    }
+    const usernamesLookUps = getUsernamesLookup(props.usernamesStore.usernames)
 
     const [state, setState] = React.useState({
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false },
-            { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps},
+            { title: 'Priority', field: 'priority', lookup: { 1:'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
-            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { 1: 'Starting', 2: 'In progress', 3: 'Completed' } },
+            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
         data: props.rows
@@ -59,8 +69,6 @@ export default inject('teamsStore')(observer(function TeamsByTaskTable(props) {
 
     const addTask = (rowData) => {
         teamsStore.addTask(props.name, rowData)
-        // const newTask = { ...rowData, category: props.category }
-        // tasksStore.addTask(newTask)
     }
 
     // const updateTask = (rowData) => {
@@ -68,10 +76,10 @@ export default inject('teamsStore')(observer(function TeamsByTaskTable(props) {
     //     tasksStore.updateTask(updatedTask)
     // }
 
-    // const deleteTask = (rowData) => {
-    //     const taskToDelete = rowData.taskId
-    //     tasksStore.deleteTask(taskToDelete)
-    // }
+    const deleteTask = (rowData) => {
+        const taskToDelete = rowData.taskId
+        props.tasksStore.deleteTask(taskToDelete)
+    }
 
     useEffect(() => {
         let oldData = { ...state }
@@ -95,23 +103,22 @@ export default inject('teamsStore')(observer(function TeamsByTaskTable(props) {
                                     addTask(newData)
                                 }, 600);
                             })
-                //     ,
-                //     onRowUpdate: (newData, oldData) =>
-                //         new Promise((resolve) => {
-                //             setTimeout(() => {
-                //                 resolve();
-
-                //                 updateTask(newData)
-                //             }, 600);
-                //         }),
-                //     onRowDelete: (oldData) =>
-                //         new Promise((resolve) => {
-                //             setTimeout(() => {
-                //                 resolve();
-
-                //                 if (oldData.status == 3) { deleteTask(oldData) }
-                //             }, 600);
-                //         }),
+                    ,
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                // updateTask(newData)
+                            }, 600);
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                // if (oldData.status == 'Completed') { deleteTask(oldData) }
+                                deleteTask(oldData)
+                            }, 600);
+                        }),
                 }}
             />
         </div>
