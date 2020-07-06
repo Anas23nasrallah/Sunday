@@ -18,36 +18,36 @@ USE sunday_finalproject;
 
 -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
-CREATE TABLE username_password (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(30),
-    salt VARCHAR(12),
-    cipher VARCHAR(50)
-);
+-- CREATE TABLE username_password (
+--     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     username VARCHAR(30),
+--     salt VARCHAR(12),
+--     cipher VARCHAR(50)
+-- );
 
 -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
-CREATE TABLE tasks (
-    taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    taskName VARCHAR(40),
-    description VARCHAR(150),
-    priority VARCHAR(20),
-    deadline DATE,
-    status VARCHAR(30),
-    budget INT,
-    category VARCHAR(50)
-);
+-- CREATE TABLE tasks (
+--     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+--     taskName VARCHAR(40),
+--     description VARCHAR(150),
+--     priority VARCHAR(20),
+--     deadline DATE,
+--     status VARCHAR(30),
+--     budget INT,
+--     category VARCHAR(50)
+-- );
 
 
 
 -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
-CREATE TABLE user_tasks (
-    task_id INT,
-    user_id INT,
-    FOREIGN KEY(user_id) REFERENCES username_password(id),
-    FOREIGN KEY(task_id) REFERENCES tasks(taskId)
-);
+-- CREATE TABLE user_tasks (
+--     task_id INT,
+--     user_id INT,
+--     FOREIGN KEY(user_id) REFERENCES username_password(id),
+--     FOREIGN KEY(task_id) REFERENCES tasks(taskId)
+-- );
 
 -- ALTER TABLE tasks ADD category VARCHAR(30);
 -- DELETE FROM user_tasks;
@@ -57,33 +57,52 @@ CREATE TABLE user_tasks (
 
 -- -- ///////////  /////////   ///////////  Teams Tables  //////////  ///////// //////////////  ////////
 
-CREATE TABLE teams (
-    teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    teamName VARCHAR(40)
-);
+-- CREATE TABLE teams (
+--     teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+--     teamName VARCHAR(40)
+-- );
 
-CREATE TABLE teams_users (
+-- CREATE TABLE teams_users (
+--     teamId INT , 
+--     userId INT,
+--     is_admin BIT,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId)
+-- );
+ 
+-- CREATE TABLE teams_tasks (
+--     teamId INT , 
+--     taskId INT,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId),
+--     FOREIGN KEY(taskId) REFERENCES tasks(taskId)
+-- );
+
+-- CREATE TABLE users (
+--     userId INT NOT NULL PRIMARY KEY, 
+--     userName VARCHAR(40),
+--     firstName VARCHAR(40),
+--     lastName VARCHAR(40), 
+--     email VARCHAR(70),
+--     birthDate  DATE
+-- );
+
+
+
+-- -- ///////////  /////////   ///////////  Chat Tables  //////////  ///////// //////////////  ////////
+
+CREATE TABLE teams_chat (
+    messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     teamId INT , 
-    userId INT,
-    is_admin BIT,
+    authorname VARCHAR(40),
+    author INT,
+    message VARCHAR(1000),
+    timestamp DATETIME,
     FOREIGN KEY(teamId) REFERENCES teams(teamId)
 );
- 
-CREATE TABLE teams_tasks (
-    teamId INT , 
-    taskId INT,
-    FOREIGN KEY(teamId) REFERENCES teams(teamId),
-    FOREIGN KEY(taskId) REFERENCES tasks(taskId)
-);
 
-CREATE TABLE users (
-    userId INT NOT NULL PRIMARY KEY, 
-    userName VARCHAR(40),
-    firstName VARCHAR(40),
-    lastName VARCHAR(40), 
-    email VARCHAR(70),
-    birthDate  DATE
-);
+
+
+
+
 
 
 

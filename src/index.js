@@ -8,14 +8,15 @@ import { Tasks } from '../src/stores/TasksStore'
 import { User } from '../src/stores/User'
 import { UsernamesStore } from './stores/UsernamesStore'
 import { TeamsStore } from './stores/TeamsStore'
+import ChatStore from './stores/chatStore';
 
-
+const chatStore = new ChatStore()
 const tasksStore = new Tasks()
 const user = new User()
 const usernamesStore = new UsernamesStore()
 const teamsStore = new TeamsStore() 
 
-const stores = { tasksStore, user, usernamesStore, teamsStore }
+const stores = { tasksStore, user, usernamesStore, teamsStore, chatStore }
 
 ReactDOM.render(<Provider {...stores}> <App /> </Provider>, document.getElementById('root'));
 

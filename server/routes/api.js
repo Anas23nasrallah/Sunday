@@ -3,6 +3,7 @@ const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
 const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const dateTime = require('node-datetime');
 
 //setting email config
 const nodemailer = require('nodemailer');
@@ -117,10 +118,17 @@ router.get('/userid/:userName', function (req, res) {
 })
 
 
+
+let WRONG_LOG_IN_USERNAME = ""
+let attempt = 0
+let isLogInAllowed = true
+
 /*   trying to log in 
      # return - res 'OK' or 'Nope' and user's id
 */
 router.post('/login', function (req, res) {
+    if(isLogInAllowed==false) {res.send({"status": "Still blocked"})} 
+    else {
     const password = req.body.password
     const name = req.body.name
     sequelize.query(`SELECT *
@@ -132,15 +140,28 @@ router.post('/login', function (req, res) {
                 const salt = results[0].salt
                 const cipher = results[0].cipher
                 const usersCipher = encodeDesECB(password, salt, "10110101")
-                if (cipher == usersCipher) { res.send({ "status": "OK", "userId": results[0].id }) }
+                if (cipher == usersCipher) { res.send({ "status": "OK", "userId": results[0].id }) 
+                  attempt = 0
+                  WRONG_LOG_IN_USERNAME = ""
+                 }
                 else {
-                    res.send({ "status": "NOPE", "id": results[0].id })
+                    let returnMessage = 'Incorect password or username'
+                    if(attempt>=1 && WRONG_LOG_IN_USERNAME==name) {
+                    isLogInAllowed = false
+                     returnMessage = `Too many wrong passwords, you are blocked for ${attempt*15} seconds! `
+                        setTimeout(function(){ isLogInAllowed=true }, 15*attempt*1000);
+                    }
+                    WRONG_LOG_IN_USERNAME = name
+                    attempt++
+                    console.log(attempt)
+                    res.send({ "status": returnMessage, "id": results[0].id })
                 }
             } else {
-                res.end()
+                res.send({"status": "Incorect password or username"})
             }
 
         })
+    }
 })
 
 
@@ -388,6 +409,48 @@ router.get('/members/:teamId', function (req, res) {
     sequelize.query(`SELECT users.firstName,users.lastName
     FROM users JOIN teams_users ON users.userId=teams_users.userId
     WHERE teams_users.teamId = ${teamId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
+//////////////////////////////////////// Chat API ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/*  Adding new team message
+    @params: take a req like : 
+    {
+        "message" : "Hello There",
+        "teamId" : 1,
+        "author": "Eitan",
+        "authorid" 2
+    }
+    #return - message id + timstamp
+*/
+router.post('/teamschat', function (req, res) {
+    const messageInfo = req.body
+    const dt = dateTime.create();
+    const  formatted = dt.format('Y-m-d H:M:S');
+    console.log(formatted);
+    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.authorname}",${messageInfo.author},"${messageInfo.message}","${formatted}")
+                    `)
+        .then( function (result) {
+            const messageId = result[0]
+            res.send({ "id": messageId ,"timestamp": formatted})
+        })
+})
+
+
+/*
+    get all messages of the team with teamId
+*/
+router.get('/teamschat/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT *
+                      FROM teams_chat 
+    WHERE teams_chat.teamId = ${teamId}
+    ORDER BY teams_chat.timestamp
    `, { type: Sequelize.QueryTypes.SELECT })
         .then( results => res.send(results) )
 })

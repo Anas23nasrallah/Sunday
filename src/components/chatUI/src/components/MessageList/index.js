@@ -7,27 +7,56 @@ import moment from 'moment';
 import './MessageList.css';
 import io from 'socket.io-client'
 import { inject, observer } from 'mobx-react';
+import Axios from 'axios';
 
 const socketURL = "http://localhost:3200"
+const socket = io(socketURL)
 
 
-const MY_USER_ID = 'apple';
+// const MY_USER_ID = localStorage['userId'];     //local storage//store
+// let MY_TEAMS_IDS = [];     //function getTeamId
 
-export default inject('tasksStore', 'user')(observer(function MessageList(props) {
+export default inject('tasksStore', 'user', 'chatStore')(observer(function MessageList(props) {
   
-  const [messages, setMessages] = useState([])
+  const chatStore = props.chatStore
+
+  const MY_USER_ID = chatStore.MY_USER_ID     //local storage//store
+  let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    //function getTeamId
+  const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
+  let currentTeamDisplayedID = chatStore.currentTeamDisplayedID 
+  // let currentTeamDisplayedID = 2    //hard codded rn
+
+  // const [currentTeamDisplayedID, setCurrentTeamDisplayedID] = useState('')
+
+  //might occur errors-not sure if need to exit before entering a new one
+  //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
 
   useEffect(() => {
-    getMessages();
+    getMessages(currentTeamDisplayedID);
   },[])
 
   useEffect(() => {
     renderMessages();
   },[messages])
 
-  
-  const getMessages = () => {
+
+  useEffect(() => {
+      chatStore.setMY_USER_ID()
+      Axios.get(`http://localhost:3200/teams/${MY_USER_ID}`).then(teams => {
+      chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
+      chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
+      })
+  },[])
+
+
+  useEffect(()=>{
+    socket.emit('joinRoom',currentTeamDisplayedID)   
+    getMessages(currentTeamDisplayedID)       //byteamID
+  },[currentTeamDisplayedID])
+
+
+  const getMessages = async (teamID) => {
      var tempMessages = [
         {
           id: 1,
@@ -90,7 +119,11 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
           timestamp: new Date().getTime()
         },
       ]
-      setMessages([...messages, ...tempMessages])
+      Axios.get(`http://localhost:3200/teamschat/${currentTeamDisplayedID}`).then( pastMessages => {
+        console.log(pastMessages.data)
+        setMessages([...pastMessages.data])
+      })
+      // setMessages([...messages, ...tempMessages])
   }
 
   const renderMessages = () => {
@@ -152,38 +185,45 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
     setMessagesToRender(tempMessages)
   }
 
-      // const [messages, setMessages] = useState([])        //intiate with past msgs from DB sorted by date time
-      // const messages=props.messages
-      // const setMessages=props.setMessages
-
-
-      const socket = io(socketURL)
 
       socket.on('connect', () => {
-        console.log('connection')
+        socket.emit('joinRoom',currentTeamDisplayedID)      //when entering a new room = change of teamdisplayed
+        console.log('connection to room: '+currentTeamDisplayedID)
       })
 
       socket.on('disconnect', () => {
           console.log('user disconnected');
       });
 
-      socket.on('chat message', function(msg){
-          const msgs = [...messages]
-          const newMsg = {
-            id: 11,
-            // author: msg.sender,
-            author: 'orange',
-            message: msg.text,
-            timestamp: new Date().getTime()
-          }
-          console.log(newMsg)
-          msgs.push(newMsg)
-          setMessages(msgs)
+
+      const addToMessages = (message) => {
+        const newMessages = [...messages]
+        const newMessage = {
+          id: message.id,
+          author: message.author,
+          message: message.message,
+          timestamp: message.timestamp,
+        }
+        newMessages.push(newMessage)
+        setMessages(newMessages)
+      }
+
+      const saveToDB = (message) => {
+        Axios.post(`http://localhost:3200/teamschat`,message).then(message => {
+          return message.data
+        })
+      }
+
+      socket.on('chat message', (msg) => {
+        addToMessages(msg)
       });
 
-      const sendInput = (e,msg) => {
+      const sendInput = async (e,message) => {
         e.preventDefault(); // prevents page reloading
-        socket.emit('chat message', {text:msg, sender:localStorage['userId']});
+        const messageData = { message:message, author:MY_USER_ID, teamId:currentTeamDisplayedID}
+        const messageToDisplayAndSave = await saveToDB(messageData)
+        socket.emit('chat message', {...messageToDisplayAndSave, ...messageData}, currentTeamDisplayedID);
+        addToMessages({...messageToDisplayAndSave, ...messageData})
         return false;
       }
 
@@ -199,8 +239,13 @@ export default inject('tasksStore', 'user')(observer(function MessageList(props)
         />
 
         <div className="message-list-container">
-          {/* {renderMessages()} */}
-          {messagesToRender.map( m => <div>{m}</div>)}
+          {messagesToRender.map( (m,i) => 
+            <div key={i}>
+              {/* show who sent what no style: */}
+              {/* {m.props.data.author + ' :\n'}     */}
+              {m}
+            </div>)
+            }
           </div>
 
         <Compose sendInput={sendInput} 
