@@ -7,6 +7,9 @@ import axios from 'axios';
 
 import './ConversationList.css';
 
+
+  //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
+
 export default function ConversationList(props) {
   const [conversations, setConversations] = useState([]);
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function ConversationList(props) {
     return (
       <div className="conversation-list">
         <Toolbar
-          title="Messenger"
+          title="Chats"
           leftItems={[
             <ToolbarButton key="cog" icon="ion-ios-cog" />
           ]}
