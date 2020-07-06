@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 
 //setting email config
 const nodemailer = require('nodemailer');
@@ -104,6 +104,18 @@ router.get('/user/:userId', function (req, res) {
 })
 
 
+/*
+      get user's id by username 
+*/
+router.get('/userid/:userName', function (req, res) {
+    const userName = req.params.userName
+    sequelize.query(`SELECT users.userId
+                    FROM users
+                    WHERE users.userName = "${userName}"
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results[0]) )
+})
+
 
 /*   trying to log in 
      # return - res 'OK' or 'Nope' and user's id
@@ -191,6 +203,10 @@ router.post('/tasks/:userId', function (req, res) {
             })
         })
 })
+
+
+
+
 
 
 
