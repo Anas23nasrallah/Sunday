@@ -50,6 +50,7 @@
     "mobx-react-devtools": "^6.1.1",
     "moment": "^2.23.0",
     "mysql2": "^2.1.0",
+    "node-datetime": "^2.1.2",
     "nodemailer": "^6.4.10",
     "nodemailer-react": "^0.1.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
