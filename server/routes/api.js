@@ -3,6 +3,7 @@ const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
 const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const dateTime = require('node-datetime');
 
 //setting email config
 const nodemailer = require('nodemailer');
@@ -408,6 +409,47 @@ router.get('/members/:teamId', function (req, res) {
     sequelize.query(`SELECT users.firstName,users.lastName
     FROM users JOIN teams_users ON users.userId=teams_users.userId
     WHERE teams_users.teamId = ${teamId}
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
+//////////////////////////////////////// Chat API ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/*  Adding new team message
+    @params: take a req like : 
+    {
+        "message" : "Hello There",
+        "teamId" : 1,
+        "author": "Eitan"
+    }
+    #return - message id + timstamp
+*/
+router.post('/teamschat', function (req, res) {
+    const messageInfo = req.body
+    const dt = dateTime.create();
+    const  formatted = dt.format('Y-m-d H:M:S');
+    console.log(formatted);
+    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.author}","${messageInfo.message}","${formatted}")
+                    `)
+        .then( function (result) {
+            const messageId = result[0]
+            res.send({ "messageId": messageId ,"timestamp": formatted})
+        })
+})
+
+
+/*
+    get all messages of the team with teamId
+*/
+router.get('/teamschat/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT *
+                      FROM teams_chat 
+    WHERE teams_chat.teamId = ${teamId}
+    ORDER BY teams_chat.timestamp
    `, { type: Sequelize.QueryTypes.SELECT })
         .then( results => res.send(results) )
 })
