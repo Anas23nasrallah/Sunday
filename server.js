@@ -8,7 +8,6 @@ const api = require('./server/routes/api')
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-
 const socketManager = require('./server/routes/socketManager')
 io.on('connection', socketManager)
 

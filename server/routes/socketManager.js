@@ -1,10 +1,12 @@
 const io = require('../../server').io
 
-module.exports = function(socket){
-    console.log('Socket id:' + socket.id)
+module.exports = (socket) => {
+    // console.log('Socket id:' + socket.id)
 
     socket.on('chat message', (msg) => {
-        socket.emit('chat message', msg);
+        // console.log('msg:' + msg.text)
+        // socket.emit('chat message', msg);
+        socket.broadcast.emit('chat message', msg);
     });
     
 }
