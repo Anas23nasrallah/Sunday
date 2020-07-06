@@ -423,7 +423,8 @@ router.get('/members/:teamId', function (req, res) {
     {
         "message" : "Hello There",
         "teamId" : 1,
-        "author": "Eitan"
+        "author": "Eitan",
+        "authorid" 2
     }
     #return - message id + timstamp
 */
@@ -432,7 +433,7 @@ router.post('/teamschat', function (req, res) {
     const dt = dateTime.create();
     const  formatted = dt.format('Y-m-d H:M:S');
     console.log(formatted);
-    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.author}","${messageInfo.message}","${formatted}")
+    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.authorname}",${messageInfo.author},"${messageInfo.message}","${formatted}")
                     `)
         .then( function (result) {
             const messageId = result[0]
