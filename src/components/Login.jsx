@@ -20,6 +20,7 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
         }
         
         Axios.post('http://localhost:3200/login',loginData).then( async res => {
+            console.log(res.data.status )
             if(res.data.status === 'OK'){
                 const userID = res.data.userId
                 const response = await Axios.get(`http://localhost:3200/user/${userID}`)
