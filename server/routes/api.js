@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -436,7 +436,7 @@ router.post('/teamschat', function (req, res) {
                     `)
         .then( function (result) {
             const messageId = result[0]
-            res.send({ "messageId": messageId ,"timestamp": formatted})
+            res.send({ "id": messageId ,"timestamp": formatted})
         })
 })
 
