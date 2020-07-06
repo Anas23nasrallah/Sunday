@@ -4,17 +4,27 @@ import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
 import Message from '../Message';
 import moment from 'moment';
-
 import './MessageList.css';
+import io from 'socket.io-client'
+import { inject, observer } from 'mobx-react';
+
+const socketURL = "http://localhost:3200"
+
 
 const MY_USER_ID = 'apple';
 
-export default function MessageList(props) {
+export default inject('tasksStore', 'user')(observer(function MessageList(props) {
+  
   const [messages, setMessages] = useState([])
+  const [messagesToRender, setMessagesToRender] = useState([])
 
   useEffect(() => {
     getMessages();
   },[])
+
+  useEffect(() => {
+    renderMessages();
+  },[messages])
 
   
   const getMessages = () => {
@@ -139,8 +149,43 @@ export default function MessageList(props) {
       i += 1;
     }
 
-    return tempMessages;
+    setMessagesToRender(tempMessages)
   }
+
+      // const [messages, setMessages] = useState([])        //intiate with past msgs from DB sorted by date time
+      // const messages=props.messages
+      // const setMessages=props.setMessages
+
+
+      const socket = io(socketURL)
+
+      socket.on('connect', () => {
+        console.log('connection')
+      })
+
+      socket.on('disconnect', () => {
+          console.log('user disconnected');
+      });
+
+      socket.on('chat message', function(msg){
+          const msgs = [...messages]
+          const newMsg = {
+            id: 11,
+            // author: msg.sender,
+            author: 'orange',
+            message: msg.text,
+            timestamp: new Date().getTime()
+          }
+          console.log(newMsg)
+          msgs.push(newMsg)
+          setMessages(msgs)
+      });
+
+      const sendInput = (e,msg) => {
+        e.preventDefault(); // prevents page reloading
+        socket.emit('chat message', {text:msg, sender:localStorage['userId']});
+        return false;
+      }
 
     return(
       <div className="message-list">
@@ -153,16 +198,16 @@ export default function MessageList(props) {
           ]}
         />
 
-        <div className="message-list-container">{renderMessages()}</div>
+        <div className="message-list-container">
+          {/* {renderMessages()} */}
+          {messagesToRender.map( m => <div>{m}</div>)}
+          </div>
 
-        <Compose rightItems={[
-          <ToolbarButton key="photo" icon="ion-ios-camera" />,
+        <Compose sendInput={sendInput} 
+        rightItems={[
           <ToolbarButton key="image" icon="ion-ios-image" />,
-          <ToolbarButton key="audio" icon="ion-ios-mic" />,
-          <ToolbarButton key="money" icon="ion-ios-card" />,
-          <ToolbarButton key="games" icon="ion-logo-game-controller-b" />,
           <ToolbarButton key="emoji" icon="ion-ios-happy" />
         ]}/>
       </div>
     );
-}
+}))

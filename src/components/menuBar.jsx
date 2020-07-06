@@ -95,15 +95,15 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
-          <StyledMenuItem style={{ cursor: 'pointer' }} onClick={() => props.user.logout()}>
-            <ListItemText primary="Log Out" />
-          </StyledMenuItem>
-
           <Link to='/chat'>
               <StyledMenuItem>
                   <ListItemText primary="Chat" />
               </StyledMenuItem>
           </Link>
+
+          <StyledMenuItem style={{ cursor: 'pointer' }} onClick={() => props.user.logout()}>
+            <ListItemText primary="Log Out" />
+          </StyledMenuItem>
 
         </div>
 
