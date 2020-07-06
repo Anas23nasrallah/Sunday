@@ -3,6 +3,7 @@ import io from 'socket.io-client'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
+import Messenger from './chatUI/src/components/Messenger';
 
 const socketURL = "http://localhost:3200"
 const Chat = inject('tasksStore', 'user')(observer((props) => {
@@ -49,6 +50,7 @@ const Chat = inject('tasksStore', 'user')(observer((props) => {
            <button onClick={sendInput}>Send</button>
            Messages:
            {messages.map( m => <p>{'User with ID ' +  m.sender + ' says: '+ m.text}</p>)}
+           <Messenger />
        </div>
     )
 }))
