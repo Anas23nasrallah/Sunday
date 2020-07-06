@@ -20,16 +20,19 @@ const TeamsByMembers = inject('teamsStore')(observer((props) => {
         }
         return modifiedTeam
     }
-    const modifiedTeams = teams.map(t => modifyTeam(t))
+    let modifiedTeams = []
+    if (teams) {
+         modifiedTeams = teams.map(t => modifyTeam(t))
+    }
     return (
         <div>
-            {modifiedTeams.map(team => Object.keys(team).map((member, i) => {
+            {modifiedTeams.length ? modifiedTeams.map(team => Object.keys(team).map((member, i) => {
                 return (
                     member !== 'teamName' ?
                         <TeamsByMemberTable member={member} key={i} tasks={team[member]} teamName={team.teamName} />
                         : null
                 )
-            }))}
+            })) : null} 
         </div>
     );
 }))
