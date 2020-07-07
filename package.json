@@ -61,6 +61,7 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
+    "rc-progress": "^3.0.0",
     "react": "^16.13.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-update": "^15.6.2",
