@@ -18,7 +18,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { useEffect } from 'react';
-import { Input } from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -40,52 +39,56 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
-    
+export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
+
     const teamsStore = props.teamsStore
-    const getUsernamesLookup = (usernames) => {
+    const members = teamsStore.teams.find(t => t.name = props.name).members
+
+    const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
-        let counter = 1
-        for(let username of usernames){
-            usernamesLookUp[username] = username
-            counter++
+        for (let member of members) {
+            usernamesLookUp[member] = member
         }
         return usernamesLookUp
     }
-    const usernamesLookUps = getUsernamesLookup(props.usernamesStore.usernames)
+    const usernamesLookUps = getUsernamesLookup(members)
 
     const [state, setState] = React.useState({
 
+
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps},
-            { title: 'Priority', field: 'priority', lookup: { 1:'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps },
+            { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
-        data: props.rows
+        data: props.rows,
+        teams: teamsStore.teams
     });
 
-    const addTask = (rowData) => {
+    const addTask = async (rowData) => {
         teamsStore.addTask(props.name, rowData)
     }
 
-    // const updateTask = (rowData) => {
-    //     const updatedTask = { ...rowData, category: props.category }
-    //     tasksStore.updateTask(updatedTask)
-    // }
+    const updateTask = async (rowData) => {
+        const updatedTask = { ...rowData, category: props.category }
+        await props.tasksStore.updateTask(updatedTask)
+        teamsStore.getTeams(localStorage.getItem('userId'))
+    }
 
-    const deleteTask = (rowData) => {
+    const deleteTask = async (rowData) => {
         const taskToDelete = rowData.taskId
-        props.tasksStore.deleteTask(taskToDelete)
+        await props.tasksStore.deleteTask(taskToDelete)
+        teamsStore.getTeams(localStorage.getItem('userId'))
     }
 
     useEffect(() => {
         let oldData = { ...state }
         oldData.data = props.rows
         setState(oldData)
-    }, [props.rows])
+    }, [props.rows, state.teams])
 
     return (
         <div className="tasks-category-table">
@@ -108,7 +111,7 @@ export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(fun
                         new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve();
-                                // updateTask(newData)
+                                updateTask(newData)
                             }, 600);
                         }),
                     onRowDelete: (oldData) =>

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { InputLabel, NativeSelect, TextField, Button } from '@material-ui/core';
 
 const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((props) => {
-    const usernames = props.usernamesStore.usernames
+    const usernames = props.usernamesStore.usernames.map(u => u.username)
 
     const [teamsObj, setTeamsObj] = useState([])
     const [team, setTeam] = useState('')
@@ -14,6 +14,16 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     const [member, setMember] = useState('')
     const [teamInput, setTeamInput] = useState('')
 
+    const getContenders = () => {
+        const teamm = props.teamsStore.teams.find(t => t.name = team)
+        if (teamm && teamm.members) {
+            const members = teamm.members
+            const contenders = usernames.filter(u => !members.includes(u))
+            return contenders
+        }
+        return
+
+    }
     const addTeam = () => {
         if (!teamInput.length) {
             alert('Enter a name for the team')
@@ -61,7 +71,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             <InputLabel htmlFor="select">Choose Team</InputLabel>
             <NativeSelect id="select" value={member} onChange={(e) => setMember(e.target.value)}>
                 <option></option>
-                {usernames.map((u, i) => <option key={i}>{u}</option>)}
+                {getContenders() ? getContenders().map((u, i) => <option key={i}>{u}</option>) : null}
             </NativeSelect>
             <button onClick={() => addMemberToTeam()}>Add</button>
 

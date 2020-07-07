@@ -83,9 +83,16 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
+
           <Link to='/profile'>
             <StyledMenuItem>
               <ListItemText primary="Profile" />
+            </StyledMenuItem>
+          </Link>
+
+          <Link to='/calendar'>
+            <StyledMenuItem>
+              <ListItemText primary="Calendar" />
             </StyledMenuItem>
           </Link>
 
@@ -94,20 +101,14 @@ const CustomizedMenus = inject('user')(observer((props) => {
               <ListItemText primary="Teams Tasks" />
             </StyledMenuItem>
           </Link>
-
-
-          <StyledMenuItem style={{ cursor: 'pointer', color: 'blue'}} onClick={() => props.user.logout()}>
-            <ListItemText primary="Log Out" />
-          </StyledMenuItem>
-
-
+      
           <Link to='/chat'>
               <StyledMenuItem>
                   <ListItemText primary="Chat" />
               </StyledMenuItem>
           </Link>
 
-          <StyledMenuItem style={{ cursor: 'pointer' }} onClick={() => props.user.logout()}>
+          <StyledMenuItem style={{ cursor: 'pointer', color: 'blue'}} onClick={() => props.user.logout()}>
             <ListItemText primary="Log Out" />
           </StyledMenuItem>
 
