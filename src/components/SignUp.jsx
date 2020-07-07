@@ -27,11 +27,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
              url:"http://localhost:3200/send", 
              data: {
                     email: inputs.email,
-                    mailContent: `Hey ${inputs.firstName}   ${inputs.lastName},\n
-                     You have been signed up successfully for Sunday.com\n
-                     Have a nice day\n
-                     Best regards\n
-                     Sunday.com team
+                    mailContent: `Hey ${inputs.firstName}   ${inputs.lastName}
                      `}
              }).then((response)=>{
                       if (response.data.msg === 'success'){
