@@ -4,17 +4,20 @@ const { default: Axios } = require("axios");
 export class UsernamesStore {
     @observable usernames = []
 
-    constructor(){
+    constructor() {
         this.getUsernames()
     }
 
     getUsernames = async () => {
         const response = await Axios.get('http://localhost:3200/users')
-        this.usernames = response.data
+        for (let username of response.data) {
+            const fullName = await this.getFullName(username)
+            this.usernames.push({ username: username, fullName: fullName })
+        }
     }
 
     getFullName = async (username) => {
         const response = await Axios.get(`http://localhost:3200/userfullname/${username}`)
-        console.log(response.data.firstName)
+        return response.data.firstName + ' ' + response.data.lastName
     }
 }

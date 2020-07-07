@@ -118,6 +118,20 @@ router.get('/userid/:userName', function (req, res) {
 })
 
 
+/*
+      get user's full name by username 
+*/
+router.get('/userfullname/:userName', function (req, res) {
+    const userName = req.params.userName
+    sequelize.query(`SELECT users.firstName,users.lastName
+                    FROM users
+                    WHERE users.userName = "${userName}"
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results[0]) )
+})
+
+
+
 
 let WRONG_LOG_IN_USERNAME = ""
 let attempt = 0
@@ -184,7 +198,7 @@ router.get('/tasks/:userId', function (req, res) {
 */
 router.get('/taskuser/:taskId', function (req, res) {
     const taskId = req.params.taskId
-    sequelize.query(`SELECT users.firstName,users.lastName
+    sequelize.query(`SELECT users.firstName,users.lastName,users.userName
     FROM users JOIN user_tasks ON users.userId=user_tasks.user_id
     WHERE user_tasks.task_id = ${taskId}
    `, { type: Sequelize.QueryTypes.SELECT })
@@ -351,6 +365,22 @@ router.post('/teamsusers/:teamId/:username', function (req, res) {
 })
 
 
+
+/*  getting teamname from teamid
+*/
+router.get('/teamname/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT teams.teamName
+                     FROM teams 
+                     WHERE teams.teamId = ${teamId}
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
+
 /*  Adding new task to a team 
     @params -teamId 
     @params - taskId
@@ -404,11 +434,26 @@ router.get('/teamstasks/:teamId', function (req, res) {
 */
 router.get('/members/:teamId', function (req, res) {
     const teamId = req.params.teamId
-    sequelize.query(`SELECT users.firstName,users.lastName
+    sequelize.query(`SELECT users.firstName,users.lastName,users.userName
     FROM users JOIN teams_users ON users.userId=teams_users.userId
     WHERE teams_users.teamId = ${teamId}
    `, { type: Sequelize.QueryTypes.SELECT })
         .then( results => res.send(results) )
+})
+
+
+/* remove user from a team
+*/
+router.post('/members/:teamName/:userId', function (req, res) {
+    const userId = req.params.userId
+    const teamName = req.params.teamName
+    sequelize.query(`SELECT teams.teamId FROM  teams WHERE teams.teamName= "${teamName}"
+            `, { type: Sequelize.QueryTypes.SELECT} ).then(function (results) {
+                sequelize.query(`DELETE FROM  teams_users WHERE teams_users.userId= ${userId} AND teams_users.teamId=${results[0].teamId}
+            `).then(function () {
+                res.end()
+            })
+            })
 })
 
 
