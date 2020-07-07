@@ -96,6 +96,12 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
+          <Link to='/analysis'>
+            <StyledMenuItem>
+              <ListItemText primary="Analysis" />
+            </StyledMenuItem>
+          </Link>
+
           <Link to='/teams'>
             <StyledMenuItem>
               <ListItemText primary="Teams Tasks" />
