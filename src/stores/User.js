@@ -19,6 +19,7 @@ export class User {
         localStorage.setItem("userId", userID)
         localStorage.setItem("loggedIn", 'true')
         this.loggedIn = 'true'
+        console.log(details);
     }
 
     @action logout(){

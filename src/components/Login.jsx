@@ -26,6 +26,7 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 const response = await Axios.get(`http://localhost:3200/user/${userID}`)
                 props.user.logout()
                 props.user.login(response.data, userID)
+                console.log(response);
             } else {
                 alert(res.data.status)
             }
