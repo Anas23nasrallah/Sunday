@@ -42,7 +42,7 @@ const tableIcons = {
 export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
 
     const teamsStore = props.teamsStore
-    const members = teamsStore.teams.find(t => t.name = props.name).members
+    const members = teamsStore.teams.find(t => t.name === props.name).members
 
     const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
