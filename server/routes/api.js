@@ -198,7 +198,7 @@ router.get('/tasks/:userId', function (req, res) {
 */
 router.get('/taskuser/:taskId', function (req, res) {
     const taskId = req.params.taskId
-    sequelize.query(`SELECT users.firstName,users.lastName
+    sequelize.query(`SELECT users.firstName,users.lastName,users.userName
     FROM users JOIN user_tasks ON users.userId=user_tasks.user_id
     WHERE user_tasks.task_id = ${taskId}
    `, { type: Sequelize.QueryTypes.SELECT })
@@ -303,8 +303,15 @@ router.post('/send', (req, res) => {
     const  mailOptions = {
         from: 'sundayprojectmail@gmail.com',
         to: email,
-        subject: 'Mail from Sunday.com',
-        text: mailContent
+        subject: 'Mail from Sunday.com ✔',
+        html: `<div style="background-color:powderblue;">
+        <h1 style="color:red;">${mailContent}</h1>
+        <p>You have been signed up successfully for Sunday.com</p>
+        <p>Have a nice day</p>
+        <p> Best regards</p>
+        <p>Sunday.com team</p>
+        <img src="https://cdn.pixabay.com/photo/2017/05/18/12/50/time-management-2323612_960_720.png"></img>
+        </div>`
       };
       
       transporter.sendMail(mailOptions, function(error, info){
