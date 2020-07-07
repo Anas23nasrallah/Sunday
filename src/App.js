@@ -11,6 +11,7 @@ import Profile from './components/Profile';
 import Teams from './components/Teams'
 import Chat from './components/chat';
 import TeamHandler from './components/TeamHandler';
+import Calendar from './components/calendar';
 
 const App = inject('tasksStore', 'user')(observer((props) => {
 
@@ -27,6 +28,7 @@ const App = inject('tasksStore', 'user')(observer((props) => {
       <Route exact path='/login' component={Login} />
       <Route exact path='/signUp' component={SignUp} />
       <Route exact path='/profile' component={Profile} />
+      <Route exact path='/calendar' component={Calendar} />
       <Route exact path='/teams' component={Teams} />
       <Route exact path='/chat' component={Chat} />
       <Route exact path='/teamhandler' component={TeamHandler} />
