@@ -21,11 +21,11 @@ class Calendar extends Component {
 
   render = () => {
     const { startDate, endDate } = this.state
-
+    const dist = (endDate-startDate)/86400000
     return (
         <div>
         <h1>Calendar</h1>
-        <h2>Days Selected: {(endDate-startDate)/86400000}</h2>
+        <h2>Days Selected: {dist >= 0 ? dist : " "}</h2>
         <ReactLightCalendar id="cal" startDate={startDate} endDate={endDate} onChange={this.onChange} range displayTime />
         </div>
     )
