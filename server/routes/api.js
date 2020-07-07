@@ -118,6 +118,20 @@ router.get('/userid/:userName', function (req, res) {
 })
 
 
+/*
+      get user's full name by username 
+*/
+router.get('/userfullname/:userName', function (req, res) {
+    const userName = req.params.userName
+    sequelize.query(`SELECT users.firstName,users.lastName
+                    FROM users
+                    WHERE users.userName = "${userName}"
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results[0]) )
+})
+
+
+
 
 let WRONG_LOG_IN_USERNAME = ""
 let attempt = 0
