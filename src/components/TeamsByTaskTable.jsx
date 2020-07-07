@@ -41,14 +41,17 @@ const tableIcons = {
 };
 
 export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(function TeamsByTaskTable(props) {
-    
+
     const teamsStore = props.teamsStore
-    const getUsernamesLookup = (usernames) => {
+
+    const getUsernamesLookup = async (usernames) => {
         const usernamesLookUp = {}
-        let counter = 1
-        for(let username of usernames){
-            usernamesLookUp[username] = username
-            counter++
+        for (let username of usernames) {
+            if (username === 'a1') {
+                usernamesLookUp[username] = await props.usernamesStore.getFullName(username)
+            } else {
+                usernamesLookUp[username] = 'some full name'
+            }
         }
         return usernamesLookUp
     }
@@ -58,34 +61,37 @@ export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(fun
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps},
-            { title: 'Priority', field: 'priority', lookup: { 1:'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps },
+            { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
-        data: props.rows
+        data: props.rows,
+        teams: teamsStore.teams
     });
 
     const addTask = (rowData) => {
         teamsStore.addTask(props.name, rowData)
     }
 
-    // const updateTask = (rowData) => {
-    //     const updatedTask = { ...rowData, category: props.category }
-    //     tasksStore.updateTask(updatedTask)
-    // }
+    const updateTask = (rowData) => {
+        const updatedTask = { ...rowData, category: props.category }
+        props.tasksStore.updateTask(updatedTask)
+        teamsStore.getTeams(localStorage.getItem('userId'))
+    }
 
     const deleteTask = (rowData) => {
         const taskToDelete = rowData.taskId
         props.tasksStore.deleteTask(taskToDelete)
+        teamsStore.getTeams(localStorage.getItem('userId'))
     }
 
     useEffect(() => {
         let oldData = { ...state }
         oldData.data = props.rows
         setState(oldData)
-    }, [props.rows])
+    }, [props.rows, state.teams])
 
     return (
         <div className="tasks-category-table">
@@ -108,7 +114,7 @@ export default inject('teamsStore', 'usernamesStore', 'tasksStore')(observer(fun
                         new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve();
-                                // updateTask(newData)
+                                updateTask(newData)
                             }, 600);
                         }),
                     onRowDelete: (oldData) =>

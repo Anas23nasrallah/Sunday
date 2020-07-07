@@ -12,4 +12,9 @@ export class UsernamesStore {
         const response = await Axios.get('http://localhost:3200/users')
         this.usernames = response.data
     }
+
+    getFullName = async (username) => {
+        const response = await Axios.get(`http://localhost:3200/userfullname/${username}`)
+        console.log(response.data.firstName)
+    }
 }

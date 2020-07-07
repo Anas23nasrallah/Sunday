@@ -68,7 +68,7 @@ export class TeamsStore {
                 let taskInfo = {}
                 taskInfo.task = task
                 const tasksUserFromAPI = await axios.get(`${API_URL}/taskuser/${task.taskId}`);
-                taskInfo.assignee = (tasksUserFromAPI.data).map(u => u.username)[0]
+                taskInfo.assignee = (tasksUserFromAPI.data).map(u => u.firstName + ' ' + u.lastName)[0]
                 teamInfo.tasks.push(taskInfo)
             }
             teamInfo.members = (membersFromAPI.data).map(u => u.firstName + ' ' + u.lastName)
@@ -110,6 +110,10 @@ export class TeamsStore {
         const teamId = this.teams.find(t => t.name = teamName).id
         await axios.post(`${API_URL}/teamstasks/${teamId}/${taskId}`)
         this.getTeams(localStorage.getItem('userId'))
+    }
+
+    @action deleteTask(taskId){
+
     }
 
     // getTeams = async (userId) => {
