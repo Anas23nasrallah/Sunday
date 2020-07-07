@@ -412,6 +412,21 @@ router.get('/members/:teamId', function (req, res) {
 })
 
 
+/* remove user from a team
+*/
+router.post('/members/:teamName/:userId', function (req, res) {
+    const userId = req.params.userId
+    const teamName = req.params.teamName
+    sequelize.query(`SELECT teams.teamId FROM  teams WHERE teams.teamName= "${teamName}"
+            `, { type: Sequelize.QueryTypes.SELECT} ).then(function (results) {
+                sequelize.query(`DELETE FROM  teams_users WHERE teams_users.userId= ${userId} AND teams_users.teamId=${results[0].teamId}
+            `).then(function () {
+                res.end()
+            })
+            })
+})
+
+
 
 //////////////////////////////////////// Chat API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
