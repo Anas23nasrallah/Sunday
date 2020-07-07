@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -206,7 +206,6 @@ router.get('/taskuser/:taskId', function (req, res) {
     "status" : "start",
     "budget" : 120
 }
-
  #result - return res : id of the new task
      
 */
@@ -243,7 +242,6 @@ router.post('/tasks/:userId', function (req, res) {
     "status" : "start",
     "budget" : 120
 }
-
  #result - /// res.end()
      
 */
