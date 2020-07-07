@@ -471,10 +471,10 @@ router.post('/members/:teamName/:userId', function (req, res) {
 /*  Adding new team message
     @params: take a req like : 
     {
-        "message" : "Hello There",
-        "teamId" : 1,
-        "author": "Eitan",
-        "authorid" 2
+        // author: "Eitan Gueron"
+        // authorid: "1"
+        // message: "bla bla"
+        // teamId: 1
     }
     #return - message id + timstamp
 */
@@ -483,7 +483,7 @@ router.post('/teamschat', function (req, res) {
     const dt = dateTime.create();
     const  formatted = dt.format('Y-m-d H:M:S');
     console.log(formatted);
-    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.authorname}",${messageInfo.author},"${messageInfo.message}","${formatted}")
+    sequelize.query(`INSERT INTO teams_chat VALUES(null,${messageInfo.teamId},"${messageInfo.author}",${messageInfo.authorid},"${messageInfo.message}","${formatted}")
                     `)
         .then( function (result) {
             const messageId = result[0]
@@ -505,5 +505,15 @@ router.get('/teamschat/:teamId', function (req, res) {
         .then( results => res.send(results) )
 })
 
+router.get('/teamname/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT teams.teamName
+                     FROM teams 
+                     WHERE teams.teamId = ${teamId}
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
 
 module.exports = router
