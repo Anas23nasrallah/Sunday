@@ -6,6 +6,8 @@ import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
 
 export default function Messenger(props) {
+
+
     return (
       <div className="messenger">
         {/* <Toolbar

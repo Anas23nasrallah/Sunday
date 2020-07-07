@@ -5,18 +5,18 @@ export default function Compose(props) {
 
   const [input, setInput] = useState('')
 
-  // const userInfo = {
-  //   userID:localStorage['userId'],
-  //   userName: props.user.firstName + ' ' + props.user.lastName          //having problem with user store?
-  // }
-
   const sendInput = props.sendInput
+
+  const sendMessage = (e) => {
+    sendInput(e,input)
+    setInput('')
+  }
 
     return (
       <div className="compose">
         <input type="text" className="compose-input" placeholder="Type a message, @name"
           value={input} onChange={(e)=>setInput(e.target.value)}/>
-        <button onClick={(e)=>sendInput(e,input)}>Send</button>
+        <button onClick={(e)=>sendMessage(e)}>Send</button>
         {
           props.rightItems
         }

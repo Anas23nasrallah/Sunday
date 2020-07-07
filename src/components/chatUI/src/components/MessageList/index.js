@@ -13,39 +13,27 @@ const socketURL = "http://localhost:3200"
 const socket = io(socketURL)
 
 
-// const MY_USER_ID = localStorage['userId'];     //local storage//store
-// let MY_TEAMS_IDS = [];     //function getTeamId
-
 export default inject('tasksStore', 'user', 'chatStore')(observer(function MessageList(props) {
   
   const chatStore = props.chatStore
   const userStore = props.user
-  const MY_USER_ID = chatStore.MY_USER_ID     //local storage//store
-  let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    //function getTeamId
-  // let MY_USER_NAME = userStore.firstName + ' ' + userStore.lastName
-  let MY_USER_NAME = 'Eitan Gueron'
-  const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
-  const [messagesToRender, setMessagesToRender] = useState([])
+  const MY_USER_ID = chatStore.MY_USER_ID     //which is in local storage
+  let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    
+  let MY_USER_NAME = chatStore.MY_USER_NAME
   let currentTeamDisplayedID = chatStore.currentTeamDisplayedID 
   let teamName = chatStore.teamName
-  // let currentTeamDisplayedID = 2    //hard codded rn
-
-  // const [currentTeamDisplayedID, setCurrentTeamDisplayedID] = useState('')
-
-  //might occur errors-not sure if need to exit before entering a new one
-  //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
-
-  useEffect(() => {
-    getMessages(currentTeamDisplayedID);
-  },[])
-
+  const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
+  const [messagesToRender, setMessagesToRender] = useState([])
+  
+  
   useEffect(() => {
       chatStore.setMY_USER_ID()
       Axios.get(`http://localhost:3200/teams/${MY_USER_ID}`).then(teams => {
-        console.log(teams)
-      chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
-      chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
+        chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
+        chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
       })
+      getMessages(currentTeamDisplayedID);
+      chatStore.setUserName()
   },[])
   
   useEffect(() => {
@@ -237,7 +225,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
     return(
       <div className="message-list">
         <Toolbar
-          title={chatStore.teamName + ' Team'}
+          title={chatStore.teamName}
           rightItems={[
             <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
             // <ToolbarButton key="video" icon="ion-ios-videocam" />,
@@ -246,11 +234,8 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
         />
 
         <div className="message-list-container">
-        {/* {console.log(messagesToRender)} */}
           {messagesToRender.map( (m,i) => 
             <div key={i}>
-              {/* show who sent what no style: */}
-              {/* {m.props.data.authorname + ' :\n'}    */}
               {m}
             </div>)
             }

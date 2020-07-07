@@ -88,20 +88,20 @@ USE sunday_finalproject;
 
 
 -- -- ///////////  /////////   ///////////  Chat Tables  //////////  ///////// //////////////  ////////
-DROP TABLE teams_chat;
+-- DROP TABLE teams_chat;
 
 
-CREATE TABLE teams_chat (
-    messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    teamId INT , 
-    authorname VARCHAR(40),
-    author INT,
-    message VARCHAR(1000),
-    timestamp DATETIME,
-    FOREIGN KEY(teamId) REFERENCES teams(teamId)
-);
+-- CREATE TABLE teams_chat (
+--     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+--     teamId INT , 
+--     authorname VARCHAR(40),
+--     author INT,
+--     message VARCHAR(1000),
+--     timestamp DATETIME,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId)
+-- );
 
-
+-- INSERT INTO users VALUES (1, 'eitan', 'Eitan', 'Gueron', 'eitangueron@gmail.com', "2020-07-06 17:00:01");
 
 
 

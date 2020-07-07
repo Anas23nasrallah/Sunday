@@ -10,10 +10,9 @@ module.exports = (socket) => {
         // console.log(roomNum)
     })
 
-    // socket.on('leaveRoom', (roomNum) => {
-    //     socket.join(roomNum)
-    //     // console.log(roomNum)
-    // })
+    // socket.on('leaveRooms', () => {
+    //     socket.rooms = {}
+    //   })
 
     socket.on('chat message', (msg,roomNum) => {
         // console.log('msg:' + msg.text)

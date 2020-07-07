@@ -16,26 +16,30 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Conve
   
   const [conversations, setConversations] = useState([]);
   const chatStore = props.chatStore
+  // const conversations = chatStore.conversations
   const userID = chatStore.MY_USER_ID
   let teamName = chatStore.teamName
   let teamID = chatStore.currentTeamDisplayedID
-  // let myTeams []
+
+  // useEffect(() => {
+  //   getTeams()
+  // },[chatStore.MY_USER_ID, chatStore.MY_TEAMS_IDS])
 
   useEffect(() => {
     getTeams()
-  },[chatStore.currentTeamDisplayedID])
+  },[])
 
 
-  const getTeams = () => {
+
+  const getTeams = async () => {
+
     const teamsInfo = []
-    // console.log(chatStore.MY_TEAMS_IDS)
     for(let t of chatStore.MY_TEAMS_IDS){
-        Axios.get(`http://localhost:3200/teamname/${t}`).then( res => {
-          const team = {name:res.data[0].teamName, id:t}
-          teamsInfo.push(team)
-        })
+        const res = await Axios.get(`http://localhost:3200/teamname/${t}`)
+        const team = {name:res.data[0].teamName, id:t}
+        teamsInfo.push(team)
       }
-    setConversations(teamsInfo)
+      setConversations(teamsInfo)
     }
 
 

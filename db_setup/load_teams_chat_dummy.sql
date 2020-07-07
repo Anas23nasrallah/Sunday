@@ -13,14 +13,19 @@ USE sunday_finalproject;
 -- INSERT INTO teams_chat VALUES (NULL,2,"Eitan",1,"good job all","2020-07-06 16:50:23");
 
 
--- INSERT INTO teams_users VALUES (1,1,0);
--- INSERT INTO teams_users VALUES (1,2,1);
--- INSERT INTO teams_users VALUES (1,3,0);
--- INSERT INTO teams_users VALUES (1,4,0);
--- INSERT INTO teams_users VALUES (1,5,0);
--- INSERT INTO teams_users VALUES (2,3,0);
--- INSERT INTO teams_users VALUES (2,2,0);
--- INSERT INTO teams_users VALUES (2,1,0);
+INSERT INTO teams_users VALUES (1,1,0);
+INSERT INTO teams_users VALUES (1,2,1);
+INSERT INTO teams_users VALUES (1,3,0);
+INSERT INTO teams_users VALUES (1,4,0);
+INSERT INTO teams_users VALUES (1,5,0);
+INSERT INTO teams_users VALUES (2,3,0);
+INSERT INTO teams_users VALUES (2,2,0);
+INSERT INTO teams_users VALUES (2,1,0);
 
 
-
+-- CREATE TABLE teams_users (
+--     teamId INT , 
+--     userId INT,
+--     is_admin BIT,
+--     FOREIGN KEY(teamId) REFERENCES teams(teamId)
+-- );
