@@ -19,12 +19,15 @@ const socket = io(socketURL)
 export default inject('tasksStore', 'user', 'chatStore')(observer(function MessageList(props) {
   
   const chatStore = props.chatStore
-
+  const userStore = props.user
   const MY_USER_ID = chatStore.MY_USER_ID     //local storage//store
   let MY_TEAMS_IDS = chatStore.MY_TEAMS_IDS    //function getTeamId
+  // let MY_USER_NAME = userStore.firstName + ' ' + userStore.lastName
+  let MY_USER_NAME = 'Eitan Gueron'
   const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
   let currentTeamDisplayedID = chatStore.currentTeamDisplayedID 
+  let teamName = chatStore.teamName
   // let currentTeamDisplayedID = 2    //hard codded rn
 
   // const [currentTeamDisplayedID, setCurrentTeamDisplayedID] = useState('')
@@ -37,22 +40,23 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
   },[])
 
   useEffect(() => {
-    renderMessages();
-  },[messages])
-
-
-  useEffect(() => {
       chatStore.setMY_USER_ID()
       Axios.get(`http://localhost:3200/teams/${MY_USER_ID}`).then(teams => {
+        console.log(teams)
       chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
       chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
       })
   },[])
+  
+  useEffect(() => {
+    renderMessages();
+  },[messages])
 
 
   useEffect(()=>{
     socket.emit('joinRoom',currentTeamDisplayedID)   
     getMessages(currentTeamDisplayedID)       //byteamID
+    chatStore.getTeamName()
   },[currentTeamDisplayedID])
 
 
@@ -120,7 +124,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
         },
       ]
       Axios.get(`http://localhost:3200/teamschat/${currentTeamDisplayedID}`).then( pastMessages => {
-        console.log(pastMessages.data)
+        // console.log(pastMessages.data)
         setMessages([...pastMessages.data])
       })
       // setMessages([...messages, ...tempMessages])
@@ -135,7 +139,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
       let previous = messages[i - 1];
       let current = messages[i];
       let next = messages[i + 1];
-      let isMine = current.author === MY_USER_ID;
+      let isMine = current.author == MY_USER_ID;
       let currentMoment = moment(current.timestamp);
       let prevBySameAuthor = false;
       let nextBySameAuthor = false;
@@ -175,6 +179,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
           endsSequence={endsSequence}
           showTimestamp={showTimestamp}
           data={current}
+          // authorName={current.author}
         />
       );
 
@@ -200,7 +205,8 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
         const newMessages = [...messages]
         const newMessage = {
           id: message.id,
-          author: message.author,
+          author: message.authorid,
+          authorname: message.author,
           message: message.message,
           timestamp: message.timestamp,
         }
@@ -208,9 +214,9 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
         setMessages(newMessages)
       }
 
-      const saveToDB = (message) => {
-        Axios.post(`http://localhost:3200/teamschat`,message).then(message => {
-          return message.data
+      const saveToDB = async (message) => {
+        Axios.post(`http://localhost:3200/teamschat`,message).then( res => {
+          return res.data
         })
       }
 
@@ -220,29 +226,31 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
 
       const sendInput = async (e,message) => {
         e.preventDefault(); // prevents page reloading
-        const messageData = { message:message, author:MY_USER_ID, teamId:currentTeamDisplayedID}
+        const messageData = { message:message, author:MY_USER_NAME, authorid:MY_USER_ID, teamId:currentTeamDisplayedID}
         const messageToDisplayAndSave = await saveToDB(messageData)
         socket.emit('chat message', {...messageToDisplayAndSave, ...messageData}, currentTeamDisplayedID);
         addToMessages({...messageToDisplayAndSave, ...messageData})
         return false;
       }
+ 
 
     return(
       <div className="message-list">
         <Toolbar
-          title="Conversation Title"
+          title={chatStore.teamName + ' Team'}
           rightItems={[
             <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
-            <ToolbarButton key="video" icon="ion-ios-videocam" />,
-            <ToolbarButton key="phone" icon="ion-ios-call" />
+            // <ToolbarButton key="video" icon="ion-ios-videocam" />,
+            // <ToolbarButton key="phone" icon="ion-ios-call" />
           ]}
         />
 
         <div className="message-list-container">
+        {/* {console.log(messagesToRender)} */}
           {messagesToRender.map( (m,i) => 
             <div key={i}>
               {/* show who sent what no style: */}
-              {/* {m.props.data.author + ' :\n'}     */}
+              {/* {m.props.data.authorname + ' :\n'}    */}
               {m}
             </div>)
             }

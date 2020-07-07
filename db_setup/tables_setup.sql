@@ -88,6 +88,8 @@ USE sunday_finalproject;
 
 
 -- -- ///////////  /////////   ///////////  Chat Tables  //////////  ///////// //////////////  ////////
+DROP TABLE teams_chat;
+
 
 CREATE TABLE teams_chat (
     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
