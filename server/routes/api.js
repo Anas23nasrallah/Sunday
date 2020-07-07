@@ -365,6 +365,22 @@ router.post('/teamsusers/:teamId/:username', function (req, res) {
 })
 
 
+
+/*  getting teamname from teamid
+*/
+router.get('/teamname/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT teams.teamName
+                     FROM teams 
+                     WHERE teams.teamId = ${teamId}
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
+
 /*  Adding new task to a team 
     @params -teamId 
     @params - taskId
