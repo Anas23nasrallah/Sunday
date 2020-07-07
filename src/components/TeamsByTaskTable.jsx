@@ -18,6 +18,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { useEffect } from 'react';
+import axios from 'axios';
+const API_URL = 'http://localhost:3200';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -72,7 +74,36 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         teamsStore.addTask(props.name, rowData)
     }
 
+    const  notifyAdmin = async (taskName,description,deadLine,teamName,username) => {
+        const teamidData = await  axios.get(`${API_URL}/teamid/${teamName}`);
+        const teamId = teamidData.data[0].teamId
+        const adminData = await  axios.get(`${API_URL}/admin/${teamId}`);
+        const email = adminData.data[0].email
+        await axios({ method: "POST", 
+        url:"http://localhost:3200/sendCompleted", 
+        data: {
+                taskName : taskName,
+                description : description,
+                deadLine : deadLine,
+                teamName : teamName,
+                email: email,
+                username : username
+                }
+        }).then((response)=>{
+                 if (response.data.msg === 'success'){
+                     alert("Email sent, awesome!"); 
+                     this.resetForm()
+                 }else if(response.data.msg === 'fail'){
+                     alert("Oops, something went wrong. Try again")
+                 }
+             })
+    } 
+
+
     const updateTask = async (rowData) => {
+        if(rowData.status=="Completed") {
+            notifyAdmin(rowData.taskName,rowData.description,rowData.deadLine,props.name,rowData.assignee)
+        }
         const updatedTask = { ...rowData, category: props.category }
         await props.tasksStore.updateTask(updatedTask)
         teamsStore.getTeams(localStorage.getItem('userId'))
