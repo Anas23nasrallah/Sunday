@@ -9,7 +9,7 @@ import { inject, observer } from 'mobx-react';
 
 const SignUp = inject('usernamesStore')(observer((props) => {
 
-    const users = props.usernamesStore.usernames
+    const users = props.usernamesStore.usernames.map(u => u.username)
     console.log('in sign up', users)
 
     const [inputs, setInputs] = useState({
