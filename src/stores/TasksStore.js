@@ -11,11 +11,15 @@ export class Tasks {
   @observable categories = []
 
   @computed get getTasksByCategory() {
-
-
     const groupedTasks = {}
     this._tasks.forEach(t => groupedTasks[t.category] ? groupedTasks[t.category].push(t) : groupedTasks[t.category] = [t])
-    this.categories.forEach(c => groupedTasks[c] = [])
+    console.log(groupedTasks)
+    const newTasks = this._tasks.filter(t => t.category === this.categories[this.categories.length - 1])
+    this.categories.forEach(c => {
+      let newTasks = this._tasks.filter(t => t.category === c)
+      groupedTasks[c] = newTasks
+    } )
+
     return groupedTasks
 
   }
@@ -53,14 +57,14 @@ export class Tasks {
 
   @action deleteTask = async (taskId) => {
     await axios.delete(`${API_URL}/deleteTask/${taskId}`);
-    this.getTasksFromDB(this.userId);
+    await this.getTasksFromDB(this.userId);
   }
 
   @action addTask = async (task) => {
-
+    if (!task.deadLine) { return }
     const d = new Date(task.deadLine)
     const date = dateFormat(d, 'isoDate')
-    
+
     try {
       let newTask = {
         taskName: task.taskName,
@@ -73,7 +77,7 @@ export class Tasks {
       }
 
       let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
-      this.getTasksFromDB(this.userId);
+      await this.getTasksFromDB(this.userId);
 
     } catch (err) {
       throw new Error(err);
@@ -84,6 +88,7 @@ export class Tasks {
     const taskId = newTask.taskId
     const trackingData = await axios.get(`${API_URL}/tracking`);
     const tracking = trackingData.data
+
     for(let tracked of tracking) {
       let checkStatus = false
       if((newTask.status=="In progress" || newTask.status=="InProgress"  ||   newTask.status==2) && tracked.status=="In progress") checkStatus=true
@@ -108,6 +113,7 @@ export class Tasks {
                  }
              })
              return 
+
       }
     }
   }
@@ -117,7 +123,7 @@ export class Tasks {
       console.log(newTask)
       this.checkNotify(newTask)
       let send = await axios.put(`${API_URL}/updateTask/`, newTask);
-      this.getTasksFromDB(this.userId);
+      await this.getTasksFromDB(this.userId);
       return send.data;
     } catch (err) {
       throw new Error(err.response.data.message);
