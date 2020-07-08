@@ -124,7 +124,7 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
         title={props.category}
         columns={state.columns}
         data={state.data}
-        editable={{
+        editable={props.category !== 'Team' ? {
           onRowAdd:
             (newData) =>
               new Promise((resolve) => {
@@ -148,7 +148,7 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
                 deleteTask(oldData)
               }, 600);
             }),
-        }}
+        } : {}}
       />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} 

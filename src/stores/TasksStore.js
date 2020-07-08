@@ -20,9 +20,7 @@ export class Tasks {
       let newTasks = this._tasks.filter(t => t.category === c)
       groupedTasks[c] = newTasks
     } )
-
     return groupedTasks
-
   }
 
   @action addCategory(categoryInput) {
