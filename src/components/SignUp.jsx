@@ -93,12 +93,16 @@ const SignUp = inject('usernamesStore')(observer((props) => {
     }
     const signUp = async () => {
         if (!allFieldsFilled(inputs) || !areInputsValid(inputs)) { return }
-        await axios.post('http://localhost:3200/signup', inputs)
+        const res = await axios.post('http://localhost:3200/signup', inputs)
+        const userId = res.data.userId
         sendNewUserMail()
         setSnackbarMessage('Signed up successfully')
         setSnackbarStatus('success')
         setOpenSnackbar(true)
-        // alert('Signed up successfully')
+        localStorage.setItem("userId", userId)
+        localStorage.setItem("loggedIn", 'true')
+        localStorage.setItem("username",  inputs.userName)
+        window.location = '/welcome'
         return
     }
 
