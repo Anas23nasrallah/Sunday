@@ -74,7 +74,7 @@ const CustomizedMenus = inject('user')(observer((props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-
+    
         <div>
 
           <Link to='/tasks' >
@@ -83,6 +83,11 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
+          <Link to='/teams'>
+            <StyledMenuItem>
+              <ListItemText primary="Teams Tasks" />
+            </StyledMenuItem>
+          </Link>
 
           <Link to='/profile'>
             <StyledMenuItem>
@@ -90,10 +95,10 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
-          <Link to='/calendar'>
-            <StyledMenuItem>
-              <ListItemText primary="Calendar" />
-            </StyledMenuItem>
+          <Link to='/chat'>
+              <StyledMenuItem>
+                  <ListItemText primary="Chat" />
+              </StyledMenuItem>
           </Link>
 
           <Link to='/analysis'>
@@ -102,17 +107,12 @@ const CustomizedMenus = inject('user')(observer((props) => {
             </StyledMenuItem>
           </Link>
 
-          <Link to='/teams'>
+          <Link to='/calendar'>
             <StyledMenuItem>
-              <ListItemText primary="Teams Tasks" />
+              <ListItemText primary="Calendar" />
             </StyledMenuItem>
           </Link>
       
-          <Link to='/chat'>
-              <StyledMenuItem>
-                  <ListItemText primary="Chat" />
-              </StyledMenuItem>
-          </Link>
 
           <StyledMenuItem style={{ cursor: 'pointer', color: 'blue'}} onClick={() => props.user.logout()}>
             <ListItemText primary="Log Out" />

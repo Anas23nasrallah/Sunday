@@ -44,7 +44,7 @@ const Welcome = (props) => {
            <h2>"Work hard, Play hard"</h2>
            <p>Elon Musk</p>
            <Link to="/tasks">
-                <Button variant="contained" color="primary"> Personal tasks </Button> 
+                <Button variant="contained" color="primary"> My tasks </Button> 
            </Link>
            <Link to="/teams">
                 <Button variant="contained" color="primary"> Team tasks </Button> 
