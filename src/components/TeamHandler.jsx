@@ -44,15 +44,25 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         setTeamInput('')
     }
 
-    useEffect(() => {
+    // const getTeams = async () => {
+    //     const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
+    //     setTeamsObj([...teamsObj, ...res.data])
+    //     setTeams(res.data.map(t => t.teamName))
+    // }
+
+    // useEffect(getTeams, [])
+    
+    useEffect(
+        () => {
+        const getTeams = async () => {
+            const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
+            setTeamsObj([...teamsObj, ...res.data])
+            setTeams(res.data.map(t => t.teamName))
+        }
         getTeams()
     }, [teams])
 
-    const getTeams = async () => {
-        const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
-        setTeamsObj([...teamsObj, ...res.data])
-        setTeams(res.data.map(t => t.teamName))
-    }
+
 
     const addMemberToTeam = async () => {
         const teamId = teamsObj.find(t => t.teamName === teamInput).teamId
@@ -102,9 +112,9 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             <button onClick={() => removeMemberFromTeam()}>Remove</button>
 
 
-            <Snackbar open={openSnackbar} autoHideDuration={6000} 
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-                <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+            <Snackbar open={openSnackbar} autoHideDuration={6000}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
                     {snackbarMessage}
                 </Alert>
             </Snackbar>

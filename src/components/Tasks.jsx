@@ -20,12 +20,18 @@ const Tasks = inject('tasksStore','user')(observer((props) => {
     
     // let tasks = []
 
-    const fetchData = () => {
-        props.tasksStore.getTasksFromDB(localStorage.getItem('userId'))
-        // props.tasksStore.setCategories()
-    }
+    // const fetchData = async () => {
+    //     await props.tasksStore.getTasksFromDB(localStorage.getItem('userId'))
+    //     // props.tasksStore.setCategories()
+    // }
 
-    useEffect(fetchData, [])
+    // useEffect(fetchData, [])
+    useEffect(() => {
+        async function fetchData() {
+          await props.tasksStore.getTasksFromDB(localStorage.getItem('userId'))
+        }
+        fetchData();
+      }, []);
 
     const groupedTasks = props.tasksStore.getTasksByCategory
 
