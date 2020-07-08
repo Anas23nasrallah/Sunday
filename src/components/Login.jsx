@@ -5,14 +5,17 @@ import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { AlertError } from 'material-ui/svg-icons';
-import details from 'material-ui/svg-icons/image/details';
+//import { AlertError } from 'material-ui/svg-icons';
+//import details from 'material-ui/svg-icons/image/details';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 
 const Login = inject('tasksStore', 'user')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
+    const [openSnackbar, setOpenSnackbar] = useState(false)
 
     const logIn = async () => {
         const loginData = {
@@ -33,11 +36,11 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 localStorage.setItem('lastName', `${details.lastName}`);
                 localStorage.setItem('email', `${details.email}`);               
             } else {
-                alert(res.data.status)
+                setOpenSnackbar(true)
             }
         })
     }
-
+    
     return (
         <div id="login-page-container">
             <div id="login-page">
@@ -56,6 +59,15 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 <Link to="/signUp">
                     <Button variant="contained" color="primary"> Create New Account </Button> 
                 </Link>
+
+                <Snackbar open={openSnackbar} autoHideDuration={6000} 
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                    <Alert onClose={()=>setOpenSnackbar(false)} severity="error" variant="filled">
+                        <span style={{display:'block'}}> {'Incorrect Password!'} </span>
+                        <span> {'Please Try again'} </span>
+                    </Alert>
+                </Snackbar>               
+
             </div>
         </div>
     );
