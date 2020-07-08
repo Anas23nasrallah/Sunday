@@ -14,31 +14,17 @@ const Tasks = inject('tasksStore','user')(observer((props) => {
 
     // [props.tasksStore._tasks.map(t => toJS(t))]
     const tasks = props.tasksStore._tasks
-
     
     // let tasks = []
 
     const fetchData = () => {
-        props.tasksStore.getTasksFromDB(props.user.id)
+        props.tasksStore.getTasksFromDB(localStorage.getItem('userId'))
         // props.tasksStore.setCategories()
     }
 
     useEffect(fetchData, [])
 
     const groupedTasks = props.tasksStore.getTasksByCategory
-
-    // const groupedTasks = groupByCategory(tasks)
-    // console.log(groupedTasks)
-    // let addTaskToggleFlag = false
-    // const showAddTaskComp = () => {
-    //     if(!addTaskToggleFlag){
-    //         addTaskToggleFlag=true
-    //         return <AddTask />
-    //     } else {
-    //         addTaskToggleFlag=false
-    //         return null
-    //     }
-    // }
 
     const [categoryInput, setCategoryInput] = useState('')
 

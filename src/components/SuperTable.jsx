@@ -58,25 +58,23 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     //   title: 'Avatar',
     //   render: rowData => <img src={rowData.url} style={{width: 50, borderRadius: '50%'}}/>
     // }
-
-
     data: props.tasks
   });
 
-  const addTask = (rowData) => {
-
+  const addTask = async (rowData) => {
     const newTask = { ...rowData, category: props.category }
-    tasksStore.addTask(newTask)
+    await tasksStore.addTask(newTask)
+
   }
 
-  const updateTask = (rowData) => {
+  const updateTask = async (rowData) => {
     const updatedTask = { ...rowData, category: props.category }
-    tasksStore.updateTask(updatedTask)
+    await tasksStore.updateTask(updatedTask)
   }
 
-  const deleteTask = (rowData) => {
+  const deleteTask = async (rowData) => {
     const taskToDelete = rowData.taskId
-    tasksStore.deleteTask(taskToDelete)
+    await tasksStore.deleteTask(taskToDelete)
   }
 
   useEffect(() => {
@@ -92,24 +90,12 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
         title={props.category}
         columns={state.columns}
         data={state.data}
-        // actions={[
-        //   {
-        //     icon: 'save',
-        //     tooltip: 'Save User',
-        //     onClick: (event, rowData) => alert("You saved " + rowData.name)
-        //   }
-        // ]}
         editable={{
           onRowAdd:
             (newData) =>
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
-                  // setState((prevState) => {
-                  //   const data = [...prevState.data];
-                  //   data.push(newData);
-                  //   return { ...prevState, data };
-                  // });
                   addTask(newData)
                 }, 600);
               })
@@ -118,13 +104,6 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
             new Promise((resolve) => {
               setTimeout(() => {
                 resolve();
-                // if (oldData) {
-                //   setState((prevState) => {
-                //     const data = [...prevState.data];
-                //     data[data.indexOf(oldData)] = newData;
-                //     return { ...prevState, data };
-                //   });
-                // }
                 updateTask(newData)
               }, 600);
             }),
@@ -132,11 +111,6 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
             new Promise((resolve) => {
               setTimeout(() => {
                 resolve();
-                // setState((prevState) => {
-                //   const data = [...prevState.data];
-                //   data.splice(data.indexOf(oldData), 1);
-                //   return { ...prevState, data };
-                // });
                 deleteTask(oldData)
               }, 600);
             }),
