@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
-
 const Login = inject('tasksStore', 'user')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
