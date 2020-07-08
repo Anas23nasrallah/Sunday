@@ -326,6 +326,75 @@ router.post('/send', (req, res) => {
 
 
 
+  /*
+    sending  message for the admin that task completed
+*/
+router.post('/sendCompleted', (req, res) => {
+    const taskName = req.body.taskName
+    const description = req.body.description
+    const deadLine = req.body.deadLine
+    const teamName = req.body.teamName
+    const email = req.body.email
+    const username = req.body.username
+    const  mailOptions = {
+        from: 'sundayprojectmail@gmail.com',
+        to: email,
+        subject: 'Notification - Sunday.com ✔',
+        html: `<div style="background-color:powderblue;">
+        <h1 style="color:red;">Dear admin of ${teamName} team</h1>
+        <p>The task : ${taskName}</p>
+        <p>With the description: ${description}</p>
+        <p>Which is supposed to be done till : ${deadLine}</p>
+        <p style="color:green;"> Completed  </p>
+        <p> By the user: ${username}  </p>
+        <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_960_720.png"></img>
+        </div>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  })
+
+
+
+    /*
+    sending tracked  message 
+*/
+router.post('/sendNot', (req, res) => {
+    const taskName = req.body.taskName
+    const email = req.body.email
+    const status = req.body.status
+    const  mailOptions = {
+        from: 'sundayprojectmail@gmail.com',
+        to: email,
+        subject: 'Notification - Sunday.com ✔',
+        html: `<div style="background-color:powderblue;">
+        <h1 style="color:red;">Dear user</h1>
+        <p>The task : ${taskName}</p>
+        <p>status updated to: ${status}</p>
+        <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_960_720.png"></img>
+        </div>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  })
+
+
+
+
+
+
 //////////////////////////////////////// Teams API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -510,6 +579,51 @@ router.get('/teamname/:teamId', function (req, res) {
     sequelize.query(`SELECT teams.teamName
                      FROM teams 
                      WHERE teams.teamId = ${teamId}
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
+
+/*
+    get team id 
+*/
+router.get('/teamid/:teamName', function (req, res) {
+    const teamName = req.params.teamName
+    sequelize.query(`SELECT teams.teamId
+                     FROM teams 
+                     WHERE teams.teamName = "${teamName}"
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
+
+
+/*
+    add track
+ */
+router.post('/tracking', function (req, res) {
+    const trackInfo = req.body
+    sequelize.query(`INSERT INTO tracking VALUES(${trackInfo.taskId},"${trackInfo.email}","${trackInfo.status}")
+                    `)
+        .then( function (result) {
+            res.end()
+        })
+})
+
+
+
+/*
+    get track
+ */
+router.get('/tracking', function (req, res) {
+    sequelize.query(`SELECT *
+                     FROM tracking 
                     `, { type: Sequelize.QueryTypes.SELECT })
         .then( function (results) {
             res.send(results)
