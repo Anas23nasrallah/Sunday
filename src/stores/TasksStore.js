@@ -44,12 +44,15 @@ export class Tasks {
 
   @action getTasksFromDB = async (id) => {
     try {
-      let tasks = await axios.get(`${API_URL}/tasks/${id}`); // ! check if ? or :
+      let tasks = await axios.get(`${API_URL}/tasks/${id}`); 
+      console.log(id, tasks);
       this._tasks = tasks.data;
     } catch (err) {
       console.log(err);
     }
   };
+
+
 
 
   @action deleteTask = async (taskId) => {
@@ -83,35 +86,41 @@ export class Tasks {
 
   @action checkNotify = async (newTask) => {
     const taskId = newTask.taskId
-    const status = newTask.status == 2 ? "In progress" : newTask.status == 3 ? "Completed" : "Starting"
     const trackingData = await axios.get(`${API_URL}/tracking`);
     const tracking = trackingData.data
-    for (let tracked of tracking) {
-      if (tracked.taskId == taskId && tracked.status == status) {
+
+    for(let tracked of tracking) {
+      let checkStatus = false
+      if((newTask.status=="In progress" || newTask.status=="InProgress"  ||   newTask.status==2) && tracked.status=="In progress") checkStatus=true
+      if(( newTask.status=="Completed"  ||   newTask.status==3) && tracked.status=="Completed") checkStatus=true
+      if(( newTask.status=="Starting"  ||   newTask.status==1) && tracked.status=="Starting") checkStatus=true
+      if(tracked.taskId==taskId && checkStatus) {
+        console.log(tracked)
         const email = tracked.email
-        await axios({
-          method: "POST",
-          url: "http://localhost:3200/sendNot",
-          data: {
-            taskName: newTask.taskName,
-            email: email,
-            status: status
-          }
-        }).then((response) => {
-          if (response.data.msg === 'success') {
-            alert("Email sent, awesome!");
-            this.resetForm()
-          } else if (response.data.msg === 'fail') {
-            alert("Oops, something went wrong. Try again")
-          }
-        })
-        return
+        await axios({ method: "POST", 
+        url:"http://localhost:3200/sendNot", 
+        data: {
+                taskName : newTask.taskName,
+                email: email,
+                status: tracked.status
+                }
+        }).then((response)=>{
+                 if (response.data.msg === 'success'){
+                     alert("Email sent, awesome!"); 
+                     this.resetForm()
+                 }else if(response.data.msg === 'fail'){
+                     alert("Oops, something went wrong. Try again")
+                 }
+             })
+             return 
+
       }
     }
   }
 
   @action updateTask = async (newTask) => {
     try {
+      console.log(newTask)
       this.checkNotify(newTask)
       let send = await axios.put(`${API_URL}/updateTask/`, newTask);
       await this.getTasksFromDB(this.userId);

@@ -54,6 +54,9 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         return usernamesLookUp
     }
     const usernamesLookUps = getUsernamesLookup(members)
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+    const [snackbarStatus, setSnackbarStatus] = useState('')
 
     const [state, setState] = React.useState({
 
@@ -90,10 +93,16 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                 }
         }).then((response)=>{
                  if (response.data.msg === 'success'){
-                     alert("Email sent, awesome!"); 
+                    setSnackbarMessage('Email sent, awesome!')
+                    setSnackbarStatus('success')
+                    setOpenSnackbar(true)
+                    //  alert("Email sent, awesome!"); 
                      this.resetForm()
                  }else if(response.data.msg === 'fail'){
-                     alert("Oops, something went wrong. Try again")
+                    setSnackbarMessage('Oops, something went wrong. Try again')
+                    setSnackbarStatus('error')
+                    setOpenSnackbar(true)
+                    //  alert("Oops, something went wrong. Try again")
                  }
              })
     } 
@@ -154,6 +163,14 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                         }),
                 } : {}}
             />
+
+            <Snackbar open={openSnackbar} autoHideDuration={6000} 
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
+
         </div>
     );
 }
