@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import { observer, inject } from 'mobx-react'
@@ -19,6 +19,9 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { useEffect } from 'react';
 import { Input } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+const capitalize = require('capitalize')
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -47,9 +50,9 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     columns: [
       { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
       { title: 'Description', field: 'description', sorting: false },
-      { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
+      { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'High', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
       { title: 'Deadline', field: 'deadLine', type: "date" },
-      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
+      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'To Do', InProgress: 'In progress', Completed: 'Completed' } },
       { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
     ],
 
@@ -61,20 +64,51 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     data: props.tasks
   });
 
-  const addTask = async (rowData) => {
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarStatus, setSnackbarStatus] = useState('')
+
+  const addTask = (rowData) => {
     const newTask = { ...rowData, category: props.category }
-    await tasksStore.addTask(newTask)
+    try{
+      tasksStore.addTask(newTask)
+      setSnackbarMessage(`Added New Task`)
+      setSnackbarStatus('success')
+      setOpenSnackbar(true)
+    } catch (err){
+      setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+      setSnackbarStatus('error')
+      setOpenSnackbar(true)
+    }
 
   }
 
   const updateTask = async (rowData) => {
     const updatedTask = { ...rowData, category: props.category }
-    await tasksStore.updateTask(updatedTask)
+    try{
+      await tasksStore.updateTask(updatedTask)
+      setSnackbarMessage(`Updated Task Successfully`)
+      setSnackbarStatus('success')
+      setOpenSnackbar(true)
+    } catch (err){
+      setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+      setSnackbarStatus('error')
+      setOpenSnackbar(true)
+    }
   }
 
   const deleteTask = async (rowData) => {
     const taskToDelete = rowData.taskId
-    await tasksStore.deleteTask(taskToDelete)
+    try{
+      await tasksStore.deleteTask(taskToDelete)
+      setSnackbarMessage(`Task Deleted`)
+      setSnackbarStatus('success')
+      setOpenSnackbar(true)
+    } catch (err){
+      setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+      setSnackbarStatus('error')
+      setOpenSnackbar(true)
+    }
   }
 
   useEffect(() => {
@@ -116,6 +150,14 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
             }),
         }}
       />
+
+      <Snackbar open={openSnackbar} autoHideDuration={6000} 
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+          <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+              {snackbarMessage}
+          </Alert>
+      </Snackbar>
+
     </div>
   );
 }

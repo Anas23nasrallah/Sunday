@@ -13,13 +13,15 @@ const Welcome = (props) => {
         const monthsOfTheYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const day = daysOfTheWeek[today.getDay()]
         const month = monthsOfTheYear[today.getMonth()]
-        const dd = String(today.getDate()).padStart(2, '0');
+        const dd = today.getDate()
+        // const dd = String(today.getDate()).padStart(2, '0');
         const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         const yyyy = today.getFullYear();
         const fullDate = `${day}, ${dd} of ${month}, ${yyyy}`
         // day + ', ' + mm + month +  mm + '/' + dd + '/' + yyyy;
         return fullDate
     }
+
 
     // const [greeting, setGreeting] =  useState('')
 
@@ -37,7 +39,7 @@ const Welcome = (props) => {
 
     return (
        <div id="welcome-container">
-           <h1>{'Weclome ' + userName + ','}</h1>
+           <h1>{'Welcome ' + userName + ','}</h1>
            <h2>{getDateNow()}</h2>
            <h2>"Work hard, Play hard"</h2>
            <p>Elon Musk</p>

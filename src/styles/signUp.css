@@ -1,3 +1,9 @@
-h1{
-    margin-left: 42%;
+#sign-up{
+    margin-left: 0px;
+    text-decoration: underline;
+}
+
+form{
+    display: grid;
+    text-align: center;
 }
