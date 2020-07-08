@@ -629,4 +629,31 @@ router.get('/tracking', function (req, res) {
         })
 })
 
+/* get admin of a team
+*/
+router.get('/admin/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT *
+    FROM users JOIN teams_users ON users.userId=teams_users.userId
+    WHERE teams_users.teamId = ${teamId} AND teams_users.is_admin = TRUE
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
+/*
+    get team id 
+*/
+router.get('/teamid/:teamName', function (req, res) {
+    const teamName = req.params.teamName
+    sequelize.query(`SELECT teams.teamId
+                     FROM teams 
+                     WHERE teams.teamName = "${teamName}"
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
 module.exports = router
