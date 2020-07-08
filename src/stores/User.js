@@ -9,6 +9,7 @@ export class User {
     @observable birthDate = null
     @observable email = null
     @observable loggedIn = localStorage.getItem('loggedIn')
+    @observable id 
 
     @action login(details, userID){
         this.userName = details.userName
@@ -16,6 +17,7 @@ export class User {
         this.lastName = details.lastName
         this.birthDate = details.birthDate
         this.email = details.email
+        this.id = userID
         localStorage.setItem("userId", userID)
         localStorage.setItem("loggedIn", 'true')
         localStorage.setItem("username",  details.userName)
@@ -26,6 +28,10 @@ export class User {
     @action logout(){
         localStorage.setItem("userId", undefined)
         localStorage.setItem("loggedIn", 'false')
+        localStorage.setItem('username', ``);
+        localStorage.setItem('firstName', ``);
+        localStorage.setItem('lastName', ``);
+        localStorage.setItem('email', ``);               
         this.loggedIn = 'false'
     }
 

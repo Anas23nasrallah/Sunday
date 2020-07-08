@@ -22,7 +22,20 @@ const Welcome = (props) => {
         return fullDate
     }
 
-    const userName = localStorage['userName']
+
+    // const [greeting, setGreeting] =  useState('')
+
+    // const getUserName = async () => {
+    //     const userId = localStorage['userId']
+    //     const res = await Axios.get(`http://localhost:3200/user/${userId}`)
+    //     const userName = res.data.firstName + ' ' + res.data.lastName
+    //     setGreeting( 'Weclome ' + userName + ',' )
+    // }
+
+    // useEffect(()=>getUserName(),[])
+
+
+    const userName = localStorage['username']
 
     return (
        <div id="welcome-container">

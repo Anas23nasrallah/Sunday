@@ -61,8 +61,6 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     //   title: 'Avatar',
     //   render: rowData => <img src={rowData.url} style={{width: 50, borderRadius: '50%'}}/>
     // }
-
-
     data: props.tasks
   });
 
@@ -82,12 +80,13 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
       setSnackbarStatus('error')
       setOpenSnackbar(true)
     }
+
   }
 
-  const updateTask = (rowData) => {
+  const updateTask = async (rowData) => {
     const updatedTask = { ...rowData, category: props.category }
     try{
-      tasksStore.updateTask(updatedTask)
+      await tasksStore.updateTask(updatedTask)
       setSnackbarMessage(`Updated Task Successfully`)
       setSnackbarStatus('success')
       setOpenSnackbar(true)
@@ -98,10 +97,10 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     }
   }
 
-  const deleteTask = (rowData) => {
+  const deleteTask = async (rowData) => {
     const taskToDelete = rowData.taskId
     try{
-      tasksStore.deleteTask(taskToDelete)
+      await tasksStore.deleteTask(taskToDelete)
       setSnackbarMessage(`Task Deleted`)
       setSnackbarStatus('success')
       setOpenSnackbar(true)
