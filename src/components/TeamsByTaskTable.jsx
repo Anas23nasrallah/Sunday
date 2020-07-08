@@ -51,7 +51,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
     const teamsStore = props.teamsStore
     const members = teamsStore.teams.find(t => t.name === props.name).members
     const isAdmin = props.isAdmin
-    console.log(isAdmin, props.name)
+    // console.log(isAdmin, props.name)
 
     const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
@@ -136,7 +136,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         try{
             await props.tasksStore.updateTask(updatedTask)
             teamsStore.getTeams(localStorage.getItem('userId'))
-            setSnackbarMessage(`Added New Task`)
+            setSnackbarMessage(`Updated Task Successfully`)
             setSnackbarStatus('success')
             setOpenSnackbar(true)
         } catch (err){
@@ -151,7 +151,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         try{
             await props.tasksStore.deleteTask(taskToDelete)
             teamsStore.getTeams(localStorage.getItem('userId'))
-            setSnackbarMessage(`Added New Task`)
+            setSnackbarMessage(`Task Deleted Successfully`)
             setSnackbarStatus('success')
             setOpenSnackbar(true)
         } catch (err){

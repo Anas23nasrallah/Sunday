@@ -6,8 +6,10 @@ import { useEffect } from 'react';
 import { InputLabel, NativeSelect, TextField, Button } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+const capitalize = require('capitalize')
 
 const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((props) => {
+
     const usernames = props.usernamesStore.usernames.map(u => u.username)
 
     const [teamsObj, setTeamsObj] = useState([])
@@ -28,6 +30,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         const contenders = usernames.filter(u => !members.includes(u))
         return contenders
     }
+
     const addTeam = () => {
         if (!newTeamInput.length) {
             setSnackbarMessage('Enter a name for the team')
@@ -36,13 +39,15 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             // alert('Enter a name for the team')
             return
         }
-        props.teamsStore.addTeam(newTeamInput, localStorage.getItem('userId'))
-        setSnackbarMessage(`Team: ${newTeamInput} was Added Successfully`)
+        const newTeam = capitalize(newTeamInput)
+        props.teamsStore.addTeam(newTeam, localStorage.getItem('userId'))
+        setSnackbarMessage(`Team: ${newTeam} was Added Successfully`)
         setSnackbarStatus('success')
         setOpenSnackbar(true)
         // alert(`Team: ${newTeamInput} was Added Successfully`)
         setTeamInput('')
     }
+
 
     // const getTeams = async () => {
     //     const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
@@ -60,7 +65,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             setTeams(res.data.map(t => t.teamName))
         }
         getTeams()
-    }, [teams])
+    }, [])
 
 
 
@@ -78,14 +83,14 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     }
 
     return (
-        <div>
+        <div style={{ marginLeft: '2%' }}>
 
             <p>Add Team</p>
             <div id="new-category-input">
                 <TextField id="category-input" label="New Category" type="text" variant="outlined"
                     style={{}}
                     value={newTeamInput} onChange={(e) => setTeamInput(e.target.value)} />
-                <Button variant='contained' color='secondary' onClick={addTeam}> Add Team </Button>
+                <Button variant='contained' color='primary' onClick={addTeam}> Add Team </Button>
             </div>
 
             <p>Your Teams</p>
