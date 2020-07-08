@@ -40,7 +40,8 @@ export class Tasks {
 
   @action getTasksFromDB = async (id) => {
     try {
-      let tasks = await axios.get(`${API_URL}/tasks/${id}`); // ! check if ? or :
+      let tasks = await axios.get(`${API_URL}/tasks/${id}`); 
+      console.log(id, tasks);
       this._tasks = tasks.data;
     } catch (err) {
       console.log(err);
