@@ -81,7 +81,6 @@ export class Tasks {
 
   @action checkNotify = async (newTask) => {
     const taskId = newTask.taskId
-    const status = newTask.status == 2 ? "In progress" : newTask.status == 3 ? "Completed" : "Starting"
     const trackingData = await axios.get(`${API_URL}/tracking`);
     const tracking = trackingData.data
     for(let tracked of tracking) {
@@ -90,13 +89,14 @@ export class Tasks {
       if(( newTask.status=="Completed"  ||   newTask.status==3) && tracked.status=="Completed") checkStatus=true
       if(( newTask.status=="Starting"  ||   newTask.status==1) && tracked.status=="Starting") checkStatus=true
       if(tracked.taskId==taskId && checkStatus) {
+        console.log(tracked)
         const email = tracked.email
         await axios({ method: "POST", 
         url:"http://localhost:3200/sendNot", 
         data: {
                 taskName : newTask.taskName,
                 email: email,
-                status: status
+                status: tracked.status
                 }
         }).then((response)=>{
                  if (response.data.msg === 'success'){
