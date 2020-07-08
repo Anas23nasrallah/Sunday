@@ -59,28 +59,28 @@ const Profile = inject('user')(
                     variant='h5'
                     component='h1'
                     gutterBottom>
-                    {bull} First Name: {user.firstName}
+                    {bull} First Name: {localStorage.getItem('firstName')}
                   </Typography>
                   <Typography
                     color='primary'
                     variant='h5'
                     component='h2'
                     gutterBottom>
-                    {bull} Last Name: {user.lastName}
+                    {bull} Last Name: {localStorage.getItem('lastName')}
                   </Typography>
                   <Typography
                     color='primary'
                     variant='h5'
                     component='h3'
                     gutterBottom>
-                    {bull} User Name : {user.userName}
+                    {bull} User Name : {localStorage.getItem('username')}
                   </Typography>
                   <Typography
                     color='primary'
                     variant='h5'
                     component='h4'
                     gutterBottom>
-                    {bull} Email : {user.email}
+                    {bull} Email : {localStorage.getItem('email')}
                   </Typography>
                   <Typography
                     color='primary'

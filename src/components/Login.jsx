@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { AlertError } from 'material-ui/svg-icons';
+import details from 'material-ui/svg-icons/image/details';
 
 
 const Login = inject('tasksStore', 'user')(observer((props) => {
@@ -27,6 +28,10 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 props.user.logout()
                 props.user.login(response.data, userID)
                 console.log(response);
+                let details = response.data 
+                localStorage.setItem('firstName', `${details.firstName}`);
+                localStorage.setItem('lastName', `${details.lastName}`);
+                localStorage.setItem('email', `${details.email}`);               
             } else {
                 alert(res.data.status)
             }

@@ -26,6 +26,10 @@ export class User {
     @action logout(){
         localStorage.setItem("userId", undefined)
         localStorage.setItem("loggedIn", 'false')
+        localStorage.setItem('username', ``);
+        localStorage.setItem('firstName', ``);
+        localStorage.setItem('lastName', ``);
+        localStorage.setItem('email', ``);               
         this.loggedIn = 'false'
     }
 
