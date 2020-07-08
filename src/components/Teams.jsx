@@ -11,7 +11,7 @@ import { InputLabel, NativeSelect } from '@material-ui/core';
 import axios from 'axios';
 const API_URL = 'http://localhost:3200';
 
-const Teams = inject('teamsStore', 'tasksStore')(observer((props) => {
+const Teams = inject('teamsStore')(observer((props) => {
     const [taskInput, settaskInput] = useState('')
     const [statusInput, setstatusInput] = useState('')
     const [toShow, setToShow] = useState('tasks')
@@ -24,10 +24,15 @@ const Teams = inject('teamsStore', 'tasksStore')(observer((props) => {
         props.teamsStore.getTeams(localStorage.getItem('userId'))
     }
 
-    const getTasks = () => {
-        props.tasksStore.getAllTasksFromDB()
-        console.log(props.tasksStore.alltasks)
-        setAll(props.tasksStore.alltasks)
+    const getTasks = async () => {
+        let alltasks = []
+        try {
+            let tasks = await axios.get(`${API_URL}/alltasks`); 
+            alltasks = tasks.data;
+          } catch (err) {
+            console.log(err);
+          }
+        setAll(alltasks)
     }
 
     useEffect(fetchData, [])
