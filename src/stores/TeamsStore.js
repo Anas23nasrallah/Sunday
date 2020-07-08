@@ -107,7 +107,7 @@ export class TeamsStore {
         }
         const response2 = await axios.post(`${API_URL}/tasks/${userId}`, taskToAdd)
         const taskId = response2.data.taskId
-        const teamId = this.teams.find(t => t.name = teamName).id
+        const teamId = this.teams.find(t => t.name === teamName).id
         await axios.post(`${API_URL}/teamstasks/${teamId}/${taskId}`)
         this.getTeams(localStorage.getItem('userId'))
     }
