@@ -5,6 +5,8 @@ import '../styles/login.css'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+//import { AlertError } from 'material-ui/svg-icons';
+//import details from 'material-ui/svg-icons/image/details';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
@@ -29,6 +31,10 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                 props.user.logout()
                 props.user.login(response.data, userID)
                 console.log(response);
+                let details = response.data 
+                localStorage.setItem('firstName', `${details.firstName}`);
+                localStorage.setItem('lastName', `${details.lastName}`);
+                localStorage.setItem('email', `${details.email}`);               
             } else {
                 setOpenSnackbar(true)
             }

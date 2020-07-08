@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
+import { useState, useEffect } from 'react';
+
 
 import { sizing } from '@material-ui/system';
 import { shadows } from '@material-ui/system';
@@ -31,115 +33,142 @@ const useStyles = makeStyles({
   },
 });
 
-const Profile = inject('user')(
-  observer((props) => {
+const Profile = inject('tasksStore')(observer((props) => {
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
+    const bull = <span className={classes.bullet}>•</span>; 
 
-    //! user basic tasks stats
-    let openTasks = 4;
-    let completedTasks = 20;
-    let urgentTasks = 3;
+    const [urgentTasks, setUrgent] = useState(0);
+    const [completedTasks, setCompleted] = useState(0);
 
-    const user = props.user;
-    return (
-      <div>
-        <ScopedCssBaseline>
-          <MuiThemeProvider>
-            <Box width='48%' boxShadow={4} style={{ justifyContent: 'center' }}>
-              <Paper elevation={4}>
-                <Avatar
-                  alt='AB'
-                  src='https://image.flaticon.com/icons/png/512/1752/1752735.png'
-                  className={classes.large}
-                />
-                <div className={classes.root}>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h1'
-                    gutterBottom>
-                    {bull} First Name: {user.firstName}
-                  </Typography>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h2'
-                    gutterBottom>
-                    {bull} Last Name: {user.lastName}
-                  </Typography>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h3'
-                    gutterBottom>
-                    {bull} User Name : {user.userName}
-                  </Typography>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h4'
-                    gutterBottom>
-                    {bull} Email : {user.email}
-                  </Typography>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h4'
-                    gutterBottom>
-                    {bull} Open Tasks
-                  </Typography>
-                  <span>
-                    <Badge
-                      className='open-tasks'
-                      badgeContent={openTasks}
-                      color='primary'>
-                      <MailIcon />
-                    </Badge>
-                  </span>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h4'
-                    gutterBottom>
-                    {bull} Completed Tasks
-                  </Typography>
-                  <span>
-                    <Badge
-                      className='completed-tasks'
-                      badgeContent={completedTasks}
-                      color='secondary'
-                      display='inline'>
-                      <MailIcon />
-                    </Badge>
-                  </span>
-                  <Typography
-                    color='primary'
-                    variant='h5'
-                    component='h4'
-                    gutterBottom>
-                    {bull} Urgent Tasks
-                  </Typography>
-                  <span>
-                    <Badge
-                      className='urgent-tasks'
-                      badgeContent={urgentTasks}
-                      color='secondary'
-                      display='inline'>
-                      <MailIcon />
-                    </Badge>
-                  </span>
-                  <br></br>
-                  <Button size='small' color='textSecondary'>
-                    Show my stats
-                  </Button>
-                </div>
-              </Paper>
-            </Box>
-          </MuiThemeProvider>
-        </ScopedCssBaseline>
-      </div>
-    );
+    
+
+    
+
+    const getAnalysis = () => {
+        
+        props.tasksStore.getTasksFromDB(props.tasksStore.userId);
+        console.log(props.tasksStore.userId);
+
+      let tasks = props.tasksStore._tasks;
+        tasks = JSON.parse(JSON.stringify(tasks));
+        console.log(tasks);
+    //   const totalTasks = tasks.length;
+      const completedTasks = tasks.filter((u) => (u.status == '3') || (u.status == 'Completed')).length;
+      const urgentTasks = tasks.filter(
+        (u) => (u.priority == '1' || u.priority == 'Urgent'
+      ) && u.status != 'Completed').length;
+      setUrgent(urgentTasks);
+      setCompleted(completedTasks);
+    };
+
+    useEffect(getAnalysis, []);
+
+    
+      
+      return (
+        <div>
+          <ScopedCssBaseline>
+            <MuiThemeProvider>
+              <Box
+                width='48%'
+                boxShadow={4}
+                style={{ justifyContent: 'center' }}>
+                <Paper elevation={4}>
+                  <Avatar
+                    alt='AB'
+                    src='https://image.flaticon.com/icons/png/512/1752/1752735.png'
+                    className={classes.large}
+                  />
+                  <div className={classes.root}>
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h1'
+                      gutterBottom>
+                      {bull} First Name: {localStorage.getItem('firstName')}
+                    </Typography>
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h2'
+                      gutterBottom>
+                      {bull} Last Name: {localStorage.getItem('lastName')}
+                    </Typography>
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h3'
+                      gutterBottom>
+                      {bull} User Name : {localStorage.getItem('username')}
+                    </Typography>
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h4'
+                      gutterBottom>
+                      {bull} Email : {localStorage.getItem('email')}
+                    </Typography>
+                    {/* <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h4'
+                      gutterBottom>
+                      {bull} Open Tasks
+                    </Typography> */}
+                    {/* <span>
+                      <Badge
+                        className='open-tasks'
+                        badgeContent={openTask}
+                        color='primary'>
+                        <MailIcon />
+                      </Badge>
+                    </span> */}
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h4'
+                      gutterBottom>
+                      {bull} Completed Tasks
+                    </Typography>
+                    <span>
+                      <Badge
+                        className='completed-tasks'
+                        badgeContent={completedTasks}
+                        color='secondary'
+                        display='inline'>
+                        <MailIcon />
+                      </Badge>
+                    </span>
+                    <Typography
+                      color='primary'
+                      variant='h5'
+                      component='h4'
+                      gutterBottom>
+                      {bull} Urgent Tasks
+                    </Typography>
+                    <span>
+                      <Badge
+                        className='urgent-tasks'
+                        badgeContent={urgentTasks}
+                        color='secondary'
+                        display='inline'>
+                        <MailIcon />
+                      </Badge>
+                    </span>
+                    <br></br>
+                    {/* <Button
+                      size='small'
+                      color='textSecondary'
+                      onClick={getAnalysis}>
+                      Show my stats
+                    </Button> */}
+                  </div>
+                </Paper>
+              </Box>
+            </MuiThemeProvider>
+          </ScopedCssBaseline>
+        </div>
+      );
   })
 );
 
