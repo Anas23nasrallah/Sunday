@@ -72,7 +72,7 @@ router.post('/signup', function (req, res) {
             const userId = results[0]
             sequelize.query(`INSERT INTO users VALUES(${userId},"${name}","${firstName}","${lastName}","${email}","${birthDate}")`)
             .then(function (secondResults) {
-                res.send({status : "OK"})
+                res.send({status : "OK", userId: userId})
             })
         })
 })
