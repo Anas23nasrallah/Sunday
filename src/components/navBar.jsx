@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     margiRight: '60%',
     fontWeight: '600',
     marginLeft:'0px', 
-    width:'30vw'
+    width:'30vw',
+    fontSize: "3.7em"
   },
   title: {
     flexGrow: 1,
