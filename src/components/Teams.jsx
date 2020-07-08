@@ -73,8 +73,9 @@ const Teams = inject('teamsStore')(observer((props) => {
                 <button onClick={trackTask}>Ok</button>
             </div>
             {
-                toShow === 'tasks' ? <button onClick={() => toggleShow()} >Show By Members</button>
-                    : <button onClick={() => toggleShow()} >Show By Teams</button>
+                 
+                toShow === 'tasks' ? <Button variant='contained' color='primary' onClick={() => toggleShow()}> Show By Members </Button>
+                    : <Button variant='contained' color='primary' onClick={() => toggleShow()} >Show By Teams</Button>
             }
             <br></br><br></br>
 

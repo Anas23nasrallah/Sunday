@@ -163,6 +163,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         setState(oldData)
     }, [props.rows, state.teams])
 
+    //ahmad - make this create the automation (onclicked in lone 177 if you need to enter row data)
     const tellMeWhenComplete = () => {
         alert('hey')
     }
