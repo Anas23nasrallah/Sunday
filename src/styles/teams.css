@@ -1,0 +1,14 @@
+.aut {
+    margin-left: 350px;
+    padding: 15px;
+    border-style: groove;
+    font-size: large;
+    font-weight: 500;
+    width: 600px;
+}
+
+button {
+    padding: 5px;
+    position: relative;
+
+}

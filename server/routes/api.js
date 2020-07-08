@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -362,6 +362,36 @@ router.post('/sendCompleted', (req, res) => {
 
 
 
+    /*
+    sending tracked  message 
+*/
+router.post('/sendNot', (req, res) => {
+    const taskName = req.body.taskName
+    const email = req.body.email
+    const status = req.body.status
+    const  mailOptions = {
+        from: 'sundayprojectmail@gmail.com',
+        to: email,
+        subject: 'Notification - Sunday.com ✔',
+        html: `<div style="background-color:powderblue;">
+        <h1 style="color:red;">Dear user</h1>
+        <p>The task : ${taskName}</p>
+        <p>status updated to: ${status}</p>
+        <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_960_720.png"></img>
+        </div>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  })
+
+
+
 
 
 //////////////////////////////////////// Teams API ///////////////////////////////////////////
@@ -579,6 +609,37 @@ router.get('/teamid/:teamName', function (req, res) {
             res.send(results)
         })
 })
+
+
+
+
+/*
+    add track
+ */
+router.post('/tracking', function (req, res) {
+    const trackInfo = req.body
+    sequelize.query(`INSERT INTO tracking VALUES(${trackInfo.taskId},"${trackInfo.email}","${trackInfo.status}")
+                    `)
+        .then( function (result) {
+            res.end()
+        })
+})
+
+
+
+/*
+    get track
+ */
+router.get('/tracking', function (req, res) {
+    sequelize.query(`SELECT *
+                     FROM tracking 
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+
 
 
 module.exports = router

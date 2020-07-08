@@ -104,7 +104,12 @@ USE sunday_finalproject;
 
 
 
-
+-- CREATE TABLE tracking (
+--     taskId INT , 
+--     email VARCHAR(50),
+--     status VARCHAR(30),
+--     FOREIGN KEY(taskId) REFERENCES tasks(taskId)  ON DELETE CASCADE
+-- );
 
 
 

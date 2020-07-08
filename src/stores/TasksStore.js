@@ -77,8 +77,37 @@ export class Tasks {
     }
   };
 
+  @action checkNotify = async (newTask) => {
+    const taskId = newTask.taskId
+    const status = newTask.status == 2 ? "In progress" : newTask.status == 3 ? "Completed" : "Starting"
+    const trackingData = await axios.get(`${API_URL}/tracking`);
+    const tracking = trackingData.data
+    for(let tracked of tracking) {
+      if(tracked.taskId==taskId && tracked.status==status) {
+        const email = tracked.email
+        await axios({ method: "POST", 
+        url:"http://localhost:3200/sendNot", 
+        data: {
+                taskName : newTask.taskName,
+                email: email,
+                status: status
+                }
+        }).then((response)=>{
+                 if (response.data.msg === 'success'){
+                     alert("Email sent, awesome!"); 
+                     this.resetForm()
+                 }else if(response.data.msg === 'fail'){
+                     alert("Oops, something went wrong. Try again")
+                 }
+             })
+             return 
+      }
+    }
+  }
+
   @action updateTask = async (newTask) => {
     try {
+      this.checkNotify(newTask)
       let send = await axios.put(`${API_URL}/updateTask/`, newTask);
       this.getTasksFromDB(this.userId);
       return send.data;
