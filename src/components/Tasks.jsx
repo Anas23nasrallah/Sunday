@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from 'react'
 
-const Tasks = inject('tasksStore')(observer((props) => {
+const Tasks = inject('tasksStore','user')(observer((props) => {
 
     // [props.tasksStore._tasks.map(t => toJS(t))]
     const tasks = props.tasksStore._tasks
@@ -19,7 +19,7 @@ const Tasks = inject('tasksStore')(observer((props) => {
     // let tasks = []
 
     const fetchData = () => {
-        props.tasksStore.getTasksFromDB(props.tasksStore.userId)
+        props.tasksStore.getTasksFromDB(props.user.id)
         // props.tasksStore.setCategories()
     }
 
