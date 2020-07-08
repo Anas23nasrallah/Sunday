@@ -15,12 +15,23 @@ const Teams = inject('teamsStore', 'tasksStore')(observer((props) => {
     const [taskInput, settaskInput] = useState('')
     const [statusInput, setstatusInput] = useState('')
     const [toShow, setToShow] = useState('tasks')
-    const statusArr = ['Starting', 'In progress', 'Completed']
+
+    const [alltasks, setAll] = useState([])
+    const statusArr = ['Starting','In progress','Completed']
+
+
     const fetchData = () => {
         props.teamsStore.getTeams(localStorage.getItem('userId'))
     }
 
+    const getTasks = () => {
+        props.tasksStore.getAllTasksFromDB()
+        console.log(props.tasksStore.alltasks)
+        setAll(props.tasksStore.alltasks)
+    }
+
     useEffect(fetchData, [])
+    useEffect(getTasks, [])
 
     const trackTask = async () => {
         const userData = await axios.get(`${API_URL}/user/${localStorage.getItem('userId')}`);
@@ -46,12 +57,14 @@ const Teams = inject('teamsStore', 'tasksStore')(observer((props) => {
             <div className="aut">
                 Hello Sunday.com, <br></br>
                 Please notify me when task with the name  <NativeSelect id="select" value={taskInput} onChange={(e) => settaskInput(e.target.value)}>
-                    <option></option>
-                    {(props.tasksStore._tasks).map((t, i) => <option key={i}>{t.taskId + '  ' + t.taskName}</option>)}
-                </NativeSelect><br></br> status change to  <NativeSelect id="select" value={statusInput} onChange={(e) => setstatusInput(e.target.value)}>
-                    <option></option>
-                    {statusArr.map((t, i) => <option key={i}>{t}</option>)}
-                </NativeSelect>.<br></br>
+
+                <option></option>
+                {alltasks.map((t, i) => <option key={i}>{t.taskId + '  ' + t.taskName}</option>)}
+            </NativeSelect><br></br> status change to  <NativeSelect id="select" value={statusInput} onChange={(e) => setstatusInput(e.target.value)}>
+                <option></option>
+                {statusArr.map((t, i) => <option key={i}>{t}</option>)}
+            </NativeSelect>.<br></br>     
+
                 <button onClick={trackTask}>Ok</button>
             </div>
             {

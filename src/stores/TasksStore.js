@@ -6,6 +6,7 @@ const dateFormat = require('dateformat');
 
 export class Tasks {
   @observable _tasks = [];
+  @observable alltasks = [];
   @observable userId = localStorage.getItem("userId")
   // @observable loggedIn = false
   @observable categories = []
@@ -47,6 +48,15 @@ export class Tasks {
     }
   };
 
+  @action getAllTasksFromDB = async () => {
+    try {
+      let tasks = await axios.get(`${API_URL}/alltasks`); 
+      this.alltasks = tasks.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   @action deleteTask = async (taskId) => {
     await axios.delete(`${API_URL}/deleteTask/${taskId}`);
@@ -83,7 +93,11 @@ export class Tasks {
     const trackingData = await axios.get(`${API_URL}/tracking`);
     const tracking = trackingData.data
     for(let tracked of tracking) {
-      if(tracked.taskId==taskId && tracked.status==status) {
+      let checkStatus = false
+      if((newTask.status=="In progress" || newTask.status=="Inprogress"  ||   newTask.status==2) && tracked.status=="In progress") checkStatus=true
+      if(( newTask.status=="Completed"  ||   newTask.status==3) && tracked.status=="Completed") checkStatus=true
+      if(( newTask.status=="Starting"  ||   newTask.status==1) && tracked.status=="Starting") checkStatus=true
+      if(tracked.taskId==taskId && checkStatus) {
         const email = tracked.email
         await axios({ method: "POST", 
         url:"http://localhost:3200/sendNot", 
@@ -107,6 +121,7 @@ export class Tasks {
 
   @action updateTask = async (newTask) => {
     try {
+      console.log(newTask)
       this.checkNotify(newTask)
       let send = await axios.put(`${API_URL}/updateTask/`, newTask);
       this.getTasksFromDB(this.userId);
