@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -624,6 +624,33 @@ router.post('/tracking', function (req, res) {
 router.get('/tracking', function (req, res) {
     sequelize.query(`SELECT *
                      FROM tracking 
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
+
+/* get admin of a team
+*/
+router.get('/admin/:teamId', function (req, res) {
+    const teamId = req.params.teamId
+    sequelize.query(`SELECT *
+    FROM users JOIN teams_users ON users.userId=teams_users.userId
+    WHERE teams_users.teamId = ${teamId} AND teams_users.is_admin = TRUE
+   `, { type: Sequelize.QueryTypes.SELECT })
+        .then( results => res.send(results) )
+})
+
+
+
+/*
+    get team id 
+*/
+router.get('/teamid/:teamName', function (req, res) {
+    const teamName = req.params.teamName
+    sequelize.query(`SELECT teams.teamId
+                     FROM teams 
+                     WHERE teams.teamName = "${teamName}"
                     `, { type: Sequelize.QueryTypes.SELECT })
         .then( function (results) {
             res.send(results)
