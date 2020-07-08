@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:35533553@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -394,6 +394,7 @@ router.post('/sendNot', (req, res) => {
 
 
 
+
 //////////////////////////////////////// Teams API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -532,17 +533,6 @@ router.post('/members/:teamName/:userId', function (req, res) {
 })
 
 
-/* get admin of a team
-*/
-router.get('/admin/:teamId', function (req, res) {
-    const teamId = req.params.teamId
-    sequelize.query(`SELECT *
-    FROM users JOIN teams_users ON users.userId=teams_users.userId
-    WHERE teams_users.teamId = ${teamId} AND teams_users.is_admin = TRUE
-   `, { type: Sequelize.QueryTypes.SELECT })
-        .then( results => res.send(results) )
-})
-
 
 //////////////////////////////////////// Chat API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -596,6 +586,7 @@ router.get('/teamname/:teamId', function (req, res) {
 })
 
 
+
 /*
     get team id 
 */
@@ -638,8 +629,5 @@ router.get('/tracking', function (req, res) {
             res.send(results)
         })
 })
-
-
-
 
 module.exports = router

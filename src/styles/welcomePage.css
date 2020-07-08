@@ -1,0 +1,27 @@
+#welcome-container{
+    text-align: center;
+}
+
+#welcome-container h1{
+    margin-left: 0px;
+    margin-top: 10vh;
+    font-size: 3.8em;
+}
+
+
+#welcome-container h2{
+    margin-left: 0px;
+}
+
+#welcome-container p {
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+#welcome-container button {
+    margin: 3%;
+    width: 270px;
+    height: 70px;
+    font-size: 26px;
+    font-weight: 900;
+}

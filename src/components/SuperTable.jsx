@@ -47,9 +47,9 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
     columns: [
       { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
       { title: 'Description', field: 'description', sorting: false },
-      { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+      { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
       { title: 'Deadline', field: 'deadLine', type: "date" },
-      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: {1:'Starting', 2:'In progress', 3:'Completed'} },
+      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
       { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
     ],
 
@@ -137,7 +137,7 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
                 //   data.splice(data.indexOf(oldData), 1);
                 //   return { ...prevState, data };
                 // });
-                if (oldData.status == 3) { deleteTask(oldData) }
+                deleteTask(oldData)
               }, 600);
             }),
         }}
