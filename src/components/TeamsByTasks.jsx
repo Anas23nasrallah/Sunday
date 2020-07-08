@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Task } from '../stores/Task'
 import TeamsByTaskTable from './TeamsByTaskTable';
+import { useEffect } from 'react';
+import Axios from 'axios';
 
 
 const TeamsByTasks = inject('teamsStore')(observer((props) => {
 
     const teams = props.teamsStore.teams
-
+    const [admin, setAdmin] = useState([])
+    
+    useEffect(() => {
+        const isAdmin = async () => {
+            for (let team of props.teamsStore.teams) {
+                const teamId = team.id
+                const res = await Axios.get(`http://localhost:3200/admin/${teamId}`)
+                const adminRes = res.data.userName
+                const isAdmin = (adminRes === localStorage.getItem('username'))
+                setAdmin([...admin, isAdmin])
+            }
+        }
+        isAdmin()
+    }, [])
+    console.log([admin])
     const modifyTeams = (teams) => {
         if (!teams) { return }
         const modifiedTeams = []

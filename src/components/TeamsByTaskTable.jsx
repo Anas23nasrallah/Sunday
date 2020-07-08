@@ -57,7 +57,6 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
 
     const [state, setState] = React.useState({
 
-
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
             { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps },
