@@ -18,6 +18,7 @@ export class User {
         this.email = details.email
         localStorage.setItem("userId", userID)
         localStorage.setItem("loggedIn", 'true')
+        localStorage.setItem("username",  details.userName)
         this.loggedIn = 'true'
         console.log(details);
     }

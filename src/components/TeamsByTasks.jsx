@@ -16,14 +16,17 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
             for (let team of props.teamsStore.teams) {
                 const teamId = team.id
                 const res = await Axios.get(`http://localhost:3200/admin/${teamId}`)
-                const adminRes = res.data.userName
+                const adminRes = res.data[0].userName
+                console.log(adminRes, localStorage.getItem('username'))
                 const isAdmin = (adminRes === localStorage.getItem('username'))
-                setAdmin([...admin, isAdmin])
+                const adminArr = admin
+                adminArr.push(isAdmin)
+                setAdmin(adminArr)
             }
         }
         isAdmin()
     }, [])
-    console.log([admin])
+
     const modifyTeams = (teams) => {
         if (!teams) { return }
         const modifiedTeams = []
@@ -47,7 +50,7 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
 
     return (
         <div>
-            {modifiedTeams ? modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} name={t.name} />) : null}
+            {modifiedTeams ? modifiedTeams.map((t, i) => <TeamsByTaskTable rows={t.rows} key={i} name={t.name} isAdmin={admin[i]}/>) : null}
         </div>
     );
 }))
