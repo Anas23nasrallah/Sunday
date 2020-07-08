@@ -74,7 +74,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
             { title: 'Assignee', field: 'assignee', editable:'never',sorting: false, lookup: usernamesLookUps },
             { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', High: 'High', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
-            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
+            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'To Do', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
             // { title: 'Notify Me', field: 'notify', type: 'text' },
         ],
