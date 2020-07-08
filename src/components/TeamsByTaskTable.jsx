@@ -45,7 +45,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
 
     const teamsStore = props.teamsStore
     const members = teamsStore.teams.find(t => t.name === props.name).members
-
+    const isAdmin = props.isAdmin
     const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
         for (let member of members) {
@@ -56,7 +56,6 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
     const usernamesLookUps = getUsernamesLookup(members)
 
     const [state, setState] = React.useState({
-
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
@@ -128,7 +127,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                 title={props.name}
                 columns={state.columns}
                 data={state.data}
-                editable={{
+                editable={isAdmin ? {
                     onRowAdd:
                         (newData) =>
                             new Promise((resolve) => {
@@ -153,7 +152,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                                 deleteTask(oldData)
                             }, 600);
                         }),
-                }}
+                } : {}}
             />
         </div>
     );
