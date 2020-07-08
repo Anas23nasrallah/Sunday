@@ -6,8 +6,16 @@ import Button from '@material-ui/core/Button';
 import { useState } from 'react';
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+
 
 const SignUp = inject('usernamesStore')(observer((props) => {
+    
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+    const [snackbarStatus, setSnackbarStatus] = useState('')
+
 
     const users = props.usernamesStore.usernames.map(u => u.username)
     console.log('in sign up', users)
@@ -56,11 +64,17 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
     const areInputsValid = (inputs) => {
         if (!isUserNameValid(inputs.userName)) {
-            alert('The username you chose already exists, choose another')
+            setSnackbarMessage('The username you chose already exists, choose another')
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+            // alert('The username you chose already exists, choose another')
             return false
         }
         if (!isPasswordValid(inputs.password, inputs.rePassword)) {
-            alert('The passwords does not match!')
+            setSnackbarMessage('The passwords does not match!')
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+            // alert('The passwords does not match!')
             return false
         }
         return true
@@ -70,7 +84,10 @@ const SignUp = inject('usernamesStore')(observer((props) => {
         if (!!inputs.email && !!inputs.firstName && !!inputs.lastName && !!inputs.userName && !!inputs.password && !!inputs.rePassword) {
             return true
         } else {
-            alert('Fill all the fields!')
+            setSnackbarMessage('Fill all the fields!')
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+            // alert('Fill all the fields!')
             return false
         }
     }
@@ -78,7 +95,10 @@ const SignUp = inject('usernamesStore')(observer((props) => {
         if (!allFieldsFilled(inputs) || !areInputsValid(inputs)) { return }
         await axios.post('http://localhost:3200/signup', inputs)
         sendNewUserMail()
-        alert('Signed up successfully')
+        setSnackbarMessage('Signed up successfully')
+        setSnackbarStatus('success')
+        setOpenSnackbar(true)
+        // alert('Signed up successfully')
         return
     }
 
@@ -140,7 +160,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
                     <TextField id="password-input"
                         label="Password"
-                        type="password"
+                        type="text"
                         variant="outlined"
                         style={{ marginTop: '4%' }}
                         name='password'
@@ -150,7 +170,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
                     <TextField id="repassword-input"
                         label="Retype password"
-                        type="password"
+                        type="text"
                         variant="outlined"
                         style={{ marginTop: '4%' }}
                         name='rePassword'
@@ -161,6 +181,14 @@ const SignUp = inject('usernamesStore')(observer((props) => {
                     <Button variant="contained" onClick={signUp} color="primary"> Sign UP </Button> <br /><br />
 
                     <span>Already registered? <Link to="/">Login here!</Link></span>
+
+                    <Snackbar open={openSnackbar} autoHideDuration={6000} 
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                        <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+                            {snackbarMessage}
+                        </Alert>
+                    </Snackbar>
+
                 </div>
             </div>
         </form>);

@@ -17,6 +17,10 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     const [newTeamInput, setTeamInput] = useState('')
     const team = props.teamsStore.teams.find(t => t.name === teamInput)
 
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+    const [snackbarStatus, setSnackbarStatus] = useState('')
+
     const getContenders = () => {
         const members = team.members
         const contenders = usernames.filter(u => !members.includes(u))
@@ -24,11 +28,17 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     }
     const addTeam = () => {
         if (!newTeamInput.length) {
-            alert('Enter a name for the team')
+            setSnackbarMessage('Enter a name for the team')
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+            // alert('Enter a name for the team')
             return
         }
         props.teamsStore.addTeam(newTeamInput, localStorage.getItem('userId'))
-        alert(`Team: ${newTeamInput} was Added Successfully`)
+        setSnackbarMessage(`Team: ${newTeamInput} was Added Successfully`)
+        setSnackbarStatus('success')
+        setOpenSnackbar(true)
+        // alert(`Team: ${newTeamInput} was Added Successfully`)
         setTeamInput('')
     }
 
@@ -88,6 +98,15 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
                 {teamInput ? props.teamsStore.teams.find(t => t.name === teamInput).members.map((u, i) => <option key={i}>{u}</option>) : null}
             </NativeSelect>
             <button onClick={() => removeMemberFromTeam()}>Remove</button>
+
+
+            <Snackbar open={openSnackbar} autoHideDuration={6000} 
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
+
 
         </div>
 
