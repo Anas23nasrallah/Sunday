@@ -13,7 +13,8 @@ const Welcome = (props) => {
         const monthsOfTheYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const day = daysOfTheWeek[today.getDay()]
         const month = monthsOfTheYear[today.getMonth()]
-        const dd = String(today.getDate()).padStart(2, '0');
+        const dd = today.getDate()
+        // const dd = String(today.getDate()).padStart(2, '0');
         const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         const yyyy = today.getFullYear();
         const fullDate = `${day}, ${dd} of ${month}, ${yyyy}`
@@ -21,23 +22,11 @@ const Welcome = (props) => {
         return fullDate
     }
 
-    // const [greeting, setGreeting] =  useState('')
-
-    // const getUserName = async () => {
-    //     const userId = localStorage['userId']
-    //     const res = await Axios.get(`http://localhost:3200/user/${userId}`)
-    //     const userName = res.data.firstName + ' ' + res.data.lastName
-    //     setGreeting( 'Weclome ' + userName + ',' )
-    // }
-
-    // useEffect(()=>getUserName(),[])
-
-
     const userName = localStorage['userName']
 
     return (
        <div id="welcome-container">
-           <h1>{'Weclome ' + userName + ','}</h1>
+           <h1>{'Welcome ' + userName + ','}</h1>
            <h2>{getDateNow()}</h2>
            <h2>"Work hard, Play hard"</h2>
            <p>Elon Musk</p>

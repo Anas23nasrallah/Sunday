@@ -6,6 +6,7 @@ const dateFormat = require('dateformat');
 
 export class Tasks {
   @observable _tasks = [];
+  @observable alltasks = [];
   @observable userId = localStorage.getItem("userId")
   // @observable loggedIn = false
   @observable categories = []
@@ -47,7 +48,14 @@ export class Tasks {
     }
   };
 
-
+  @action getAllTasksFromDB = async () => {
+    try {
+      let tasks = await axios.get(`${API_URL}/alltasks`); 
+      this.alltasks = tasks.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 
   @action deleteTask = async (taskId) => {
@@ -60,22 +68,22 @@ export class Tasks {
     const d = new Date(task.deadLine)
     const date = dateFormat(d, 'isoDate')
     
+    let newTask = {
+      taskName: task.taskName,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      deadLine: date,
+      budget: task.budget,
+      category: task.category
+    }
     try {
-      let newTask = {
-        taskName: task.taskName,
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        deadLine: date,
-        budget: task.budget,
-        category: task.category
-      }
-
       let savedTask = await axios.post(`${API_URL}/tasks/${this.userId}`, newTask);
+      console.log(savedTask)
       this.getTasksFromDB(this.userId);
-
     } catch (err) {
       throw new Error(err);
+      // console.log(err)
     }
   };
 
@@ -86,7 +94,7 @@ export class Tasks {
     const tracking = trackingData.data
     for(let tracked of tracking) {
       let checkStatus = false
-      if((newTask.status=="In progress" || newTask.status=="InProgress"  ||   newTask.status==2) && tracked.status=="In progress") checkStatus=true
+      if((newTask.status=="In progress" || newTask.status=="Inprogress"  ||   newTask.status==2) && tracked.status=="In progress") checkStatus=true
       if(( newTask.status=="Completed"  ||   newTask.status==3) && tracked.status=="Completed") checkStatus=true
       if(( newTask.status=="Starting"  ||   newTask.status==1) && tracked.status=="Starting") checkStatus=true
       if(tracked.taskId==taskId && checkStatus) {
@@ -113,7 +121,7 @@ export class Tasks {
 
   @action updateTask = async (newTask) => {
     try {
-      console.log(newTask)
+      // console.log(newTask)
       this.checkNotify(newTask)
       let send = await axios.put(`${API_URL}/updateTask/`, newTask);
       this.getTasksFromDB(this.userId);

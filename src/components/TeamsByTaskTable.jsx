@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import { observer, inject } from 'mobx-react'
@@ -19,6 +19,10 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { useEffect } from 'react';
 import axios from 'axios';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import AlarmOnIcon from '@material-ui/icons/AlarmOn';
+
 const API_URL = 'http://localhost:3200';
 
 const tableIcons = {
@@ -67,13 +71,24 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
+            { title: 'Notify Me', field: 'notify', type: 'text' },
         ],
         data: props.rows,
         teams: teamsStore.teams
     });
 
     const addTask = async (rowData) => {
-        teamsStore.addTask(props.name, rowData)
+        try{
+            teamsStore.addTask(props.name, rowData)
+            setSnackbarMessage(`Added New Task`)
+            setSnackbarStatus('success')
+            setOpenSnackbar(true)
+        } catch(err){
+            setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+            console.log(err)
+        }
     }
 
     const  notifyAdmin = async (taskName,description,deadLine,teamName,username) => {
@@ -93,15 +108,15 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                 }
         }).then((response)=>{
                  if (response.data.msg === 'success'){
-                    setSnackbarMessage('Email sent, awesome!')
-                    setSnackbarStatus('success')
-                    setOpenSnackbar(true)
+                    // setSnackbarMessage('Email sent, awesome!')
+                    // setSnackbarStatus('success')
+                    // setOpenSnackbar(true)
                     //  alert("Email sent, awesome!"); 
                      this.resetForm()
                  }else if(response.data.msg === 'fail'){
-                    setSnackbarMessage('Oops, something went wrong. Try again')
-                    setSnackbarStatus('error')
-                    setOpenSnackbar(true)
+                    // setSnackbarMessage('Oops, something went wrong. Try again')
+                    // setSnackbarStatus('error')
+                    // setOpenSnackbar(true)
                     //  alert("Oops, something went wrong. Try again")
                  }
              })
@@ -113,14 +128,32 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
             notifyAdmin(rowData.taskName,rowData.description,rowData.deadLine,props.name,rowData.assignee)
         }
         const updatedTask = { ...rowData, category: props.category }
-        await props.tasksStore.updateTask(updatedTask)
-        teamsStore.getTeams(localStorage.getItem('userId'))
+        try{
+            await props.tasksStore.updateTask(updatedTask)
+            teamsStore.getTeams(localStorage.getItem('userId'))
+            setSnackbarMessage(`Added New Task`)
+            setSnackbarStatus('success')
+            setOpenSnackbar(true)
+        } catch (err){
+            setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+        }
     }
 
     const deleteTask = async (rowData) => {
         const taskToDelete = rowData.taskId
-        await props.tasksStore.deleteTask(taskToDelete)
-        teamsStore.getTeams(localStorage.getItem('userId'))
+        try{
+            await props.tasksStore.deleteTask(taskToDelete)
+            teamsStore.getTeams(localStorage.getItem('userId'))
+            setSnackbarMessage(`Added New Task`)
+            setSnackbarStatus('success')
+            setOpenSnackbar(true)
+        } catch (err){
+            setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+        }
     }
 
     useEffect(() => {
@@ -129,13 +162,17 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         setState(oldData)
     }, [props.rows, state.teams])
 
+    const tellMeWhenComplete = () => {
+        alert('hey')
+    }
+
     return (
         <div className="tasks-category-table">
             <MaterialTable
                 icons={tableIcons}
                 title={props.name}
                 columns={state.columns}
-                data={state.data}
+                data={state.data.map(r => ({...r, notify:<AlarmOnIcon onClick={tellMeWhenComplete}/>}))}
                 editable={isAdmin ? {
                     onRowAdd:
                         (newData) =>

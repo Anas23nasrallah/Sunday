@@ -104,7 +104,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
     return (
         <form>
-            <h1>Sign Up</h1>
+            <h1 id="sign-up">Sign Up</h1>
             <div id="login-page-container">
                 <div id="login-page">
 
@@ -180,7 +180,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
                     <Button variant="contained" onClick={signUp} color="primary"> Sign UP </Button> <br /><br />
 
-                    <span>Already registered? <Link to="/">Login here!</Link></span>
+                    <span>Already registered? </span> <Link to="/login">Login here!</Link>
 
                     <Snackbar open={openSnackbar} autoHideDuration={6000} 
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>

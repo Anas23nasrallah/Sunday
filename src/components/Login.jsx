@@ -14,13 +14,17 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
     const [userNameInput, setUserNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
     const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [openSnackbar2, setOpenSnackbar2] = useState(false)
 
     const logIn = async () => {
         const loginData = {
             name:userNameInput,
             password:passwordInput
         }
-        
+        if(!(userNameInput && passwordInput)){
+            setOpenSnackbar2(true)
+            return
+        }
         Axios.post('http://localhost:3200/login',loginData).then( async res => {
             console.log(res.data.status )
             if(res.data.status === 'OK'){
@@ -61,6 +65,13 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
                         <span> {'Please Try again'} </span>
                     </Alert>
                 </Snackbar>               
+
+                <Snackbar open={openSnackbar2} autoHideDuration={6000} 
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                    <Alert onClose={()=>setOpenSnackbar2(false)} severity="error" variant="filled">
+                        <span style={{display:'block'}}>Please fill all input fields</span>
+                    </Alert>
+                </Snackbar> 
 
             </div>
         </div>

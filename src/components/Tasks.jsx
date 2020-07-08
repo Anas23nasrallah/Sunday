@@ -9,6 +9,9 @@ import SuperTable from './SuperTable'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from 'react'
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+const capitalize = require('capitalize')
 
 const Tasks = inject('tasksStore')(observer((props) => {
 
@@ -42,8 +45,24 @@ const Tasks = inject('tasksStore')(observer((props) => {
 
     const [categoryInput, setCategoryInput] = useState('')
 
+
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+    const [snackbarStatus, setSnackbarStatus] = useState('')
+
     const addCategory = () => {
-        props.tasksStore.addCategory(categoryInput)
+        const catgoreyToAdd = capitalize(categoryInput)
+        try{
+            props.tasksStore.addCategory(catgoreyToAdd)
+            setSnackbarMessage(`Added new category - ${catgoreyToAdd}`)
+            setSnackbarStatus('success')
+            setOpenSnackbar(true)
+            setCategoryInput('')
+        } catch (err){
+            setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
+            setSnackbarStatus('error')
+            setOpenSnackbar(true)
+        }
     }
     
     return (
@@ -62,6 +81,14 @@ const Tasks = inject('tasksStore')(observer((props) => {
             <div id="all-tasks-tables">
                 {Object.keys(groupedTasks).map((group, i) => <SuperTable key={i} category={group} tasks={groupedTasks[group]}/>)}
             </div>
+
+            <Snackbar open={openSnackbar} autoHideDuration={6000} 
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
+
         </div>
 
     );
