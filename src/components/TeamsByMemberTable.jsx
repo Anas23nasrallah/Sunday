@@ -45,9 +45,9 @@ export default inject('tasksStore')(observer(function TeamsByMemberTable(props) 
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Priority', field: 'priority', lookup: { 1: 'Urgent', 2: 'Hight', 3: 'Medium', 4: 'Low' }, searchable: true, sorting: false },
+            { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
-            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { 1: 'Starting', 2: 'In progress', 3: 'Completed' } },
+            { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
         ],
         data: props.tasks
