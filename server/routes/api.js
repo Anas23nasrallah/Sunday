@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
 const dateTime = require('node-datetime');
 
 //setting email config
@@ -326,44 +326,6 @@ router.post('/send', (req, res) => {
 
 
 
-  /*
-    sending  message for the admin that task completed
-*/
-router.post('/sendCompleted', (req, res) => {
-    const taskName = req.body.taskName
-    const description = req.body.description
-    const deadLine = req.body.deadLine
-    const teamName = req.body.teamName
-    const email = req.body.email
-    const username = req.body.username
-    const  mailOptions = {
-        from: 'sundayprojectmail@gmail.com',
-        to: email,
-        subject: 'Notification - Sunday.com ✔',
-        html: `<div style="background-color:powderblue;">
-        <h1 style="color:red;">Dear admin of ${teamName} team</h1>
-        <p>The task : ${taskName}</p>
-        <p>With the description: ${description}</p>
-        <p>Which is supposed to be done till : ${deadLine}</p>
-        <p style="color:green;"> Completed  </p>
-        <p> By the user: ${username}  </p>
-        <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_960_720.png"></img>
-        </div>`
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-  })
-
-
-
-
-
 //////////////////////////////////////// Teams API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -502,17 +464,6 @@ router.post('/members/:teamName/:userId', function (req, res) {
 })
 
 
-/* get admin of a team
-*/
-router.get('/admin/:teamId', function (req, res) {
-    const teamId = req.params.teamId
-    sequelize.query(`SELECT *
-    FROM users JOIN teams_users ON users.userId=teams_users.userId
-    WHERE teams_users.teamId = ${teamId} AND teams_users.is_admin = TRUE
-   `, { type: Sequelize.QueryTypes.SELECT })
-        .then( results => res.send(results) )
-})
-
 
 //////////////////////////////////////// Chat API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -564,21 +515,5 @@ router.get('/teamname/:teamId', function (req, res) {
             res.send(results)
         })
 })
-
-
-/*
-    get team id 
-*/
-router.get('/teamid/:teamName', function (req, res) {
-    const teamName = req.params.teamName
-    sequelize.query(`SELECT teams.teamId
-                     FROM teams 
-                     WHERE teams.teamName = "${teamName}"
-                    `, { type: Sequelize.QueryTypes.SELECT })
-        .then( function (results) {
-            res.send(results)
-        })
-})
-
 
 module.exports = router

@@ -13,6 +13,8 @@ import Chat from './components/chat';
 import TeamHandler from './components/TeamHandler';
 import Calendar from './components/calendar';
 import Analysis from './components/Analysis';
+import Welcome from './components/welcome';
+
 
 const App = inject('tasksStore', 'user')(observer((props) => {
 
@@ -22,11 +24,12 @@ const App = inject('tasksStore', 'user')(observer((props) => {
      <NavBar />
 
       <Route path='/' >
-        {props.user.loggedIn === 'true' ? <Redirect to="/tasks" /> : <Redirect to="/login" />}
+        {props.user.loggedIn === 'true' ? <Redirect to="/welcome" /> : <Redirect to="/login" />}
       </Route>
 
       <Route exact path='/tasks' component={Tasks} />
       <Route exact path='/login' component={Login} />
+      <Route exact path='/welcome' component={Welcome} />
       <Route exact path='/signUp' component={SignUp} />
       <Route exact path='/profile' component={Profile} />
       <Route exact path='/calendar' component={Calendar} />
