@@ -9,6 +9,8 @@ import { Router, Link } from 'react-router-dom';
 import '../styles/teams.css'
 import { InputLabel, NativeSelect } from '@material-ui/core';
 import axios from 'axios';
+import TeamManager from './TeamManager'
+
 const API_URL = 'http://localhost:3200';
 
 const Teams = inject('teamsStore')(observer((props) => {
@@ -38,6 +40,8 @@ const Teams = inject('teamsStore')(observer((props) => {
     useEffect(fetchData, [])
     useEffect(getTasks, [])
 
+    const [manageTeams, setManageTeams] = useState(false)
+
     const trackTask = async () => {
         const userData = await axios.get(`${API_URL}/user/${localStorage.getItem('userId')}`);
         const email = userData.data.email
@@ -57,9 +61,13 @@ const Teams = inject('teamsStore')(observer((props) => {
         }
     }
 
+    // const toggleTeamManager = () => {
+    //     setManageTeams(!manageTeams) : setManageTeams(true)
+    // }
+
     return (
         <div id="tasks-page">
-            <div className="aut">
+            {/* <div className="aut">
                 Hello Sunday.com, <br></br>
                 Please notify me when task with the name  <NativeSelect id="select" value={taskInput} onChange={(e) => settaskInput(e.target.value)}>
 
@@ -71,17 +79,20 @@ const Teams = inject('teamsStore')(observer((props) => {
             </NativeSelect>.<br></br>     
 
                 <button onClick={trackTask}>Ok</button>
-            </div>
+            </div> */}
+            
+                {/* <Link to='/teamhandler'> */}
+            {/* </Link> */}
+            <Button variant='contained' color='primary' onClick={()=>setManageTeams(!manageTeams)}> Manage Teams </Button>
+            
+            {manageTeams ? <TeamManager/> : <div></div>}
+            <br></br><br></br>
             {
                  
-                toShow === 'tasks' ? <Button variant='contained' color='primary' onClick={() => toggleShow()}> Show By Members </Button>
-                    : <Button variant='contained' color='primary' onClick={() => toggleShow()} >Show By Teams</Button>
-            }
-            <br></br><br></br>
+                 toShow === 'tasks' ? <Button variant='contained' color='primary' onClick={() => toggleShow()}> Show By Members </Button>
+                     : <Button variant='contained' color='primary' onClick={() => toggleShow()} >Show By Teams</Button>
+             }
 
-            <Link to='/teamhandler'>
-                <Button variant='contained' color='primary'> Manage Teams </Button>
-            </Link><br></br><br></br>
             {toShow === 'tasks' ? <TeamsByTasks /> : <TeamsByMembers />}
         </div>
     );

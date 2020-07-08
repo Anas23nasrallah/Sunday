@@ -8,6 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((props) => {
+
     const usernames = props.usernamesStore.usernames.map(u => u.username)
 
     const [teamsObj, setTeamsObj] = useState([])
@@ -28,6 +29,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         const contenders = usernames.filter(u => !members.includes(u))
         return contenders
     }
+
     const addTeam = () => {
         if (!newTeamInput.length) {
             setSnackbarMessage('Enter a name for the team')
@@ -44,9 +46,10 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         setTeamInput('')
     }
 
-    useEffect(() => {
-        getTeams()
-    }, [teams])
+    // useEffect(
+    //     getTeams
+    // }, [])
+    // teams
 
     const getTeams = async () => {
         const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
@@ -102,9 +105,9 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             <button onClick={() => removeMemberFromTeam()}>Remove</button>
 
 
-            <Snackbar open={openSnackbar} autoHideDuration={6000} 
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-                <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+            <Snackbar open={openSnackbar} autoHideDuration={6000}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
