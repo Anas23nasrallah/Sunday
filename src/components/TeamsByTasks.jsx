@@ -17,7 +17,6 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
                 const teamId = team.id
                 const res = await Axios.get(`http://localhost:3200/admin/${teamId}`)
                 if(!res.data.length){ return }
-                debugger
                 const adminRes = res.data[0].userName
                 console.log(adminRes, localStorage.getItem('username'))
                 const isAdmin = (adminRes === localStorage.getItem('username'))
@@ -28,8 +27,6 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
         }
         isAdmin()
     }, [])
-    // console.log(admin)
-
     
     const modifyTeams = (teams) => {
         if (!teams) { return }

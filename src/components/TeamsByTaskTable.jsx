@@ -51,6 +51,8 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
     const teamsStore = props.teamsStore
     const members = teamsStore.teams.find(t => t.name === props.name).members
     const isAdmin = props.isAdmin
+    console.log(isAdmin, props.name)
+
     const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
         for (let member of members) {
@@ -67,7 +69,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps },
+            { title: 'Assignee', field: 'assignee', editable: 'never', sorting: false, lookup: usernamesLookUps },
             { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
