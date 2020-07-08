@@ -127,7 +127,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                 title={props.name}
                 columns={state.columns}
                 data={state.data}
-                editable={{
+                editable={isAdmin ? {
                     onRowAdd:
                         (newData) =>
                             new Promise((resolve) => {
@@ -152,7 +152,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                                 deleteTask(oldData)
                             }, 600);
                         }),
-                }}
+                } : {}}
             />
         </div>
     );

@@ -26,7 +26,7 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
         }
         isAdmin()
     }, [])
-
+    console.log(admin)
     const modifyTeams = (teams) => {
         if (!teams) { return }
         const modifiedTeams = []

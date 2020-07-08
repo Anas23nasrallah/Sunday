@@ -361,6 +361,37 @@ router.post('/sendCompleted', (req, res) => {
 
 
 
+    /*
+    sending tracked  message 
+*/
+router.post('/sendNot', (req, res) => {
+    const taskName = req.body.taskName
+    const email = req.body.email
+    const status = req.body.status
+    const  mailOptions = {
+        from: 'sundayprojectmail@gmail.com',
+        to: email,
+        subject: 'Notification - Sunday.com ✔',
+        html: `<div style="background-color:powderblue;">
+        <h1 style="color:red;">Dear user</h1>
+        <p>The task : ${taskName}</p>
+        <p>status updated to: ${status}</p>
+        <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_960_720.png"></img>
+        </div>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+  })
+
+
+
+
 
 
 //////////////////////////////////////// Teams API ///////////////////////////////////////////
@@ -501,17 +532,6 @@ router.post('/members/:teamName/:userId', function (req, res) {
 })
 
 
-/* get admin of a team
-*/
-router.get('/admin/:teamId', function (req, res) {
-    const teamId = req.params.teamId
-    sequelize.query(`SELECT *
-    FROM users JOIN teams_users ON users.userId=teams_users.userId
-    WHERE teams_users.teamId = ${teamId} AND teams_users.is_admin = TRUE
-   `, { type: Sequelize.QueryTypes.SELECT })
-        .then( results => res.send(results) )
-})
-
 
 //////////////////////////////////////// Chat API ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -565,6 +585,7 @@ router.get('/teamname/:teamId', function (req, res) {
 })
 
 
+
 /*
     get team id 
 */
@@ -579,5 +600,33 @@ router.get('/teamid/:teamName', function (req, res) {
         })
 })
 
+
+
+
+/*
+    add track
+ */
+router.post('/tracking', function (req, res) {
+    const trackInfo = req.body
+    sequelize.query(`INSERT INTO tracking VALUES(${trackInfo.taskId},"${trackInfo.email}","${trackInfo.status}")
+                    `)
+        .then( function (result) {
+            res.end()
+        })
+})
+
+
+
+/*
+    get track
+ */
+router.get('/tracking', function (req, res) {
+    sequelize.query(`SELECT *
+                     FROM tracking 
+                    `, { type: Sequelize.QueryTypes.SELECT })
+        .then( function (results) {
+            res.send(results)
+        })
+})
 
 module.exports = router
