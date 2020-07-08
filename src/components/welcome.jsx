@@ -35,7 +35,7 @@ const Welcome = (props) => {
     // useEffect(()=>getUserName(),[])
 
 
-    const userName = localStorage['username']
+    const userName = localStorage['userName']
 
     return (
        <div id="welcome-container">
