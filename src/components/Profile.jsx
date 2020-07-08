@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
 import { useState, useEffect } from 'react';
+import Axios from 'axios';
 
 
 import { sizing } from '@material-ui/system';
@@ -39,6 +40,8 @@ const Profile = inject('tasksStore')(observer((props) => {
 
     const [urgentTasks, setUrgent] = useState(0);
     const [completedTasks, setCompleted] = useState(0);
+        const [avatar, setAvatar] = useState(0);
+    
 
     
 
@@ -47,11 +50,11 @@ const Profile = inject('tasksStore')(observer((props) => {
     const getAnalysis = () => {
         
         props.tasksStore.getTasksFromDB(props.tasksStore.userId);
-        console.log(props.tasksStore.userId);
+        // console.log(props.tasksStore.userId);
 
       let tasks = props.tasksStore._tasks;
         tasks = JSON.parse(JSON.stringify(tasks));
-        console.log(tasks);
+        // console.log(tasks);
     //   const totalTasks = tasks.length;
       const completedTasks = tasks.filter((u) => (u.status == '3') || (u.status == 'Completed')).length;
       const urgentTasks = tasks.filter(
@@ -60,11 +63,26 @@ const Profile = inject('tasksStore')(observer((props) => {
       setUrgent(urgentTasks);
       setCompleted(completedTasks);
     };
-
+    const url = []
+    // let getAvatar = async () =>{
+    //     const response = await Axios.get(`https://tinyfac.es/api/users`);
+    //     console.log("response is:" , response.data[0].avatars[0].url);
+    // url.push(response.data[0].avatars[0].url);
+    // }
+  
     useEffect(getAnalysis, []);
+    // useEffect(getAvatar, []);
 
-    
-      
+    useEffect(() => {
+  async function getAvatar() {
+   const response = await Axios.get(`https://tinyfac.es/api/users`);
+        console.log("response is:" , response.data[0].avatars[0].url);
+      url.push(response.data[0].avatars[0].url);
+      setAvatar(url)
+  }
+  getAvatar();
+}, []); 
+
       return (
         <div>
           <ScopedCssBaseline>
@@ -73,10 +91,12 @@ const Profile = inject('tasksStore')(observer((props) => {
                 width='48%'
                 boxShadow={4}
                 style={{ justifyContent: 'center' }}>
-                <Paper elevation={4}>
+                          <Paper elevation={4}>
+                              <br></br>
                   <Avatar
-                    alt='AB'
-                    src='https://image.flaticon.com/icons/png/512/1752/1752735.png'
+                    alt='https://api.adorable.io/avatars/285/abott@adorable.png'
+                    src= {`${avatar}` || ""}
+                    // src='https://image.flaticon.com/icons/png/512/1752/1752735.png'
                     className={classes.large}
                   />
                   <div className={classes.root}>
@@ -123,21 +143,21 @@ const Profile = inject('tasksStore')(observer((props) => {
                         <MailIcon />
                       </Badge>
                     </span> */}
-                    <Typography
-                      color='primary'
-                      variant='h5'
-                      component='h4'
-                      gutterBottom>
-                      {bull} Completed Tasks
-                    </Typography>
                     <span>
-                      <Badge
-                        className='completed-tasks'
-                        badgeContent={completedTasks}
-                        color='secondary'
-                        display='inline'>
-                        <MailIcon />
-                      </Badge>
+                      <Typography
+                        color='primary'
+                        variant='h5'
+                        component='h4'
+                        gutterBottom>
+                        {bull} Completed Tasks
+                        <Badge
+                          className='completed-tasks'
+                          badgeContent={completedTasks}
+                          color='secondary'
+                          display='inline'>
+                          <MailIcon />
+                        </Badge>
+                      </Typography>
                     </span>
                     <Typography
                       color='primary'
@@ -145,8 +165,6 @@ const Profile = inject('tasksStore')(observer((props) => {
                       component='h4'
                       gutterBottom>
                       {bull} Urgent Tasks
-                    </Typography>
-                    <span>
                       <Badge
                         className='urgent-tasks'
                         badgeContent={urgentTasks}
@@ -154,7 +172,8 @@ const Profile = inject('tasksStore')(observer((props) => {
                         display='inline'>
                         <MailIcon />
                       </Badge>
-                    </span>
+                    </Typography>
+                    <span></span>
                     <br></br>
                     {/* <Button
                       size='small'
