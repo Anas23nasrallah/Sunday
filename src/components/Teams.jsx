@@ -37,8 +37,28 @@ const Teams = inject('teamsStore')(observer((props) => {
         setAll(alltasks)
     }
 
-    useEffect(fetchData, [])
-    useEffect(getTasks, [])
+    useEffect(()=>{
+        const fetchData = async () => {
+            await props.teamsStore.getTeams(localStorage.getItem('userId'))
+        }
+        fetchData()
+    }, [])
+
+    useEffect(()=>{
+        const getTasks = async () => {
+            let alltasks = []
+            try {
+                let tasks = await axios.get(`${API_URL}/alltasks`); 
+                alltasks = tasks.data;
+              } catch (err) {
+                console.log(err);
+              }
+            setAll(alltasks)
+        }
+        getTasks()
+    }, [])
+
+    // useEffect(getTasks, [])
 
     const [manageTeams, setManageTeams] = useState(false)
 

@@ -46,16 +46,26 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         setTeamInput('')
     }
 
-    // useEffect(
-    //     getTeams
-    // }, [])
-    // teams
 
-    const getTeams = async () => {
-        const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
-        setTeamsObj([...teamsObj, ...res.data])
-        setTeams(res.data.map(t => t.teamName))
-    }
+    // const getTeams = async () => {
+    //     const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
+    //     setTeamsObj([...teamsObj, ...res.data])
+    //     setTeams(res.data.map(t => t.teamName))
+    // }
+
+    // useEffect(getTeams, [])
+    
+    useEffect(
+        () => {
+        const getTeams = async () => {
+            const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
+            setTeamsObj([...teamsObj, ...res.data])
+            setTeams(res.data.map(t => t.teamName))
+        }
+        getTeams()
+    }, [teams])
+
+
 
     const addMemberToTeam = async () => {
         const teamId = teamsObj.find(t => t.teamName === teamInput).teamId
