@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import { observer, inject } from 'mobx-react'
@@ -40,7 +40,9 @@ const tableIcons = {
 };
 
 export default inject('tasksStore')(observer(function TeamsByMemberTable(props) {
+    const [selectedRow, setSelectedRow] = useState(null);
     
+
     const [state, setState] = React.useState({
 
         columns: [
@@ -82,6 +84,9 @@ export default inject('tasksStore')(observer(function TeamsByMemberTable(props) 
                 title={props.tasks[0].assignee + ' - ' + props.teamName}
                 columns={state.columns}
                 data={state.data}
+                onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+                options={{ rowStyle: rowData => ({backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'})},
+                { headerStyle: { backgroundColor: '#01579b', color: '#FFF' }}}
                 // editable={{
                 //     onRowAdd:
                 //         (newData) =>

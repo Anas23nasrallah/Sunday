@@ -45,14 +45,21 @@ const tableIcons = {
 
 export default inject('tasksStore')(observer(function SuperTable(props) {
   const tasksStore = props.tasksStore
+
+  const [selectedRow, setSelectedRow] = useState(null);
+
   const [state, setState] = React.useState({
 
     columns: [
       { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
       { title: 'Description', field: 'description', sorting: false },
-      { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'High', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
+      {
+        title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'High', Medium: 'Medium', Low: 'Low' },
+        searchable: true, sorting: false
+      },
+      //cellStyle: { backgroundColor: title === 'Priority' ? '#039be5': '#FFF', color: '#FFF' },
       { title: 'Deadline', field: 'deadLine', type: "date" },
-      { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'To Do', InProgress: 'In progress', Completed: 'Completed' } },
+      { title: 'Status', field: 'status', initialEditValue: 'Starting', sorting: false, lookup: { Starting: 'To Do', InProgress: 'In progress', Completed: 'Completed' } },
       { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
     ],
 
@@ -70,12 +77,12 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
 
   const addTask = (rowData) => {
     const newTask = { ...rowData, category: props.category }
-    try{
+    try {
       tasksStore.addTask(newTask)
       setSnackbarMessage(`Added New Task`)
       setSnackbarStatus('success')
       setOpenSnackbar(true)
-    } catch (err){
+    } catch (err) {
       setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
       setSnackbarStatus('error')
       setOpenSnackbar(true)
@@ -85,12 +92,12 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
 
   const updateTask = async (rowData) => {
     const updatedTask = { ...rowData, category: props.category }
-    try{
+    try {
       await tasksStore.updateTask(updatedTask)
       setSnackbarMessage(`Updated Task Successfully`)
       setSnackbarStatus('success')
       setOpenSnackbar(true)
-    } catch (err){
+    } catch (err) {
       setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
       setSnackbarStatus('error')
       setOpenSnackbar(true)
@@ -99,12 +106,12 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
 
   const deleteTask = async (rowData) => {
     const taskToDelete = rowData.taskId
-    try{
+    try {
       await tasksStore.deleteTask(taskToDelete)
       setSnackbarMessage(`Task Deleted`)
       setSnackbarStatus('success')
       setOpenSnackbar(true)
-    } catch (err){
+    } catch (err) {
       setSnackbarMessage(`Seems like there was an error, please try again or contact us`)
       setSnackbarStatus('error')
       setOpenSnackbar(true)
@@ -149,13 +156,18 @@ export default inject('tasksStore')(observer(function SuperTable(props) {
               }, 600);
             }),
         } : {}}
+  
+        onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+        options={{ rowStyle: rowData => ({backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'})},
+        { headerStyle: { backgroundColor: '#01579b', color: '#FFF' }}}
+
       />
 
-      <Snackbar open={openSnackbar} autoHideDuration={6000} 
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-          <Alert onClose={()=>setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
-              {snackbarMessage}
-          </Alert>
+      <Snackbar open={openSnackbar} autoHideDuration={6000}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarStatus} variant="filled">
+          {snackbarMessage}
+        </Alert>
       </Snackbar>
 
     </div>

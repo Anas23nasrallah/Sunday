@@ -23,7 +23,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     const [memberToDelete, setMemberToDelete] = useState('')
 
     const [newTeamInput, setTeamInput] = useState('')
-    const team = props.teamsStore.teams.find(t => t.name === teamInput)
+    const [team, setTeammm] = useState(props.teamsStore.teams.find(t => t.name == teamInput))
 
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -35,7 +35,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
         return contenders
     }
 
-    const addTeam = () => {
+    const addTeam = async () => {
         if (!newTeamInput.length) {
             setSnackbarMessage('Enter a name for the team')
             setSnackbarStatus('error')
@@ -43,13 +43,17 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             // alert('Enter a name for the team')
             return
         }
-        const newTeam = capitalize(newTeamInput)
-        props.teamsStore.addTeam(newTeam, localStorage.getItem('userId'))
+        // const newTeam = capitalize(newTeamInput)
+        const newTeam = newTeamInput
+        await props.teamsStore.addTeam(newTeam, localStorage.getItem('userId'))
         setSnackbarMessage(`Team: ${newTeam} was Added Successfully`)
         setSnackbarStatus('success')
         setOpenSnackbar(true)
         // alert(`Team: ${newTeamInput} was Added Successfully`)
         setTeamInput('')
+        await props.teamsStore.getTeams(localStorage.getItem('userId'))
+        const t = props.teamsStore.teams.find(t => t.name === teamInput)
+        setTeammm(t)
     }
 
 
@@ -69,12 +73,13 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
             setTeams(res.data.map(t => t.teamName))
         }
         getTeams()
-    }, [])
+    }, [team])
 
 
 
     const addMemberToTeam = async () => {
         const teamId = teamsObj.find(t => t.teamName === teamInput).teamId
+
         await Axios.post(`${API_URL}/teamsusers/${teamId}/${member}`)
         props.teamsStore.getTeams(localStorage.getItem('userId'))
     }
@@ -82,8 +87,10 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     const removeMemberFromTeam = async () => {
         const response = await Axios.get(`${API_URL}/userid/${memberToDelete}`)
         const idToDelete = response.data.userId
+
         await Axios.post(`${API_URL}/members/${teamInput}/${idToDelete}`)
         props.teamsStore.getTeams(localStorage.getItem('userId'))
+
     }
 
     return (
@@ -91,7 +98,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
 
             <p>Add Team</p>
             <div id="new-category-input">
-                <TextField id="category-input" label="New Category" type="text" variant="outlined"
+                <TextField id="category-input" label="New Team" type="text" variant="outlined"
                     style={{}}
                     value={newTeamInput} onChange={(e) => setTeamInput(e.target.value)} />
                 <Button variant='contained' color='primary' onClick={addTeam}> Add Team </Button>
