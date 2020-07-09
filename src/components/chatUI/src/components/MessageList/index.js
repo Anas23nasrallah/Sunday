@@ -9,7 +9,10 @@ import io from 'socket.io-client'
 import { inject, observer } from 'mobx-react';
 import Axios from 'axios';
 
-const socketURL = "http://localhost:3200"
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
+
+const socketURL = API_URL
 const socket = io(socketURL)
 
 
@@ -24,11 +27,12 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
   let teamName = chatStore.teamName
   const [messages, setMessages] = useState([])    //intiate with past msgs from DB sorted by date time
   const [messagesToRender, setMessagesToRender] = useState([])
-  
+  // const API_URL = '${API_URL}'
+const API_URL = ''
   
   useEffect(() => {
       chatStore.setMY_USER_ID()
-      Axios.get(`http://localhost:3200/teams/${MY_USER_ID}`).then(teams => {
+      Axios.get(`${API_URL}/teams/${MY_USER_ID}`).then(teams => {
         chatStore.setMY_TEAMS_IDS(teams.data.map(t => t.teamId))       
         chatStore.changeCurrentTeamDisplayedID(chatStore.MY_TEAMS_IDS[0])         //until side will b available
       })
@@ -111,7 +115,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
           timestamp: new Date().getTime()
         },
       ]
-      Axios.get(`http://localhost:3200/teamschat/${currentTeamDisplayedID}`).then( pastMessages => {
+      Axios.get(`${API_URL}/teamschat/${currentTeamDisplayedID}`).then( pastMessages => {
         // console.log(pastMessages.data)
         setMessages([...pastMessages.data])
       })
@@ -203,7 +207,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Messa
       }
 
       const saveToDB = async (message) => {
-        Axios.post(`http://localhost:3200/teamschat`,message).then( res => {
+        Axios.post(`${API_URL}/teamschat`,message).then( res => {
           return res.data
         })
       }

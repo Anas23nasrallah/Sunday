@@ -1,18 +1,18 @@
--- Run each part and then comment it out, 
--- (our db is localhosted right now so this is how to sync it)
+-- -- Run each part and then comment it out, 
+-- -- (our db is localhosted right now so this is how to sync it)
 
--- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- First run this, refresh your mysql extension and check that it was added, then comment it out:
+-- -- First run this, refresh your mysql extension and check that it was added, then comment it out:
 
--- CREATE DATABASE sunday_finalProject;
+-- -- CREATE DATABASE sunday_finalProject;
 
--- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
--- Then uncomment this line and a singe create table every time:
-USE sunday_finalproject;
+-- -- Then uncomment this line and a singe create table every time:
+-- USE sunday_finalproject;
 
--- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE username_password (
 --     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -21,7 +21,7 @@ USE sunday_finalproject;
 --     cipher VARCHAR(50)
 -- );
 
--- -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE tasks (
 --     taskId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -36,7 +36,7 @@ USE sunday_finalproject;
 
 
 
--- -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
+-- -- -- -- ///////////  /////////   ///////////    //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE user_tasks (
 --     task_id INT,
@@ -47,7 +47,7 @@ USE sunday_finalproject;
 
 
 
--- -- -- ///////////  /////////   ///////////  Teams Tables  //////////  ///////// //////////////  ////////
+-- -- -- -- ///////////  /////////   ///////////  Teams Tables  //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE teams (
 --     teamId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -80,7 +80,7 @@ USE sunday_finalproject;
 
 
 
--- -- -- ///////////  /////////   ///////////  Chat Tables  //////////  ///////// //////////////  ////////
+-- -- -- -- ///////////  /////////   ///////////  Chat Tables  //////////  ///////// //////////////  ////////
 
 -- CREATE TABLE teams_chat (
 --     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -94,13 +94,23 @@ USE sunday_finalproject;
 -- );
 
 
+-- --Didnt this one :
+
+-- -- CREATE TABLE teams_chat (
+-- --     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+-- --     teamId INT , 
+-- --     authorname VARCHAR(40),
+-- --     author INT,
+-- --     message VARCHAR(1000),
+-- --     timestamp DATETIME,
+-- --     FOREIGN KEY(teamId) REFERENCES teams(teamId)
+-- -- );
 
 
-
--- DROP TABLE teams_chat 
--- DROP TABLE teams_tasks 
--- DROP TABLE teams_users
--- DROP TABLE user_tasks
+-- -- DROP TABLE teams_chat 
+-- -- DROP TABLE teams_tasks 
+-- -- DROP TABLE teams_users
+-- -- DROP TABLE user_tasks
 
 
 
@@ -120,17 +130,7 @@ USE sunday_finalproject;
 
 
 
--- CREATE TABLE teams_chat (
---     messageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---     teamId INT , 
---     authorname VARCHAR(40),
---     author INT,
---     message VARCHAR(1000),
---     timestamp DATETIME,
---     FOREIGN KEY(teamId) REFERENCES teams(teamId)
--- );
-
--- INSERT INTO users VALUES (1, 'eitan', 'Eitan', 'Gueron', 'eitangueron@gmail.com', "2020-07-06 17:00:01");
+-- -- INSERT INTO users VALUES (1, 'eitan', 'Eitan', 'Gueron', 'eitangueron@gmail.com', "2020-07-06 17:00:01");
 
 
 

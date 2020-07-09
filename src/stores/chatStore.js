@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import Axios from 'axios'
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 export class ChatStore {
   @observable MY_USER_ID;
@@ -28,13 +30,13 @@ export class ChatStore {
     }
 
     @action async getTeamName(){
-        Axios.get(`http://localhost:3200/teamname/${this.currentTeamDisplayedID}`).then( res => {
+        Axios.get(`${API_URL}/teamname/${this.currentTeamDisplayedID}`).then( res => {
             this.teamName = res.data[0].teamName
         })
     }
 
     @action setUserName(){
-        Axios.get(`http://localhost:3200/user/${this.MY_USER_ID}`).then( res => {
+        Axios.get(`${API_URL}/user/${this.MY_USER_ID}`).then( res => {
             this.MY_USER_NAME = res.data.firstName + ' ' + res.data.lastName
         })
     }
@@ -43,7 +45,7 @@ export class ChatStore {
         if(!this.MY_TEAMS_IDS){return }
         const teamsInfo = []
         for(let t of this.MY_TEAMS_IDS){
-            Axios.get(`http://localhost:3200/teamname/${t}`).then( res => {
+            Axios.get(`${API_URL}/teamname/${t}`).then( res => {
                 const team = {name:res.data[0].teamName, id:t}
                 teamsInfo.push(team)
             })

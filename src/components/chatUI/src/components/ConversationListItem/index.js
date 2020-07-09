@@ -4,7 +4,9 @@ import io from 'socket.io-client'
 import './ConversationListItem.css';
 import { observer, inject } from 'mobx-react';
 
-const socketURL = "http://localhost:3200"
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
+const socketURL = API_URL
 const socket = io(socketURL)
 
 export default inject('tasksStore', 'user', 'chatStore')(observer(function ConversationListItem(props) {

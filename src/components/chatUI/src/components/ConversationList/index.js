@@ -9,6 +9,8 @@ import './ConversationList.css';
 import { observer, inject } from 'mobx-react';
 import Axios from 'axios';
 
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
   //onclick => chatStore.changeCurrentTeamDisplayedID(newID)           setCurrentTeamDisplayedID(newID)
 
@@ -35,7 +37,7 @@ export default inject('tasksStore', 'user', 'chatStore')(observer(function Conve
 
     const teamsInfo = []
     for(let t of chatStore.MY_TEAMS_IDS){
-        const res = await Axios.get(`http://localhost:3200/teamname/${t}`)
+        const res = await Axios.get(`${API_URL}/teamname/${t}`)
         const team = {name:res.data[0].teamName, id:t}
         teamsInfo.push(team)
       }
