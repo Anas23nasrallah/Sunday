@@ -9,6 +9,8 @@ import { inject, observer } from 'mobx-react';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 const SignUp = inject('usernamesStore')(observer((props) => {
     
@@ -32,7 +34,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
 
     const sendNewUserMail = async () => {
     await axios({ method: "POST", 
-             url:"http://localhost:3200/send", 
+             url:`${API_URL}/send`, 
              data: {
                     email: inputs.email,
                     mailContent: `Hey ${inputs.firstName}   ${inputs.lastName}
@@ -93,7 +95,7 @@ const SignUp = inject('usernamesStore')(observer((props) => {
     }
     const signUp = async () => {
         if (!allFieldsFilled(inputs) || !areInputsValid(inputs)) { return }
-        await axios.post('http://localhost:3200/signup', inputs)
+        await axios.post(`${API_URL}/signup`, inputs)
         sendNewUserMail()
         setSnackbarMessage('Signed up successfully')
         setSnackbarStatus('success')

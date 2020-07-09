@@ -7,6 +7,8 @@ import { InputLabel, NativeSelect, TextField, Button } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 const capitalize = require('capitalize')
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 const TeamManager = inject('usernamesStore', 'user', 'teamsStore')(observer((props) => {
     const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -35,7 +37,7 @@ const TeamManager = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     }
 
     const getTeams = async () => {
-        const teams = await Axios.get(`http://localhost:3200/teams/${userID}`)
+        const teams = await Axios.get(`${API_URL}/teams/${userID}`)
         console.log(teams)
     }
 

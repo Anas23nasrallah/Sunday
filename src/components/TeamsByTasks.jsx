@@ -4,7 +4,8 @@ import { Task } from '../stores/Task'
 import TeamsByTaskTable from './TeamsByTaskTable';
 import { useEffect } from 'react';
 import Axios from 'axios';
-
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 const TeamsByTasks = inject('teamsStore')(observer((props) => {
 
@@ -15,7 +16,7 @@ const TeamsByTasks = inject('teamsStore')(observer((props) => {
         const isAdmin = async () => {
             for (let team of props.teamsStore.teams) {
                 const teamId = team.id
-                const res = await Axios.get(`http://localhost:3200/admin/${teamId}`)
+                const res = await Axios.get(`${API_URL}/admin/${teamId}`)
                 if(!res.data.length){ return }
                 const adminRes = res.data[0].userName
                 const isAdmin = (adminRes === localStorage.getItem('username'))

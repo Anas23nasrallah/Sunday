@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 //********* Here you should change the password "35533553" => YOUR_OWN_DB_PASSWORD */
-const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+// const sequelize = new Sequelize('mysql://root:1234@localhost/sunday_finalProject')
+const sequelize = new Sequelize('mysql://b0a4c802933a2b:7b1cede7@eu-cdbr-west-03.cleardb.net/heroku_d701cc3f0f93532?reconnect=true')
 const dateTime = require('node-datetime');
 
 //setting email config

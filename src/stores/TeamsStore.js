@@ -2,7 +2,8 @@ import { observable, action } from "mobx";
 import Task from '../stores/Task'
 import axios from 'axios';
 const dateFormat = require('dateformat');
-const API_URL = 'http://localhost:3200';
+// const API_URL = 'http://localhost:3200';
+const API_URL = '';
 
 
 const dummyTeams = [

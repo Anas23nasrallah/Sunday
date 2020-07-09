@@ -1,5 +1,7 @@
 const { observable } = require("mobx");
 const { default: Axios } = require("axios");
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 export class UsernamesStore {
     @observable usernames = []
@@ -9,7 +11,7 @@ export class UsernamesStore {
     }
 
     getUsernames = async () => {
-        const response = await Axios.get('http://localhost:3200/users')
+        const response = await Axios.get(`${API_URL}/users`)
         for (let username of response.data) {
             const fullName = await this.getFullName(username)
             this.usernames.push({ username: username, fullName: fullName })
@@ -17,7 +19,7 @@ export class UsernamesStore {
     }
 
     getFullName = async (username) => {
-        const response = await Axios.get(`http://localhost:3200/userfullname/${username}`)
+        const response = await Axios.get(`${API_URL}/userfullname/${username}`)
         return response.data.firstName + ' ' + response.data.lastName
     }
 }

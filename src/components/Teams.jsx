@@ -11,7 +11,8 @@ import axios from 'axios';
 import TeamManager from './TeamManager'
 import TeamHandler from './TeamHandler'
 
-const API_URL = 'http://localhost:3200';
+// const API_URL = 'http://localhost:3200';
+const API_URL = ''
 
 const Teams = inject('teamsStore')(observer((props) => {
     const [taskInput, settaskInput] = useState('')
