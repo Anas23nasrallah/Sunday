@@ -35,8 +35,28 @@ const Teams = inject('teamsStore')(observer((props) => {
         setAll(alltasks)
     }
 
-    useEffect(fetchData, [])
-    useEffect(getTasks, [])
+    useEffect(()=>{
+        const fetchData = async () => {
+            await props.teamsStore.getTeams(localStorage.getItem('userId'))
+        }
+        fetchData()
+    }, [])
+
+    useEffect(()=>{
+        const getTasks = async () => {
+            let alltasks = []
+            try {
+                let tasks = await axios.get(`${API_URL}/alltasks`); 
+                alltasks = tasks.data;
+              } catch (err) {
+                console.log(err);
+              }
+            setAll(alltasks)
+        }
+        getTasks()
+    }, [])
+
+    // useEffect(getTasks, [])
 
     const trackTask = async () => {
         const userData = await axios.get(`${API_URL}/user/${localStorage.getItem('userId')}`);
@@ -78,7 +98,6 @@ const Teams = inject('teamsStore')(observer((props) => {
                     : <Button variant='contained' color='primary' onClick={() => toggleShow()} >Show By Teams</Button>
             }
             <br></br><br></br>
-
             <Link to='/teamhandler'>
                 <Button variant='contained' color='primary'> Manage Teams </Button>
             </Link><br></br><br></br>
@@ -87,4 +106,4 @@ const Teams = inject('teamsStore')(observer((props) => {
     );
 }))
 
-export default Teams;
+export default Teams

@@ -6,7 +6,6 @@ const dateFormat = require('dateformat');
 
 export class Tasks {
   @observable _tasks = [];
-  @observable alltasks = [];
   @observable userId = localStorage.getItem("userId")
   // @observable loggedIn = false
   @observable categories = []
@@ -48,15 +47,6 @@ export class Tasks {
       let tasks = await axios.get(`${API_URL}/tasks/${id}`); 
       // console.log(id, tasks);
       this._tasks = tasks.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  @action getAllTasksFromDB = async () => {
-    try {
-      let tasks = await axios.get(`${API_URL}/alltasks`); 
-      this.alltasks = tasks.data;
     } catch (err) {
       console.log(err);
     }

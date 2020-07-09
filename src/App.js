@@ -16,8 +16,7 @@ import Analysis from './components/Analysis';
 import Welcome from './components/welcome';
 
 
-const App = inject('tasksStore', 'user')(observer((props) => {
-
+const App = inject('user')(observer((props) => {
   return (
     <Router >
 

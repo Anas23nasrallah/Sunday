@@ -51,6 +51,8 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
     const teamsStore = props.teamsStore
     const members = teamsStore.teams.find(t => t.name === props.name).members
     const isAdmin = props.isAdmin
+    console.log(isAdmin, props.name)
+
     const getUsernamesLookup = (members) => {
         const usernamesLookUp = {}
         for (let member of members) {
@@ -58,7 +60,9 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         }
         return usernamesLookUp
     }
+
     const usernamesLookUps = getUsernamesLookup(members)
+
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
     const [snackbarStatus, setSnackbarStatus] = useState('')
@@ -67,12 +71,12 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', sorting: false, lookup: usernamesLookUps },
-            { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', Hight: 'Hight', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
+            { title: 'Assignee', field: 'assignee', editable:'never',sorting: false, lookup: usernamesLookUps },
+            { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', High: 'High', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'Starting', InProgress: 'In progress', Completed: 'Completed' } },
             { title: 'Budget', field: 'budget', type: 'currency', currencySetting: { currencyCode: "ILS" } },
-            { title: 'Notify Me', field: 'notify', type: 'text' },
+            // { title: 'Notify Me', field: 'notify', type: 'text' },
         ],
         data: props.rows,
         teams: teamsStore.teams
@@ -174,8 +178,9 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                 icons={tableIcons}
                 title={props.name}
                 columns={state.columns}
-                data={state.data.map(r => ({...r, notify:<AlarmOnIcon onClick={tellMeWhenComplete}/>}))}
-                editable={isAdmin ? {
+                data={state.data}
+                // .map(r => ({...r, notify:<AlarmOnIcon onClick={tellMeWhenComplete}/>}))}
+                editable= { isAdmin ? {
                     onRowAdd:
                         (newData) =>
                             new Promise((resolve) => {
@@ -183,7 +188,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                                     resolve();
                                     addTask(newData)
                                 }, 600);
-                            })
+                            }) 
                     ,
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve) => {
@@ -200,7 +205,17 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                                 deleteTask(oldData)
                             }, 600);
                         }),
-                } : {}}
+                    } 
+                    :
+                    {
+                        onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                                updateTask(newData)
+                            }, 600);
+                        })  
+                    } } 
             />
 
             <Snackbar open={openSnackbar} autoHideDuration={6000} 
