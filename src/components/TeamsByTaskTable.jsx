@@ -62,7 +62,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
     }
 
     const usernamesLookUps = getUsernamesLookup(members)
-
+    const [selectedRow, setSelectedRow] = useState(null);
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
     const [snackbarStatus, setSnackbarStatus] = useState('')
@@ -71,7 +71,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
 
         columns: [
             { title: 'Task Name', field: 'taskName', sorting: false, searchable: true },
-            { title: 'Assignee', field: 'assignee', editable:'never',sorting: false, lookup: usernamesLookUps },
+            { title: 'Assignee', field: 'assignee',sorting: false, lookup: usernamesLookUps },
             { title: 'Priority', field: 'priority', lookup: { Urgent: 'Urgent', High: 'High', Medium: 'Medium', Low: 'Low' }, searchable: true, sorting: false },
             { title: 'Deadline', field: 'deadLine', type: "date" },
             { title: 'Status', field: 'status', initialEditValue: 1, sorting: false, lookup: { Starting: 'To Do', InProgress: 'In progress', Completed: 'Completed' } },
@@ -216,6 +216,9 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
                             }, 600);
                         })  
                     } } 
+                    onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+                    options={{ rowStyle: rowData => ({backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'})},
+                    { headerStyle: { backgroundColor: '#01579b', color: '#FFF' }}}
             />
 
             <Snackbar open={openSnackbar} autoHideDuration={6000} 
