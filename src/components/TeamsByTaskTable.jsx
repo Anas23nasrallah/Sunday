@@ -23,8 +23,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import AlarmOnIcon from '@material-ui/icons/AlarmOn';
 
-const API_URL = 'http://localhost:3200';
-
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -102,7 +102,7 @@ export default inject('teamsStore', 'tasksStore')(observer(function TeamsByTaskT
         const adminData = await  axios.get(`${API_URL}/admin/${teamId}`);
         const email = adminData.data[0].email
         await axios({ method: "POST", 
-        url:"http://localhost:3200/sendCompleted", 
+        url:`${API_URL}/sendCompleted`, 
         data: {
                 taskName : taskName,
                 description : description,

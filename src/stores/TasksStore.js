@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
-const API_URL = 'http://localhost:3200';
+// const API_URL = 'http://localhost:3200';
+const API_URL = ''
 const dateFormat = require('dateformat');
 
 
@@ -106,7 +107,7 @@ export class Tasks {
         console.log(tracked)
         const email = tracked.email
         await axios({ method: "POST", 
-        url:"http://localhost:3200/sendNot", 
+        url:`${API_URL}/sendNot`, 
         data: {
                 taskName : newTask.taskName,
                 email: email,

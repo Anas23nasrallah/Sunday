@@ -10,6 +10,9 @@ import { Link } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
+
 const Login = inject('tasksStore', 'user')(observer((props) => {
 
     const [userNameInput, setUserNameInput] = useState('')
@@ -26,12 +29,12 @@ const Login = inject('tasksStore', 'user')(observer((props) => {
             setOpenSnackbar2(true)
             return
         }
-        Axios.post('http://localhost:3200/login',loginData).then( async res => {
+        Axios.post(`${API_URL}/login`,loginData).then( async res => {
             console.log(res.data.status )
             if(res.data.status === 'OK'){
 
                 const userID = res.data.userId
-                const response = await Axios.get(`http://localhost:3200/user/${userID}`)
+                const response = await Axios.get(`${API_URL}/user/${userID}`)
                 props.user.logout()
                 props.user.login(response.data, userID)
 

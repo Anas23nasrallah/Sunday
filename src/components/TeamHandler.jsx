@@ -8,6 +8,10 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 const capitalize = require('capitalize')
 
+// const API_URL = 'http://localhost:3200'
+const API_URL = ''
+
+
 const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((props) => {
 
     const usernames = props.usernamesStore.usernames.map(u => u.username)
@@ -64,7 +68,7 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
     useEffect(
         () => {
         const getTeams = async () => {
-            const res = await Axios.get(`http://localhost:3200/teams/${localStorage.getItem('userId')}`)
+            const res = await Axios.get(`${API_URL}/teams/${localStorage.getItem('userId')}`)
             setTeamsObj([...teamsObj, ...res.data])
             setTeams(res.data.map(t => t.teamName))
         }
@@ -75,15 +79,18 @@ const TeamHandler = inject('usernamesStore', 'user', 'teamsStore')(observer((pro
 
     const addMemberToTeam = async () => {
         const teamId = teamsObj.find(t => t.teamName === teamInput).teamId
-        await Axios.post(`http://localhost:3200/teamsusers/${teamId}/${member}`)
-        await props.teamsStore.getTeams(localStorage.getItem('userId'))
+
+        await Axios.post(`${API_URL}/teamsusers/${teamId}/${member}`)
+        props.teamsStore.getTeams(localStorage.getItem('userId'))
     }
 
     const removeMemberFromTeam = async () => {
-        const response = await Axios.get(`http://localhost:3200/userid/${memberToDelete}`)
+        const response = await Axios.get(`${API_URL}/userid/${memberToDelete}`)
         const idToDelete = response.data.userId
-        await Axios.post(`http://localhost:3200/members/${teamInput}/${idToDelete}`)
-        await props.teamsStore.getTeams(localStorage.getItem('userId'))
+
+        await Axios.post(`${API_URL}/members/${teamInput}/${idToDelete}`)
+        props.teamsStore.getTeams(localStorage.getItem('userId'))
+
     }
 
     return (
